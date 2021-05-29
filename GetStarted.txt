@@ -1,0 +1,20 @@
+====create a project====
+
+expo init startuphub
+
+=== select blanck template ===
+=== replace assests & screens folders as well as app.js file ===
+=== open cmd in project folder ===
+=== install dependancies ===
+
+npm install react-native-paper
+
+npm install react-native-vector-icons
+
+npm install @react-navigation/native
+
+expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-view
+
+npm install @react-navigation/stack
+
+=== IF YOU INSTALL ANY OTHER DEPENDENCIES PLEASE UPDATE THIS FILE ===
