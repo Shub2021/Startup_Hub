@@ -13,40 +13,51 @@ import {
   Platform,
   TouchableOpacity,
 } from "react-native";
-import { TouchableRipple } from "react-native-paper";
+import { Card, FAB } from "react-native-paper";
 import Constants from "expo-constants";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
 import Urls from "../constant";
 
-export default function Home(props) {
-  //const data = props.route.params.data;
-
+export default function Products(props) {
+  const email = props.route.params.email;
+  const br_number = props.route.params.br;
+  const name = props.route.params.name;
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "position"}
-      style={styles.container}
-    >
-      <ImageBackground
-        source={require("../assets/img1.png")}
-        style={styles.header}
+    <View style={styles.container}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "position"}
+        style={styles.container}
       >
-        <View style={styles.welcomeContainer}>
-          <Icons
-            name="menu"
-            color="#ffffff"
-            size={30}
-            onPress={() => props.navigation.openDrawer()}
-          />
-          <Text style={styles.welcome}>Home</Text>
-          <Icons
-            name="bell-outline"
-            style={{ marginLeft: 110 }}
-            color="#ffffff"
-            size={30}
-          />
-        </View>
-      </ImageBackground>
-    </KeyboardAvoidingView>
+        <ImageBackground
+          source={require("../assets/img1.png")}
+          style={styles.header}
+        >
+          <View style={styles.welcomeContainer}>
+            <Icons
+              name="menu"
+              color="#ffffff"
+              size={30}
+              onPress={() => props.navigation.openDrawer()}
+            />
+            <Text style={styles.welcome}>Products</Text>
+            <Icons
+              name="bell-outline"
+              style={{ marginLeft: 110 }}
+              color="#ffffff"
+              size={30}
+            />
+          </View>
+        </ImageBackground>
+      </KeyboardAvoidingView>
+      <FAB
+        style={styles.fab}
+        small={false}
+        icon="plus"
+        onPress={() =>
+          props.navigation.navigate("Add Product", { br_number, email, name })
+        }
+      />
+    </View>
   );
 }
 
@@ -115,5 +126,13 @@ const styles = StyleSheet.create({
   registerbtn: {
     backgroundColor: "#fff",
     justifyContent: "center",
+  },
+  fab: {
+    position: "absolute",
+    backgroundColor: "#4800ff",
+    marginBottom: 20,
+    marginRight: 20,
+    right: 0,
+    bottom: 0,
   },
 });
