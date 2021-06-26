@@ -1,22 +1,57 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
   View,
   ImageBackground,
   TextInput,
-  TouchableWithoutFeedback,
+  Alert,
   KeyboardAvoidingView,
   Button,
   Keyboard,
   Platform,
   TouchableOpacity,
 } from "react-native";
-import Constants from "expo-constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icons from "@expo/vector-icons/AntDesign";
+import Urls from "../constant";
 
 export default function Login(props) {
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const signin = async () => {
+    //console.log(email);
+    fetch(Urls.cn + "/users/login", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    })
+      .then((res) => res.json())
+      .then(async (result) => {
+        console.log(result);
+        if (result.message === "Auth successful") {
+          Alert.alert("login successfull");
+          try {
+            await AsyncStorage.setItem("token", result.token);
+            await AsyncStorage.setItem("br", result.br_number);
+            await AsyncStorage.setItem("email", email);
+            await AsyncStorage.setItem("name", result.name);
+          } catch (e) {
+            console.log(e);
+          }
+
+          props.navigation.push("Drawer");
+          setEmail("");
+          setPassword("");
+        } else {
+          Alert.alert("login unsuccessfull");
+        }
+      });
+  };
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "position"}
@@ -37,15 +72,24 @@ export default function Login(props) {
         <Icons name="mail" color="#306bff" size={30} />
         <TextInput
           style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 20 }}
+          placeholder="Email"
+          value={email}
+          onChangeText={(text) => setEmail(text)}
         />
       </View>
       <View style={styles.inputContainer}>
         <Icons name="lock" color="#306bff" size={30} />
         <TextInput
           style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 20 }}
+          placeholder="Password"
+          value={password}
+          onChangeText={(text) => setPassword(text)}
         />
       </View>
-      <TouchableOpacity style={[styles.inputContainer, styles.btn]}>
+      <TouchableOpacity
+        style={[styles.inputContainer, styles.btn]}
+        onPress={signin}
+      >
         <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
           Log in
         </Text>
