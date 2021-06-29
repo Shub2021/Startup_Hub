@@ -1,33 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, ActivityIndicator } from "react-native";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import {
-  Avatar,
-  Title,
-  Caption,
-  Paragraph,
-  Drawer,
-  Text,
-  Switch,
-  TouchableRipple,
-} from "react-native-paper";
+import { Avatar, Title, Caption, Drawer } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { color } from "react-native-elements/dist/helpers";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useSelector } from "react-redux";
 
 export function DrawerContent(props) {
   //const data = props.route.params.data;
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [br, setBr] = useState("");
+  const [type, setType] = useState("");
   const [loading, setloading] = useState(true);
   const getData = async () => {
+    // const { br, name, email, loading } = useSelector((state) => {
+    //   return state;
+    // });
     const email = await AsyncStorage.getItem("email");
     const name = await AsyncStorage.getItem("name");
     const br = await AsyncStorage.getItem("br");
+    const type = await AsyncStorage.getItem("type");
     setEmail(email);
     setBr(br);
     setName(name);
+    setType(type);
     setloading(false);
   };
   useEffect(() => {
@@ -39,6 +36,8 @@ export function DrawerContent(props) {
       await AsyncStorage.removeItem("br");
       await AsyncStorage.removeItem("name");
       await AsyncStorage.removeItem("email");
+      await AsyncStorage.removeItem("type");
+      await AsyncStorage.removeItem("category");
       props.navigation.navigate("Login");
     } catch (e) {
       console.log(e);
@@ -70,24 +69,49 @@ export function DrawerContent(props) {
               />
             </View>
             <Drawer.Section style={styles.drawerSection}>
-              <DrawerItem
-                icon={({ color, size }) => (
-                  <Icon name="home-outline" color={color} size={size} />
-                )}
-                label="Home"
-                onPress={() => {
-                  props.navigation.navigate("Home", { br, name, email });
-                }}
-              />
-              <DrawerItem
-                icon={({ color, size }) => (
-                  <Icon name="account-outline" color={color} size={size} />
-                )}
-                label="Products"
-                onPress={() => {
-                  props.navigation.navigate("Products", { br, name, email });
-                }}
-              />
+              {type === "product" ? (
+                <>
+                  <DrawerItem
+                    icon={({ color, size }) => (
+                      <Icon name="home-outline" color={color} size={size} />
+                    )}
+                    label="Home"
+                    onPress={() => {
+                      props.navigation.navigate("Home");
+                    }}
+                  />
+                  <DrawerItem
+                    icon={({ color, size }) => (
+                      <Icon name="account-outline" color={color} size={size} />
+                    )}
+                    label="Products"
+                    onPress={() => {
+                      props.navigation.navigate("Products");
+                    }}
+                  />
+                </>
+              ) : (
+                <>
+                  <DrawerItem
+                    icon={({ color, size }) => (
+                      <Icon name="home-outline" color={color} size={size} />
+                    )}
+                    label="Home"
+                    onPress={() => {
+                      props.navigation.navigate("ServiceHome");
+                    }}
+                  />
+                  <DrawerItem
+                    icon={({ color, size }) => (
+                      <Icon name="account-outline" color={color} size={size} />
+                    )}
+                    label="Services"
+                    onPress={() => {
+                      props.navigation.navigate("Services");
+                    }}
+                  />
+                </>
+              )}
 
               <DrawerItem
                 icon={({ color, size }) => (
@@ -95,7 +119,7 @@ export function DrawerContent(props) {
                 )}
                 label="Settings"
                 onPress={() => {
-                  props.navigation.push("Settings", { br, name, email });
+                  props.navigation.push("Settings");
                 }}
               />
             </Drawer.Section>

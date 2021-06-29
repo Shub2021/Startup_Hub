@@ -16,8 +16,10 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icons from "@expo/vector-icons/AntDesign";
 import Urls from "../constant";
+//import { useSelector, useDispatch } from "react-redux";
 
 export default function Login(props) {
+  //const dispatch = useDispatch();
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const signin = async () => {
@@ -40,6 +42,16 @@ export default function Login(props) {
             await AsyncStorage.setItem("br", result.br_number);
             await AsyncStorage.setItem("email", email);
             await AsyncStorage.setItem("name", result.name);
+            fetch(Urls.cn + "/company/" + result.br_number)
+              .then((res) => res.json())
+              .then(async (cmp) => {
+                await AsyncStorage.setItem("type", cmp.type);
+                await AsyncStorage.setItem("category", cmp.category);
+              });
+            // dispatch({ type: "br", payload: result.br_number });
+            // dispatch({ type: "email", payload: email });
+            // dispatch({ type: "name", payload: result.name });
+            // dispatch({ type: "set_loading", payload: false });
           } catch (e) {
             console.log(e);
           }

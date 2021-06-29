@@ -163,7 +163,10 @@ export default function Register(props) {
               <Picker.Item label="Apparrel" value="apparel" />
               <Picker.Item label="Healthcare" value="helthcare" />
               <Picker.Item label="Household" value="household" />
-              <Picker.Item label="Foods & Beverages" value="foods & everages" />
+              <Picker.Item
+                label="Foods & Beverages"
+                value="foods & beverages"
+              />
               <Picker.Item label="Other" value="other" />
             </Picker>
           ) : (
