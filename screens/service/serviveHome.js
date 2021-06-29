@@ -16,9 +16,9 @@ import {
 import { TouchableRipple } from "react-native-paper";
 import Constants from "expo-constants";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
-import Urls from "../constant";
+import Urls from "../../constant";
 
-export default function Home(props) {
+export default function serviceHome(props) {
   //const data = props.route.params.data;
 
   return (
@@ -27,7 +27,7 @@ export default function Home(props) {
       style={styles.container}
     >
       <ImageBackground
-        source={require("../assets/img1.png")}
+        source={require("../../assets/img1.png")}
         style={styles.header}
       >
         <View style={styles.welcomeContainer}>

@@ -22,11 +22,11 @@ router.post("/", (req, res, next) => {
   const product = new Product({
     _id: new mongoose.Types.ObjectId(),
     product_name: req.body.product_name,
+    product_category: req.body.product_category,
     picture: req.body.picture,
     unitprice: req.body.unitprice,
     quantity: req.body.quantity,
     description: req.body.description,
-    address: req.body.address,
     br_number: req.body.br_number,
   });
   product

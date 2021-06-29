@@ -5,31 +5,98 @@ import {
   Text,
   View,
   TextInput,
-  Header,
   KeyboardAvoidingView,
-  Button,
-  Keyboard,
-  Alert,
   Platform,
   TouchableOpacity,
   ImageBackground,
   ScrollView,
-  Picker,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Urls from "../constant";
-
-const auth = require("../Contolers/Authentication.js");
+import { Card } from "react-native-paper";
+import Urls from "../../constant";
+import * as ImagePicker from "expo-image-picker";
+import * as Permissions from "expo-permissions";
 
 export default function AddProduct(props) {
   const [product_name, setPname] = useState("");
-  const [picture, setPicture] = useState("");
+  const [picture, setPicture] = useState(
+    "https://res.cloudinary.com/hiruna/image/upload/c_fit,w_700/v1624803256/90343213-aquamarine-blue-rounded-arrow-up-in-light-blue-circle-icon-flat-upload-sign-isolated-on-white-point-_tzzhnf.jpg"
+  );
   const [unitprice, setUprice] = useState("");
   const [quantity, setQuantity] = useState("");
   const [description, setDescription] = useState("");
-  const [br_number, setBr] = useState("");
+  const [product_category, setPCategory] = useState("");
+  const br_number = props.route.params.br;
+  const name = props.route.params.name;
+  const email = props.route.params.email;
 
-  const submitData = () => {};
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== "web") {
+        const { status } =
+          await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== "granted") {
+          alert("Sorry, we need camera roll permissions to make this work!");
+        }
+      }
+    })();
+  }, []);
+  const pickImage = async () => {
+    let data = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    //console.log(data);
+
+    if (!data.cancelled) {
+      let newfile = {
+        uri: data.uri,
+        type: `test/${data.uri.split(".")[1]}`,
+        name: `test/${data.uri.split(".")[1]}`,
+      };
+      handleUpload(newfile);
+    }
+  };
+  const handleUpload = (image) => {
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset", "StartupHub");
+    data.append("cloud_name", "hiruna");
+
+    fetch("https://api.cloudinary.com/v1_1/hiruna/image/upload", {
+      method: "post",
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        //console.log(data);
+        setPicture(data.url);
+      });
+  };
+  const submitData = () => {
+    fetch(Urls.cn + "/product/", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        product_name,
+        product_category,
+        picture,
+        unitprice,
+        quantity,
+        description,
+        br_number,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        Alert.alert(`${data.createProduct.product_name} is successfuly added`);
+        props.navigation.navigate("Products");
+      });
+  };
 
   return (
     <KeyboardAvoidingView
@@ -37,7 +104,7 @@ export default function AddProduct(props) {
       style={styles.container}
     >
       <ImageBackground
-        source={require("../assets/img1.png")}
+        source={require("../../assets/img1.png")}
         style={styles.header}
         imageStyle={{ borderBottomRightRadius: 30 }}
       >
@@ -54,12 +121,25 @@ export default function AddProduct(props) {
         </View>
       </ImageBackground>
       <ScrollView>
+        <View style={styles.imageContainer}>
+          <Card style={styles.card} onPress={pickImage}>
+            <Card.Cover style={styles.image} source={{ uri: picture }} />
+          </Card>
+        </View>
         <View style={styles.inputContainer}>
           <TextInput
             style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 20 }}
             placeholder="Product Name"
             value={product_name}
             onChangeText={(text) => setPname(text)}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 20 }}
+            placeholder="Product Category"
+            value={product_category}
+            onChangeText={(text) => setPCategory(text)}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -84,7 +164,7 @@ export default function AddProduct(props) {
             style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 20 }}
             placeholder="Description"
             value={description}
-            onChangeText={(text) => setPhone(text)}
+            onChangeText={(text) => setDescription(text)}
           />
         </View>
 
@@ -138,6 +218,27 @@ const styles = StyleSheet.create({
     borderRadius: 23,
     paddingVertical: 2,
     height: 45,
+  },
+  imageContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginHorizontal: 35,
+    marginTop: 24,
+    borderRadius: 23,
+    height: 200,
+    width: 300,
+  },
+  card: {
+    borderRadius: 23,
+    height: 200,
+    width: 300,
+  },
+  image: {
+    marginHorizontal: 0,
+    borderRadius: 23,
+    height: 200,
+    width: 300,
+    resizeMode: "contain",
   },
   btn: {
     backgroundColor: "#306bff",
