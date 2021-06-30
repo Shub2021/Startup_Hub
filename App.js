@@ -17,12 +17,12 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
 import { DrawerContent } from "./screens/DrawerContent";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { createStore } from "redux";
-import { Provider } from "react-redux";
-import { reducer } from "./reducers/reducer";
+// import { createStore } from "redux";
+// import { Provider } from "react-redux";
+// import { reducer } from "./reducers/reducer";
 //import { useSelector, useDispatch } from "react-redux";
 
-const store = createStore(reducer);
+//const store = createStore(reducer);
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -64,20 +64,26 @@ function ServicetRoutes() {
         options={{ ...navoption, title: "Service", headerShown: false }}
       />
       <serviceStack.Screen
-        name="Service Details"
+        name="serviceDetails"
         component={serviceDetails}
-        options={{ ...navoption, title: "ServiceDetails", headerShown: false }}
+        options={{ ...navoption, title: "serviceDetails", headerShown: false }}
       />
     </serviceStack.Navigator>
   );
 }
 
-function DrawerRoutes() {
+function PDrawerRoutes() {
   return (
     <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
       <Drawer.Screen name="Home" component={Home} />
-      <Drawer.Screen name="ServiceHome" component={serviveHome} />
       <Drawer.Screen name="Products" component={ProductRoutes} />
+    </Drawer.Navigator>
+  );
+}
+function SDrawerRoutes() {
+  return (
+    <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
+      <Drawer.Screen name="ServiceHome" component={serviveHome} />
       <Drawer.Screen name="Services" component={ServicetRoutes} />
     </Drawer.Navigator>
   );
@@ -95,7 +101,7 @@ export default function App() {
   const [loading, setloading] = useState(true);
   const [islogged, setLogged] = useState(false);
   const [data, setData] = useState("");
-
+  const [type, setType] = useState("");
   const getData = async () => {
     try {
       var jsonValue = "";
@@ -104,10 +110,12 @@ export default function App() {
       const email = await AsyncStorage.getItem("email");
       const name = await AsyncStorage.getItem("name");
       const br = await AsyncStorage.getItem("br");
+      const type = await AsyncStorage.getItem("type");
       // dispatch({ type: "br", payload: br });
       // dispatch({ type: "email", payload: email });
       // dispatch({ type: "name", payload: name });
       // dispatch({ type: "set_loading", payload: false });
+      setType(type);
       setData(jsonValue);
       if (jsonValue) {
         setLogged(true);
@@ -133,21 +141,43 @@ export default function App() {
           <Stack.Navigator>
             {islogged ? (
               <>
-                <Stack.Screen
-                  name="Drawer"
-                  component={DrawerRoutes}
-                  options={{
-                    ...navoption,
-                    title: "Drawer",
-                    headerShown: false,
-                  }}
-                />
+                {type === "product" ? (
+                  <Stack.Screen
+                    name="PDrawer"
+                    component={PDrawerRoutes}
+                    options={{
+                      ...navoption,
+                      title: "Drawer",
+                      headerShown: false,
+                    }}
+                  />
+                ) : (
+                  <Stack.Screen
+                    name="SDrawer"
+                    component={SDrawerRoutes}
+                    options={{
+                      ...navoption,
+                      title: "Drawer",
+                      headerShown: false,
+                    }}
+                  />
+                )}
+
                 <Stack.Screen
                   name="Products"
                   component={ProductRoutes}
                   options={{
                     ...navoption,
                     title: "Products",
+                    headerShown: false,
+                  }}
+                />
+                <Stack.Screen
+                  name="Services"
+                  component={ServicetRoutes}
+                  options={{
+                    ...navoption,
+                    title: "Services",
                     headerShown: false,
                   }}
                 />
@@ -205,6 +235,15 @@ export default function App() {
                   options={{
                     ...navoption,
                     title: "Products",
+                    headerShown: false,
+                  }}
+                />
+                <Stack.Screen
+                  name="Services"
+                  component={ServicetRoutes}
+                  options={{
+                    ...navoption,
+                    title: "Services",
                     headerShown: false,
                   }}
                 />
