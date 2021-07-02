@@ -19,8 +19,6 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import Urls from "../constant";
 
-const auth = require("../Contolers/Authentication.js");
-
 export default function Register(props) {
   const [company_name, setCName] = useState("");
   const [admin, setAdmin] = useState("");

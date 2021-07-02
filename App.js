@@ -6,6 +6,7 @@ import Home from "./screens/products/Home";
 import Products from "./screens/products/Products";
 import AddProducts from "./screens/products/AddProduct";
 import ProductDetails from "./screens/products/ProductDetails";
+import updateProduct from "./screens/products/UpdateProduct";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
 import addService from "./screens/service/addService";
@@ -46,6 +47,11 @@ function ProductRoutes() {
         name="ProductDetails"
         component={ProductDetails}
         options={{ ...navoption, title: "ProductDetails", headerShown: false }}
+      />
+      <productStack.Screen
+        name="UpdateProduct"
+        component={updateProduct}
+        options={{ ...navoption, title: "UpdateProduct", headerShown: false }}
       />
     </productStack.Navigator>
   );

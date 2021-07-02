@@ -18,21 +18,27 @@ import Urls from "../../constant";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 
-export default function AddProduct(props) {
-  const [product_name, setPname] = useState("");
-  const [picture, setPicture] = useState(
-    "https://res.cloudinary.com/hiruna/image/upload/c_fit,w_700/v1624803256/90343213-aquamarine-blue-rounded-arrow-up-in-light-blue-circle-icon-flat-upload-sign-isolated-on-white-point-_tzzhnf.jpg"
+export default function UpdateProduct(props) {
+  const [product_name, setPname] = useState(props.route.params.product_name);
+  const [picture, setPicture] = useState(props.route.params.picture);
+  const [unitprice, setUprice] = useState(
+    props.route.params.unitprice.toString()
   );
-  const [unitprice, setUprice] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [description, setDescription] = useState("");
-  const [product_category, setPCategory] = useState("");
-  const br_number = props.route.params.br;
-  const name = props.route.params.name;
-  const email = props.route.params.email;
+  const [quantity, setQuantity] = useState(
+    props.route.params.quantity.toString()
+  );
+  const [description, setDescription] = useState(
+    props.route.params.description
+  );
+  const [product_category, setPCategory] = useState(
+    props.route.params.product_category
+  );
+
+  //   const name = props.route.params.name;
+  //   const email = props.route.params.email;
 
   useEffect(() => {
-    (async () => {
+    async () => {
       if (Platform.OS !== "web") {
         const { status } =
           await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -40,7 +46,9 @@ export default function AddProduct(props) {
           alert("Sorry, we need camera roll permissions to make this work!");
         }
       }
-    })();
+    };
+    //let pname = props.route.params.product_name;
+    //setPname(pname);
   }, []);
   const pickImage = async () => {
     let data = await ImagePicker.launchImageLibraryAsync({
@@ -77,9 +85,9 @@ export default function AddProduct(props) {
         setPicture(data.url);
       });
   };
-  const submitData = () => {
+  const updateData = () => {
     fetch(Urls.cn + "/product/", {
-      method: "post",
+      method: "patch",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         product_name,
@@ -88,12 +96,11 @@ export default function AddProduct(props) {
         unitprice,
         quantity,
         description,
-        br_number,
       }),
     })
       .then((res) => res.json())
       .then((data) => {
-        Alert.alert(`${data.createProduct.product_name} is successfuly added`);
+        Alert.alert(product_name + " is successfuly added");
         props.navigation.navigate("Products");
       });
   };
@@ -114,10 +121,10 @@ export default function AddProduct(props) {
               name="arrow-back"
               size={28}
               color="white"
-              onPress={() => props.navigation.navigate("Products")}
+              onPress={() => props.navigation.navigate("ProductDetails")}
             />
           </TouchableOpacity>
-          <Text style={styles.title}>Add Product</Text>
+          <Text style={styles.title}>Update Product</Text>
         </View>
       </ImageBackground>
       <ScrollView>
@@ -173,7 +180,7 @@ export default function AddProduct(props) {
           onPress={submitData}
         >
           <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
-            Create
+            Save
           </Text>
         </TouchableOpacity>
       </ScrollView>
@@ -222,7 +229,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     flexDirection: "row",
     alignItems: "center",
-    alignSelf: "center",
+    marginHorizontal: 35,
     marginTop: 24,
     borderRadius: 23,
     height: 200,
