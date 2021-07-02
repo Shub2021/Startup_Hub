@@ -56,7 +56,7 @@ export default function Login(props) {
             console.log(e);
           }
 
-          props.navigation.push("Drawer");
+          props.navigation.push("PDrawer");
           setEmail("");
           setPassword("");
         } else {

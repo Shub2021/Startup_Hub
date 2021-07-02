@@ -30,7 +30,23 @@ export default function ProductDetails(props) {
   const unitprice = props.route.params.item.unitprice;
   const quantity = props.route.params.item.quantity;
   const description = props.route.params.item.description;
+  const ratingarr = props.route.params.item.rating;
   const loading = false;
+  var trating = 0;
+  for (let i = 0; i < ratingarr.length; i++) {
+    trating += ratingarr[i].rate;
+  }
+  console.log(trating);
+  const deleteProduct = () => {
+    fetch(Urls.cn + "/product/" + _id, {
+      method: "delete",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        Alert.alert(product_name + " is successfuly deleted");
+        props.navigation.navigate("Products");
+      });
+  };
 
   const showAlert = () =>
     Alert.alert(
@@ -39,7 +55,7 @@ export default function ProductDetails(props) {
       [
         {
           text: "Yes",
-          onPress: () => Alert.alert("Yes Pressed"),
+          onPress: () => deleteProduct(),
           style: "cancel",
         },
         {
@@ -113,13 +129,30 @@ export default function ProductDetails(props) {
                     <Text style={styles.dtext1}>Quantity : </Text>
                     <Text style={styles.dtext2}>{quantity}</Text>
                   </View>
+                  <View style={styles.dtailcont}>
+                    <Text style={styles.dtext1}>Rating : </Text>
+                    <Text style={styles.dtext2}>{trating}</Text>
+                  </View>
                   <View style={styles.description}>
                     <Text style={styles.dtext1}>Description : </Text>
                     <Text style={styles.dtext2}>{description}</Text>
                   </View>
                 </View>
               </Card>
-              <TouchableOpacity style={[styles.inputContainer, styles.btn]}>
+              <TouchableOpacity
+                style={[styles.inputContainer, styles.btn]}
+                onPress={() =>
+                  props.navigation.navigate("UpdateProduct", {
+                    product_name,
+                    _id,
+                    product_category,
+                    picture,
+                    unitprice,
+                    quantity,
+                    description,
+                  })
+                }
+              >
                 <Icons name="pencil" size={28} color="white" />
                 <Text
                   style={{
@@ -240,18 +273,18 @@ const styles = StyleSheet.create({
   btn: {
     backgroundColor: "#306bff",
     justifyContent: "center",
-    marginTop: 20,
+    marginTop: 15,
   },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginHorizontal: 10,
     borderWidth: 2,
-    marginTop: 10,
+    marginTop: 5,
     paddingHorizontal: 10,
     borderColor: "#306bff",
     borderRadius: 23,
     paddingVertical: 2,
-    height: 50,
+    height: 45,
   },
 });
