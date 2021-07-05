@@ -21,6 +21,7 @@ import { Card, FAB, Button } from "react-native-paper";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
 import Urls from "../../constant";
 import { Ionicons } from "@expo/vector-icons";
+import { SIZES, COLORS, icons } from "../../constants";
 
 export default function ProductDetails(props) {
   const product_name = props.route.params.item.product_name;
@@ -71,125 +72,191 @@ export default function ProductDetails(props) {
     <View style={styles.container}>
       {!loading ? (
         <>
-          <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "position"}
-          >
-            <ImageBackground
-              source={require("../../assets/img1.png")}
-              style={styles.header}
+          <ScrollView contentContainerStyle={{ flex: 1, paddingBottom: 0 }}>
+            <View
+              style={{
+                width: "100%",
+                height: 320,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
-              <View style={styles.welcomeContainer}>
-                <Ionicons
-                  name="arrow-back"
-                  size={28}
-                  color="white"
-                  onPress={() => props.navigation.navigate("Products")}
-                />
-
-                <Icons
-                  name="bell-outline"
-                  style={{ marginRight: 30 }}
-                  color="#ffffff"
-                  size={30}
-                />
-              </View>
-            </ImageBackground>
-            <ScrollView>
-              <Card
+              <View
                 style={{
-                  paddingBottom: 40,
-                  borderBottomLeftRadius: 40,
-                  borderBottomRightRadius: 40,
+                  position: "absolute",
+                  top: 0,
+                  bottom: 0,
+                  right: 0,
+                  left: 40,
+                  borderBottomLeftRadius: 100,
+                  backgroundColor: COLORS.primary,
+                }}
+              />
+              <Image
+                source={{ uri: picture }}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  bottom: 0,
+                  right: 0,
+                  left: 40,
+                  borderBottomLeftRadius: 100,
+                }}
+              />
+              {/* back Button */}
+              <TouchableOpacity
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  position: "absolute",
+                  top: 25,
+                  left: 20,
+                  padding: 10,
+                  borderRadius: SIZES.radius,
+                  backgroundColor: COLORS.black,
+                }}
+                onPress={() => props.navigation.navigate("Products")}
+              >
+                <Image
+                  source={icons.leftArrow}
+                  resizeMode="contain"
+                  style={{ width: 25, height: 25, tintColor: COLORS.white }}
+                />
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                paddingHorizontal: 15,
+                marginTop: SIZES.padding,
+                justifyContent: "space-between",
+              }}
+            >
+              <View>
+                <Text style={{ color: COLORS.lightYellow, fontSize: 28 }}>
+                  {product_name}
+                </Text>
+                <Text
+                  style={{
+                    marginTop: SIZES.base,
+                    color: COLORS.white,
+                    fontSize: 18,
+                  }}
+                >
+                  {description}
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  marginTop: SIZES.base * 2,
                 }}
               >
-                <View style={styles.imageContainer}>
-                  <ImageBackground
-                    style={styles.image}
-                    source={{ uri: picture }}
-                    imageStyle={{
-                      borderBottomRightRadius: 40,
-                      borderBottomLeftRadius: 40,
-                    }}
-                  >
-                    <View style={styles.child}>
-                      <Text style={styles.welcome}>{product_name}</Text>
-                    </View>
-                  </ImageBackground>
-                </View>
-                <View>
-                  <View style={styles.dtailcont}>
-                    <Text style={styles.dtext1}>Product Catrgory : </Text>
-                    <Text style={styles.dtext2}>{product_category}</Text>
-                  </View>
-                  <View style={styles.dtailcont}>
-                    <Text style={styles.dtext1}>Unit Price : </Text>
-                    <Text style={styles.dtext2}>LKR {unitprice}.00</Text>
-                  </View>
-                  <View style={styles.dtailcont}>
-                    <Text style={styles.dtext1}>Quantity : </Text>
-                    <Text style={styles.dtext2}>{quantity}</Text>
-                  </View>
-                  <View style={styles.dtailcont}>
-                    <Text style={styles.dtext1}>Rating : </Text>
-                    <Text style={styles.dtext2}>{trating}</Text>
-                  </View>
-                  <View style={styles.description}>
-                    <Text style={styles.dtext1}>Description : </Text>
-                    <Text style={styles.dtext2}>{description}</Text>
-                  </View>
-                </View>
-              </Card>
-              <TouchableOpacity
-                style={[styles.inputContainer, styles.btn]}
-                onPress={() =>
-                  props.navigation.navigate("UpdateProduct", {
-                    product_name,
-                    _id,
-                    product_category,
-                    picture,
-                    unitprice,
-                    quantity,
-                    description,
-                  })
-                }
-              >
-                <Icons name="pencil" size={28} color="white" />
-                <Text
-                  style={{
-                    color: "white",
-                    fontSize: 20,
-                    fontWeight: "bold",
-                    paddingHorizontal: 10,
-                  }}
-                >
-                  Edit
+                <Text style={{ color: COLORS.yellow, fontSize: 23 }}>
+                  Category
                 </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.inputContainer,
-                  styles.btn,
-                  { backgroundColor: "#ff0000", borderColor: "#ff0000" },
-                ]}
-                onPress={showAlert}
-              >
-                <Icons name="delete" size={28} color="white" />
-                <Text
-                  style={{
-                    color: "white",
-                    fontSize: 20,
-                    fontWeight: "bold",
-                    paddingHorizontal: 10,
-                  }}
-                >
-                  Delete
+                <Text style={{ color: COLORS.primary, fontSize: 23 }}>
+                  {product_category}
                 </Text>
-              </TouchableOpacity>
-            </ScrollView>
-          </KeyboardAvoidingView>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text style={{ color: COLORS.yellow, fontSize: 23 }}>
+                  Unit Price
+                </Text>
+                <Text style={{ color: COLORS.primary, fontSize: 23 }}>
+                  LKR {unitprice}.00
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text style={{ color: COLORS.yellow, fontSize: 23 }}>
+                  Quantity
+                </Text>
+                <Text style={{ color: COLORS.primary, fontSize: 23 }}>
+                  {quantity}
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text style={{ color: COLORS.yellow, fontSize: 23 }}>
+                  Rating
+                </Text>
+                <Text style={{ color: COLORS.primary, fontSize: 23 }}>
+                  {trating}
+                </Text>
+              </View>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                marginTop: SIZES.padding * 2,
+                justifyContent: "space-between",
+              }}
+            ></View>
+          </ScrollView>
+          <View style={{ marginBottom: 10 }}>
+            <TouchableOpacity
+              style={[
+                styles.inputContainer,
+                styles.btn,
+                {
+                  backgroundColor: COLORS.darkGreen,
+                  borderColor: COLORS.darkGreen,
+                },
+              ]}
+              onPress={() =>
+                props.navigation.navigate("UpdateProduct", {
+                  product_name,
+                  _id,
+                  product_category,
+                  picture,
+                  unitprice,
+                  quantity,
+                  description,
+                })
+              }
+            >
+              <Text
+                style={{ color: "white", fontSize: 20, fontWeight: "bold" }}
+              >
+                Edit
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.inputContainer,
+                styles.btn,
+                {
+                  backgroundColor: COLORS.red,
+                  borderColor: COLORS.red,
+                },
+              ]}
+              onPress={showAlert}
+            >
+              <Text
+                style={{ color: "white", fontSize: 20, fontWeight: "bold" }}
+              >
+                Delete
+              </Text>
+            </TouchableOpacity>
+          </View>
         </>
       ) : (
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color={COLORS.primary} />
       )}
     </View>
   );
@@ -198,92 +265,22 @@ export default function ProductDetails(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#8cf9ff",
+    backgroundColor: COLORS.secondary,
   },
-  header: {
-    height: 75,
-    width: "100%",
-    borderBottomRightRadius: 20,
-  },
-  welcome: {
-    fontSize: 30,
-    marginTop: 15,
-    fontWeight: "bold",
-    marginLeft: 15,
-    color: "white",
-    width: "100%",
-  },
-  welcomeContainer: {
-    flexDirection: "row",
-    height: 75,
-    width: "100%",
-    marginTop: 20,
-    marginLeft: 15,
-    paddingBottom: 10,
-    justifyContent: "space-between",
-  },
-  image: {
-    marginHorizontal: 0,
-    height: 200,
-    width: "100%",
-    borderBottomRightRadius: 40,
-    borderBottomLeftRadius: 40,
-  },
-  imageContainer: {
-    marginHorizontal: 0,
-    height: 200,
-    width: "100%",
-  },
-  dtailcont: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 10,
-    borderBottomWidth: 2,
-    height: 35,
-    width: "100%",
-    borderBottomRightRadius: 10,
-    borderBottomLeftRadius: 10,
-    borderBottomColor: "#c7d3ff",
-  },
-  description: {
-    flexDirection: "column",
-    justifyContent: "space-between",
-    marginTop: 10,
-    height: 65,
-  },
-  dtext1: {
-    fontSize: 20,
-    fontWeight: "700",
-    marginLeft: 10,
-  },
-  dtext2: {
-    fontSize: 20,
-    fontWeight: "600",
-    justifyContent: "center",
-    marginRight: 10,
-    marginLeft: 10,
-  },
-  child: {
-    height: 200,
-    width: "100%",
-    backgroundColor: "rgba(0,0,0,0.3)",
-    borderBottomRightRadius: 40,
-    borderBottomLeftRadius: 40,
-  },
+
   btn: {
     backgroundColor: "#306bff",
-    justifyContent: "center",
-    marginTop: 15,
+    justifyContent: "flex-end",
   },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginHorizontal: 10,
     borderWidth: 2,
-    marginTop: 5,
-    paddingHorizontal: 10,
+    marginTop: 18,
+    paddingHorizontal: 20,
     borderColor: "#306bff",
     borderRadius: 23,
+    right: 85,
     paddingVertical: 2,
     height: 45,
   },

@@ -158,14 +158,11 @@ export default function Register(props) {
               style={{ paddingLeft: 280, color: "#306bff", fontSize: 20 }}
               onValueChange={(itemValue) => setCategory(itemValue)}
             >
-              <Picker.Item label="Apparrel" value="apparel" />
-              <Picker.Item label="Healthcare" value="helthcare" />
-              <Picker.Item label="Household" value="household" />
-              <Picker.Item
-                label="Foods & Beverages"
-                value="foods & beverages"
-              />
-              <Picker.Item label="Other" value="other" />
+              <Picker.Item label="Apparel" value="Apparel" />
+              <Picker.Item label="Healthcare" value="Helthcare" />
+              <Picker.Item label="Household" value="Household" />
+              <Picker.Item label="Foods & Beverages" value="Food & Bev" />
+              <Picker.Item label="Other" value="Other" />
             </Picker>
           ) : (
             <Picker

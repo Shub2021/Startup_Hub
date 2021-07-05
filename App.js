@@ -7,6 +7,7 @@ import Products from "./screens/products/Products";
 import AddProducts from "./screens/products/AddProduct";
 import ProductDetails from "./screens/products/ProductDetails";
 import updateProduct from "./screens/products/UpdateProduct";
+import Orders from "./screens/products/Orders";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
 import addService from "./screens/service/addService";
@@ -83,6 +84,7 @@ function PDrawerRoutes() {
     <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
       <Drawer.Screen name="Home" component={Home} />
       <Drawer.Screen name="Products" component={ProductRoutes} />
+      <Drawer.Screen name="Orders" component={Orders} />
     </Drawer.Navigator>
   );
 }
@@ -226,15 +228,27 @@ export default function App() {
                     headerShown: false,
                   }}
                 />
+
                 <Stack.Screen
-                  name="Drawer"
-                  component={DrawerRoutes}
+                  name="PDrawer"
+                  component={PDrawerRoutes}
                   options={{
                     ...navoption,
                     title: "Drawer",
                     headerShown: false,
                   }}
                 />
+
+                <Stack.Screen
+                  name="SDrawer"
+                  component={SDrawerRoutes}
+                  options={{
+                    ...navoption,
+                    title: "Drawer",
+                    headerShown: false,
+                  }}
+                />
+
                 <Stack.Screen
                   name="Products"
                   component={ProductRoutes}
@@ -258,7 +272,7 @@ export default function App() {
           </Stack.Navigator>
         )}
 
-        <StatusBar style="auto" />
+        <StatusBar style="dark" />
       </View>
     </NavigationContainer>
   );

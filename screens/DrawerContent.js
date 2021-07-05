@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, ActivityIndicator } from "react-native";
+import {
+  View,
+  StyleSheet,
+  ActivityIndicator,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { Avatar, Title, Caption, Drawer } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useSelector } from "react-redux";
+import { COLORS, icons, SIZES } from "../constants";
 
 export function DrawerContent(props) {
   //const data = props.route.params.data;
@@ -46,25 +52,39 @@ export function DrawerContent(props) {
     console.log("Done.");
   };
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: COLORS.secondary }}>
       {!loading ? (
         <DrawerContentScrollView {...props}>
           <View style={styles.drawerContent}>
-            <View style={{ flexDirection: "row", marginTop: 15 }}>
-              <Avatar.Image
-                source={require("../assets/PngItem_4212266.png")}
-                size={50}
-                style={{ marginLeft: 10 }}
-              />
-              <View style={{ marginLeft: 15, flexDirection: "column" }}>
-                <Title style={styles.title}>{name}</Title>
-                <Caption style={styles.caption}>{email}</Caption>
+            <View
+              style={{
+                flexDirection: "row",
+                marginTop: 15,
+                justifyContent: "space-between",
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginTop: 15,
+                }}
+              >
+                <Avatar.Image
+                  source={require("../assets/PngItem_4212266.png")}
+                  size={50}
+                  style={{ marginLeft: 10 }}
+                />
+                <View style={{ marginLeft: 15, flexDirection: "column" }}>
+                  <Title style={styles.title}>{name}</Title>
+                  <Caption style={styles.caption}>{email}</Caption>
+                </View>
               </View>
+
               <Icon
                 name="close"
                 color="#000000"
+                style={{ marginTop: 10, marginRight: 5, color: COLORS.white }}
                 size={28}
-                style={{ marginLeft: 100 }}
                 onPress={() => props.navigation.closeDrawer()}
               />
             </View>
@@ -72,40 +92,79 @@ export function DrawerContent(props) {
               {type === "product" ? (
                 <>
                   <DrawerItem
-                    icon={({ color, size }) => (
-                      <Icon name="home-outline" color={color} size={size} />
+                    icon={() => (
+                      <Icon
+                        name="home-outline"
+                        color={COLORS.white}
+                        size={28}
+                      />
                     )}
+                    pressColor={COLORS.yellow}
                     label="Home"
+                    labelStyle={{ color: COLORS.white, fontSize: SIZES.h3 }}
                     onPress={() => {
                       props.navigation.navigate("Home");
                     }}
                   />
                   <DrawerItem
-                    icon={({ color, size }) => (
-                      <Icon name="account-outline" color={color} size={size} />
+                    icon={() => (
+                      <Icon
+                        name="gift-outline"
+                        color={COLORS.white}
+                        size={28}
+                      />
                     )}
+                    pressColor={COLORS.yellow}
                     label="Products"
+                    labelStyle={{ color: COLORS.white, fontSize: SIZES.h3 }}
                     onPress={() => {
                       props.navigation.navigate("Products");
+                    }}
+                  />
+                  <DrawerItem
+                    icon={() => (
+                      <Icon
+                        name="truck-outline"
+                        color={COLORS.white}
+                        size={28}
+                      />
+                    )}
+                    pressColor={COLORS.yellow}
+                    label="Orders"
+                    labelStyle={{ color: COLORS.white, fontSize: SIZES.h3 }}
+                    onPress={() => {
+                      props.navigation.navigate("Orders");
                     }}
                   />
                 </>
               ) : (
                 <>
                   <DrawerItem
-                    icon={({ color, size }) => (
-                      <Icon name="home-outline" color={color} size={size} />
+                    icon={() => (
+                      <Icon
+                        name="home-outline"
+                        color={COLORS.white}
+                        size={28}
+                      />
                     )}
                     label="SHome"
+                    pressColor={COLORS.yellow}
+                    labelStyle={{ color: COLORS.white, fontSize: SIZES.h3 }}
                     onPress={() => {
                       props.navigation.navigate("ServiceHome");
                     }}
                   />
                   <DrawerItem
-                    icon={({ color, size }) => (
-                      <Icon name="account-outline" color={color} size={size} />
+                    icon={() => (
+                      <Icon
+                        name="account-outline"
+                        color={COLORS.white}
+                        size={28}
+                      />
                     )}
                     label="Services"
+                    pressColor={COLORS.yellow}
+                    labelStyle={{ color: COLORS.white, fontSize: SIZES.h3 }}
                     onPress={() => {
                       props.navigation.navigate("Services");
                     }}
@@ -114,10 +173,12 @@ export function DrawerContent(props) {
               )}
 
               <DrawerItem
-                icon={({ color, size }) => (
-                  <Icon name="cog-outline" color={color} size={size} />
+                icon={() => (
+                  <Icon name="cog-outline" color={COLORS.white} size={28} />
                 )}
                 label="Settings"
+                pressColor={COLORS.yellow}
+                labelStyle={{ color: COLORS.white, fontSize: SIZES.h3 }}
                 onPress={() => {
                   props.navigation.push("Settings");
                 }}
@@ -130,10 +191,12 @@ export function DrawerContent(props) {
       )}
       <Drawer.Section style={styles.bottomDrawerSection}>
         <DrawerItem
-          icon={({ color, size }) => (
-            <Icon name="exit-to-app" color={color} size={size} />
+          icon={() => (
+            <Icon name="exit-to-app" color={COLORS.white} size={28} />
           )}
           label="Sign Out"
+          pressColor={COLORS.yellow}
+          labelStyle={{ color: COLORS.white, fontSize: SIZES.h3 }}
           onPress={() => logout()}
         />
       </Drawer.Section>
@@ -150,39 +213,18 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    marginTop: 3,
-    fontWeight: "bold",
+    fontWeight: "normal",
+    color: COLORS.white,
   },
   caption: {
     fontSize: 14,
     lineHeight: 14,
-  },
-  row: {
-    marginTop: 20,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  section: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginRight: 15,
-  },
-  paragraph: {
-    fontWeight: "bold",
-    marginRight: 3,
+    color: COLORS.white,
   },
   drawerSection: {
     marginTop: 15,
   },
   bottomDrawerSection: {
     marginBottom: 15,
-    borderTopColor: "#f4f4f4",
-    borderTopWidth: 1,
-  },
-  preference: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingVertical: 12,
-    paddingHorizontal: 16,
   },
 });
