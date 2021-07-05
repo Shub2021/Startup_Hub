@@ -50,7 +50,7 @@ export default function Home(props) {
               onPress={() => props.navigation.openDrawer()}
             />
             <Text style={{ color: COLORS.white, marginLeft: 10, fontSize: 25 }}>
-              Home
+              Orders
             </Text>
           </View>
           <View>

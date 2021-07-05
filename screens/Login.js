@@ -47,6 +47,15 @@ export default function Login(props) {
               .then(async (cmp) => {
                 await AsyncStorage.setItem("type", cmp.type);
                 await AsyncStorage.setItem("category", cmp.category);
+                if (cmp.type === "product") {
+                  props.navigation.navigate("PDrawer");
+                  setEmail("");
+                  setPassword("");
+                } else if (cmp.type === "service") {
+                  props.navigation.navigate("SDrawer");
+                  setEmail("");
+                  setPassword("");
+                }
               });
             // dispatch({ type: "br", payload: result.br_number });
             // dispatch({ type: "email", payload: email });
@@ -55,10 +64,6 @@ export default function Login(props) {
           } catch (e) {
             console.log(e);
           }
-
-          props.navigation.push("PDrawer");
-          setEmail("");
-          setPassword("");
         } else {
           Alert.alert("login unsuccessfull");
         }

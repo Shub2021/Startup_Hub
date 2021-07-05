@@ -8,10 +8,13 @@ import {
   KeyboardAvoidingView,
   Platform,
   TouchableOpacity,
-  ImageBackground,
+  Image,
   ScrollView,
+  SafeAreaView,
   Alert,
 } from "react-native";
+import { SIZES, COLORS, icons } from "../../constants";
+import Icons from "react-native-vector-icons/MaterialCommunityIcons";
 import { Ionicons } from "@expo/vector-icons";
 import { Card } from "react-native-paper";
 import Urls from "../../constant";
@@ -19,6 +22,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 
 export default function UpdateProduct(props) {
+  const product_id = props.route.params._id;
   const [product_name, setPname] = useState(props.route.params.product_name);
   const [picture, setPicture] = useState(props.route.params.picture);
   const [unitprice, setUprice] = useState(
@@ -86,7 +90,7 @@ export default function UpdateProduct(props) {
       });
   };
   const updateData = () => {
-    fetch(Urls.cn + "/product/", {
+    fetch(Urls.cn + "/product/" + product_id, {
       method: "patch",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -110,24 +114,56 @@ export default function UpdateProduct(props) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
-      <ImageBackground
-        source={require("../../assets/img1.png")}
-        style={styles.header}
-        imageStyle={{ borderBottomRightRadius: 30 }}
+      <SafeAreaView
+        style={{
+          height: 100,
+          width: "100%",
+          backgroundColor: COLORS.darkGreen,
+          flexDirection: "row",
+        }}
       >
-        <View style={styles.headerContainer}>
-          <TouchableOpacity>
-            <Ionicons
-              name="arrow-back"
-              size={28}
-              color="white"
-              onPress={() => props.navigation.navigate("ProductDetails")}
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <View style={{ flexDirection: "row", padding: SIZES.padding }}>
+            <TouchableOpacity
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                position: "relative",
+                top: -5,
+                left: 0,
+                padding: 10,
+                borderRadius: SIZES.radius,
+                backgroundColor: COLORS.darkGreen,
+              }}
+              onPress={() => props.navigation.navigate("Products")}
+            >
+              <Image
+                source={icons.leftArrow}
+                resizeMode="contain"
+                style={{ width: 25, height: 25, tintColor: COLORS.white }}
+              />
+            </TouchableOpacity>
+            <Text style={{ color: COLORS.white, marginLeft: 10, fontSize: 25 }}>
+              Add Product
+            </Text>
+          </View>
+          <View>
+            <Icons
+              name="bell-outline"
+              style={{ padding: SIZES.padding }}
+              color="#ffffff"
+              size={30}
             />
-          </TouchableOpacity>
-          <Text style={styles.title}>Update Product</Text>
+          </View>
         </View>
-      </ImageBackground>
-      <ScrollView>
+      </SafeAreaView>
+      <ScrollView style={styles.scrollcontainer}>
         <View style={styles.imageContainer}>
           <Card style={styles.card} onPress={pickImage}>
             <Card.Cover style={styles.image} source={{ uri: picture }} />
@@ -135,32 +171,53 @@ export default function UpdateProduct(props) {
         </View>
         <View style={styles.inputContainer}>
           <TextInput
-            style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 20 }}
+            style={{
+              paddingHorizontal: 10,
+              color: COLORS.yellow,
+              fontSize: 20,
+            }}
             placeholder="Product Name"
+            placeholderTextColor={COLORS.primary}
             value={product_name}
             onChangeText={(text) => setPname(text)}
           />
         </View>
         <View style={styles.inputContainer}>
           <TextInput
-            style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 20 }}
+            style={{
+              paddingHorizontal: 10,
+              color: COLORS.yellow,
+              fontSize: 20,
+            }}
             placeholder="Product Category"
+            placeholderTextColor={COLORS.primary}
             value={product_category}
             onChangeText={(text) => setPCategory(text)}
           />
         </View>
         <View style={styles.inputContainer}>
           <TextInput
-            style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 20 }}
+            style={{
+              paddingHorizontal: 10,
+              color: COLORS.yellow,
+              fontSize: 20,
+            }}
             placeholder="Unit Price"
+            placeholderTextColor={COLORS.primary}
+            keyboardType="number-pad"
             value={unitprice}
             onChangeText={(text) => setUprice(text)}
           />
         </View>
         <View style={styles.inputContainer}>
           <TextInput
-            style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 20 }}
+            style={{
+              paddingHorizontal: 10,
+              color: COLORS.yellow,
+              fontSize: 20,
+            }}
             placeholder="Quantity"
+            placeholderTextColor={COLORS.primary}
             keyboardType="number-pad"
             value={quantity}
             onChangeText={(text) => setQuantity(text)}
@@ -168,16 +225,25 @@ export default function UpdateProduct(props) {
         </View>
         <View style={styles.inputContainer}>
           <TextInput
-            style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 20 }}
+            style={{
+              paddingHorizontal: 10,
+              color: COLORS.yellow,
+              fontSize: 20,
+            }}
             placeholder="Description"
+            placeholderTextColor={COLORS.primary}
             value={description}
             onChangeText={(text) => setDescription(text)}
           />
         </View>
 
         <TouchableOpacity
-          style={[styles.inputContainer, styles.btn]}
-          onPress={submitData}
+          style={[
+            styles.inputContainer,
+            styles.btn,
+            { borderColor: COLORS.darkGreen },
+          ]}
+          onPress={updateData}
         >
           <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
             Save
@@ -193,35 +259,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
-  header: {
-    height: 70,
-    width: "100%",
-    borderBottomRightRadius: 70,
-    borderBottomLeftRadius: 70,
-  },
-  title: {
-    fontSize: 25,
-    fontWeight: "bold",
-    color: "white",
-    marginLeft: 10,
-  },
-  headerContainer: {
-    height: 70,
-    width: "100%",
-    marginLeft: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
-  },
-
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginHorizontal: 35,
     borderWidth: 2,
     marginTop: 24,
+    left: 40,
     paddingHorizontal: 10,
-    borderColor: "#306bff",
+    borderColor: COLORS.lightGreen,
     borderRadius: 23,
     paddingVertical: 2,
     height: 45,
@@ -248,13 +293,18 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   btn: {
-    backgroundColor: "#306bff",
-    justifyContent: "center",
+    backgroundColor: COLORS.darkGreen,
+    justifyContent: "flex-start",
+    paddingLeft: 20,
+    alignItems: "center",
     marginTop: 40,
     marginBottom: 10,
   },
-  registerbtn: {
-    backgroundColor: "#fff",
-    justifyContent: "center",
+  scrollcontainer: {
+    flex: 1,
+    marginTop: -22,
+    borderTopLeftRadius: SIZES.radius * 2,
+    borderTopRightRadius: SIZES.radius * 2,
+    backgroundColor: COLORS.secondary,
   },
 });
