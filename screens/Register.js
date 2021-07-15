@@ -26,6 +26,7 @@ export default function Register(props) {
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [br_number, setBr] = useState("");
+  const [NIC, setNIC] = useState("");
   const [type, setType] = useState("");
   const [category, setCategory] = useState("");
   const [password, setPassword] = useState("");
@@ -58,6 +59,7 @@ export default function Register(props) {
           email,
           name: admin,
           password,
+          NIC,
         }),
       });
 
@@ -123,6 +125,14 @@ export default function Register(props) {
             keyboardType="number-pad"
             value={contact}
             onChangeText={(text) => setPhone(text)}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 20 }}
+            placeholder="NIC"
+            value={NIC}
+            onChangeText={(text) => setNIC(text)}
           />
         </View>
         <View style={styles.inputContainer}>

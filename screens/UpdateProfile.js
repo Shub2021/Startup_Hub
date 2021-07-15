@@ -2,43 +2,39 @@ import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
-  SafeAreaView,
   Text,
   View,
   TextInput,
   KeyboardAvoidingView,
   Platform,
   TouchableOpacity,
-  ImageBackground,
   Image,
   ScrollView,
-  Picker,
+  SafeAreaView,
   Alert,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { SIZES, COLORS, icons } from "../../constants";
-import { Card } from "react-native-paper";
-import Urls from "../../constant";
+import { SIZES, COLORS, icons } from "../constants";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
+import { Ionicons } from "@expo/vector-icons";
+import { Card } from "react-native-paper";
+import Urls from "../constant";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 
-export default function AddProduct(props) {
-  const [product_name, setPname] = useState("");
-  const [picture, setPicture] = useState(
-    "https://res.cloudinary.com/hiruna/image/upload/c_fit,w_700/v1624803256/90343213-aquamarine-blue-rounded-arrow-up-in-light-blue-circle-icon-flat-upload-sign-isolated-on-white-point-_tzzhnf.jpg"
-  );
-  const [unitprice, setUprice] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [description, setDescription] = useState("");
-  const [product_category, setPCategory] = useState("");
-  const [ordercategory, setOCategory] = useState("");
-  const br_number = props.route.params.br;
-  const company_category = props.route.params.cmpcategory;
-  const email = props.route.params.email;
+export default function UpdateProduct(props) {
+  const user_id = props.route.params.data._id;
+  const [user_name, setSname] = useState(props.route.params.data.name);
+  const [picture, setPicture] = useState(props.route.params.data.img);
+  const [email, setEmail] = useState(props.route.params.data.email);
+  const [address, setAddress] = useState(props.route.params.data.Address);
+  const [NIC, setNIC] = useState(props.route.params.data.NIC);
+  const [mobile, setMobile] = useState(props.route.params.data.mobile);
+
+  //   const name = props.route.params.name;
+  //   const email = props.route.params.email;
 
   useEffect(() => {
-    (async () => {
+    async () => {
       if (Platform.OS !== "web") {
         const { status } =
           await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -46,13 +42,15 @@ export default function AddProduct(props) {
           alert("Sorry, we need camera roll permissions to make this work!");
         }
       }
-    })();
+    };
+    //let pname = props.route.params.product_name;
+    //setPname(pname);
   }, []);
   const pickImage = async () => {
     let data = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [2, 2],
       quality: 1,
     });
 
@@ -83,26 +81,23 @@ export default function AddProduct(props) {
         setPicture(data.url);
       });
   };
-  const submitData = () => {
-    fetch(Urls.cn + "/product/", {
-      method: "post",
+  const updateData = () => {
+    fetch(Urls.cn + "/users/" + user_id, {
+      method: "patch",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        product_name,
-        product_category,
-        company_category,
-        ordercategory,
+        user_name,
+        email,
         picture,
-        unitprice,
-        quantity,
-        description,
-        br_number,
+        address,
+        NIC,
+        mobile,
       }),
     })
       .then((res) => res.json())
       .then((data) => {
-        Alert.alert(`${data.createProduct.product_name} is successfuly added`);
-        props.navigation.navigate("Products");
+        Alert.alert("Updated Successfully");
+        props.navigation.navigate("Profile");
       });
   };
 
@@ -138,7 +133,7 @@ export default function AddProduct(props) {
                 borderRadius: SIZES.radius,
                 backgroundColor: COLORS.darkGreen,
               }}
-              onPress={() => props.navigation.navigate("Products")}
+              onPress={() => props.navigation.navigate("Profile")}
             >
               <Image
                 source={icons.leftArrow}
@@ -147,7 +142,7 @@ export default function AddProduct(props) {
               />
             </TouchableOpacity>
             <Text style={{ color: COLORS.white, marginLeft: 10, fontSize: 25 }}>
-              Add Product
+              Edit Profile
             </Text>
           </View>
           <View>
@@ -162,9 +157,9 @@ export default function AddProduct(props) {
       </SafeAreaView>
       <ScrollView style={styles.scrollcontainer}>
         <View style={styles.imageContainer}>
-          <Card style={styles.card} onPress={pickImage}>
-            <Card.Cover style={styles.image} source={{ uri: picture }} />
-          </Card>
+          <TouchableOpacity style={styles.image} onPress={pickImage}>
+            <Image style={styles.image} source={{ uri: picture }} />
+          </TouchableOpacity>
         </View>
         <View style={styles.inputContainer}>
           <TextInput
@@ -173,10 +168,10 @@ export default function AddProduct(props) {
               color: COLORS.yellow,
               fontSize: 20,
             }}
-            placeholder="Product Name"
+            placeholder="Name"
             placeholderTextColor={COLORS.primary}
-            value={product_name}
-            onChangeText={(text) => setPname(text)}
+            value={user_name}
+            onChangeText={(text) => setSname(text)}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -186,10 +181,10 @@ export default function AddProduct(props) {
               color: COLORS.yellow,
               fontSize: 20,
             }}
-            placeholder="Product Category"
+            placeholder="Email"
             placeholderTextColor={COLORS.primary}
-            value={product_category}
-            onChangeText={(text) => setPCategory(text)}
+            value={email}
+            onChangeText={(text) => setEmail(text)}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -199,55 +194,26 @@ export default function AddProduct(props) {
               color: COLORS.yellow,
               fontSize: 20,
             }}
-            placeholder="Unit Price"
+            placeholder="NIC"
             placeholderTextColor={COLORS.primary}
-            value={unitprice}
+            value={NIC}
+            onChangeText={(text) => setNIC(text)}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={{
+              paddingHorizontal: 10,
+              color: COLORS.yellow,
+              fontSize: 20,
+            }}
+            placeholder="Phone Number"
+            placeholderTextColor={COLORS.primary}
             keyboardType="number-pad"
-            onChangeText={(text) => setUprice(text)}
+            value={mobile}
+            onChangeText={(text) => setMobile(text)}
           />
         </View>
-        <View style={styles.inputContainer}>
-          <Picker
-            selectedValue={ordercategory}
-            style={{ paddingLeft: 300, color: COLORS.primary, fontSize: 20 }}
-            onValueChange={(itemValue) => setOCategory(itemValue)}
-          >
-            <Picker.Item label="Ordering" value="Ordering" />
-            <Picker.Item label="Purchasing" value="Purchasing" />
-          </Picker>
-        </View>
-        {ordercategory === "Ordering" ? (
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={{
-                paddingHorizontal: 10,
-                color: COLORS.yellow,
-                fontSize: 20,
-              }}
-              placeholder="Max order per day"
-              placeholderTextColor={COLORS.primary}
-              keyboardType="number-pad"
-              value={quantity}
-              onChangeText={(text) => setQuantity(text)}
-            />
-          </View>
-        ) : (
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={{
-                paddingHorizontal: 10,
-                color: COLORS.yellow,
-                fontSize: 20,
-              }}
-              placeholder="Quantity"
-              placeholderTextColor={COLORS.primary}
-              keyboardType="number-pad"
-              value={quantity}
-              onChangeText={(text) => setQuantity(text)}
-            />
-          </View>
-        )}
-
         <View style={styles.inputContainer}>
           <TextInput
             style={{
@@ -255,10 +221,10 @@ export default function AddProduct(props) {
               color: COLORS.yellow,
               fontSize: 20,
             }}
-            placeholder="Description"
+            placeholder="Address"
             placeholderTextColor={COLORS.primary}
-            value={description}
-            onChangeText={(text) => setDescription(text)}
+            value={address}
+            onChangeText={(text) => setAddress(text)}
           />
         </View>
 
@@ -268,10 +234,10 @@ export default function AddProduct(props) {
             styles.btn,
             { borderColor: COLORS.darkGreen },
           ]}
-          onPress={submitData}
+          onPress={updateData}
         >
           <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
-            Create
+            Save
           </Text>
         </TouchableOpacity>
       </ScrollView>
@@ -284,7 +250,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
-
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -300,22 +265,23 @@ const styles = StyleSheet.create({
   imageContainer: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     alignSelf: "center",
     marginTop: 24,
-    borderRadius: 23,
+    borderRadius: 100,
     height: 200,
-    width: 300,
+    width: 200,
   },
   card: {
-    borderRadius: 23,
+    borderRadius: 100,
     height: 200,
-    width: 300,
+    width: 200,
   },
   image: {
     marginHorizontal: 0,
-    borderRadius: 23,
+    borderRadius: 100,
     height: 200,
-    width: 300,
+    width: 200,
     resizeMode: "contain",
   },
   btn: {
@@ -326,7 +292,6 @@ const styles = StyleSheet.create({
     marginTop: 40,
     marginBottom: 10,
   },
-
   scrollcontainer: {
     flex: 1,
     marginTop: -22,

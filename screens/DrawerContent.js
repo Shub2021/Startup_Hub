@@ -176,11 +176,11 @@ export function DrawerContent(props) {
                 icon={() => (
                   <Icon name="cog-outline" color={COLORS.white} size={28} />
                 )}
-                label="Settings"
+                label="Profile"
                 pressColor={COLORS.yellow}
                 labelStyle={{ color: COLORS.white, fontSize: SIZES.h3 }}
                 onPress={() => {
-                  props.navigation.push("Settings");
+                  props.navigation.navigate("Profile");
                 }}
               />
             </Drawer.Section>

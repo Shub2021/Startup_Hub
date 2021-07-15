@@ -6,6 +6,11 @@ const Startup_UserSchema = new mongoose.Schema({
   email: String,
   name: String,
   password: String,
+  mobile: String,
+  Address: String,
+  NIC: String,
+  accountType: String,
+  img: String,
 });
 
 module.exports = mongoose.model("Startup_User", Startup_UserSchema);

@@ -20,7 +20,24 @@ router.get("/", (req, res, next) => {
       });
     });
 });
+router.get("/:email", (req, res, next) => {
+  const email = req.params.email;
+  User.find({ email: email })
+    .exec()
+    .then((doc) => {
+      console.log(doc);
 
+      if (doc) {
+        res.status(200).json(doc);
+      } else {
+        res.status(404).json({ message: "No valide entry found" });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
+});
 router.post("/signup", (req, res, next) => {
   User.find({ email: req.body.email })
     .exec()
@@ -42,6 +59,11 @@ router.post("/signup", (req, res, next) => {
               name: req.body.name,
               email: req.body.email,
               password: hash,
+              mobile: "",
+              Address: "",
+              NIC: req.body.NIC,
+              accountType: "admin",
+              img: "https://res.cloudinary.com/hiruna/image/upload/v1625729331/startupHub/PngItem_4212266_rd09ab.png",
             });
             user
               .save()
@@ -101,6 +123,29 @@ router.post("/login", (req, res, next) => {
           message: "Auth faild",
         });
       });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
+});
+router.patch("/:userID", (req, res, next) => {
+  const id = req.params.userID;
+  User.findByIdAndUpdate(
+    { _id: id },
+    {
+      name: req.body.user_name,
+      email: req.body.email,
+      img: req.body.picture,
+      Address: req.body.address,
+      NIC: req.body.NIC,
+      mobile: req.body.mobile,
+    }
+  )
+    .exec()
+    .then((result) => {
+      console.log(result);
+      res.status(200).json(result);
     })
     .catch((err) => {
       console.log(err);

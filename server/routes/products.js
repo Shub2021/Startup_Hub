@@ -19,13 +19,14 @@ router.get("/", (req, res, next) => {
     });
 });
 router.post("/", (req, res, next) => {
-  const arr = [{ rate: 0, client: "none" }];
+  const arr = [{ rate: 0, client: "none", comment: " " }];
   const product = new Product({
     _id: new mongoose.Types.ObjectId(),
     product_name: req.body.product_name,
     product_category: req.body.product_category,
     company_category: req.body.company_category,
     picture: req.body.picture,
+    order_category: req.body.ordercategory,
     unitprice: req.body.unitprice,
     quantity: req.body.quantity,
     description: req.body.description,
