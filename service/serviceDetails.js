@@ -1,152 +1,287 @@
 import { StatusBar } from "expo-status-bar";
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
-  Dimensions,
   StyleSheet,
   Text,
   View,
-  SafeAreaView,
-  ScrollView,
+  FlatList,
+  ImageBackground,
   TextInput,
-  Header,
+  Alert,
   KeyboardAvoidingView,
-  Button,
+  ActivityIndicator,
+  ScrollView,
   Keyboard,
   Platform,
+  Image,
+  Modal,
   TouchableOpacity,
-  LayoutAnimation,
 } from "react-native";
-import Constants from "expo-constants";
-import Icons from "@expo/vector-icons/AntDesign";
-import { AntDesign,Feather } from '@expo/vector-icons'; 
-import { Appbar, FAB } from "react-native-paper";
-import { Value } from "react-native-reanimated";
+import { Card, FAB, Button } from "react-native-paper";
+import Icons from "react-native-vector-icons/MaterialCommunityIcons";
+import Urls from "../../constant";
+import { Ionicons } from "@expo/vector-icons";
+import { SIZES, COLORS, icons } from "../../constants";
 
+export default function serviceDetails(props) {
+  const Description = props.route.params.item.Description;
+  const _id = props.route.params.item._id;
+  const service_type = props.route.params.item.service_type;
+  const picture = props.route.params.item.picture;
+  // const unitprice = props.route.params.item.unitprice;
+  // const quantity = props.route.params.item.quantity;
+  const service_name = props.route.params.item.service_name;
+  const loading = false;
+  // console.log(dis);
 
-  export default function serviceDetails(props) {
-    return (
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.container}
-      >
-       
-       <View style={styles.labelContainer}>
-          <Text
-            style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 18 }} 
-          >Service Type</Text>
-        </View>
-        <View style={styles.inputContainer}>
-          <Text
-            style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 20 }} 
-          >Document analasis</Text>
-        </View>
+  const deleteservice = () => {
+    fetch(Urls.cn + "/service/" + _id, {
+      method: "delete",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        Alert.alert(service_name + " is successfuly deleted");
+        props.navigation.navigate("ServiceCard");
+      });
+  };
 
-        <View style={styles.labelContainer}>
-          <Text
-            style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 18 }} 
-          >Service Type</Text>
-        </View>
-        <View style={styles.inputContainer}>
-          <Text
-            style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 20 }} 
-          >Document analasis</Text>
-        </View>
-
-        <View style={styles.labelContainer}>
-          <Text
-            style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 18 }} 
-          >Service Type</Text>
-        </View>
-        <View style={styles.inputContainer}>
-          <Text
-            style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 20 }} 
-          >Document analasis</Text>
-        </View>
-       
-        <FAB
-        style={styles.fab}
-        small={false}
-        icon="plus"
-        onPress={() => props.navigation.navigate("addService")}
-      />
-      </KeyboardAvoidingView>
-      
+  const showAlert = () =>
+    Alert.alert(
+      "Warning",
+      "Are you sure to delete " + service_name,
+      [
+        {
+          text: "Yes",
+          onPress: () => deleteservice(),
+          style: "cancel",
+        },
+        {
+          text: "No",
+          style: "cancel",
+        },
+      ],
+      {
+        cancelable: true,
+      }
     );
-  }
-  
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: "#fff",
-    },
-    header: {
-      height: Keyboard.height,
-      width: "100%",
-      borderBottomRightRadius: 70,
-    },
-    title: {
-      fontSize: 40,
-      fontWeight: "bold",
-      color: "white",
-    },
-    welcome: {
-      fontSize: 25,
-      marginBottom: 15,
-      fontWeight: "bold",
-      color: "white",
-    },
-    welcomeContainer: {
-      justifyContent: "center",
-      height: 250,
-      width: "100%",
-      marginLeft: 10,
-    },
-    logintxt: {
-      fontSize: 40,
-      fontWeight: "bold",
-      alignSelf: "center",
-      marginTop: 28,
-      color: "#1255ff",
-    },
-    inputContainer: {
-      flexDirection: "row",
-      alignItems: "center",
-      marginHorizontal: 35,
-      borderBottomWidth: 2,
-      marginTop: 10,
-      paddingHorizontal: 10,
-      borderColor: "#306bff",
-      borderRadius: 23,
-      paddingVertical: 2,
-      height: 45,
-    },
-    labelContainer: {
-      flexDirection: "row",
-      alignItems: "center",
-      marginTop: 44,
-      paddingHorizontal: 10,
-      borderColor: "#306bff",
-     
-      height: 10,
-    },
-    btn: {
-      backgroundColor: "#306bff",
-      justifyContent: "center",
-      marginTop: 40,
-    },
-    registerbtn: {
-      backgroundColor: "#fff",
-      justifyContent: "center",
-    },
-    apbar: {
-      height: 40,
-    },
-    fab: {
-      position: "absolute",
-      backgroundColor: "#4636ff",
-      marginBottom: 20,
-      marginRight: 20,
-      right: 0,
-      bottom: 0,
-    },
-  });
+  return (
+    <View style={styles.container}>
+    {!loading ? (
+      <>
+        <ScrollView >
+          <View
+            style={{
+              width: "100%",
+              height: 280,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <View
+              style={{
+                position: "absolute",
+                top: 0,
+                // width:320,
+                bottom: 0,
+                right: 0,
+                left: 40,
+                borderBottomLeftRadius: 100,
+                backgroundColor: COLORS.primary,
+              }}
+            />
+            <Image
+              source={{ uri: picture }}
+              style={{
+                position: "absolute",
+                top: 0,
+                bottom: 0,
+                right: 0,
+                left: 40,
+                borderBottomLeftRadius: 100,
+              }}
+            />
+            {/* back Button */}
+            <TouchableOpacity
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                position: "absolute",
+                top: 25,
+                left: 20,
+                padding: 10,
+                borderRadius: SIZES.radius,
+                backgroundColor: COLORS.black,
+              }}
+              onPress={() => props.navigation.navigate("ServiceCard")}
+            >
+              <Image
+                source={icons.leftArrow}
+                resizeMode="contain"
+                style={{ width: 25, height: 25, tintColor: COLORS.white }}
+              />
+            </TouchableOpacity>
+          </View>
+          <View
+            style={{
+              flex: 1,
+              paddingHorizontal: 15,
+              marginTop: SIZES.padding,
+              justifyContent: "space-between",
+            }}
+          >
+            <View>
+              <Text style={{ 
+                color: COLORS.lightYellow,
+                 fontSize: 28 }}>
+                {service_name}
+              </Text>
+              <Text
+                style={{
+                  marginTop: SIZES.base,
+                  color: COLORS.white,
+                  fontSize: 18,
+                }}
+              >
+                {Description}
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginTop: SIZES.base * 2,
+              }}
+            >
+              <Text style={{ color: COLORS.yellow, fontSize: 23 }}>
+                Category
+              </Text>
+              <Text style={{ color: COLORS.primary, fontSize: 23 }}>
+                {service_type}
+              </Text>
+            </View>
+            {/* <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <Text style={{ color: COLORS.yellow, fontSize: 23 }}>
+                Unit Price
+              </Text>
+              <Text style={{ color: COLORS.primary, fontSize: 23 }}>
+                LKR {unitprice}.00
+              </Text>
+            </View> */}
+            {/* <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <Text style={{ color: COLORS.yellow, fontSize: 23 }}>
+                Quantity
+              </Text>
+              <Text style={{ color: COLORS.primary, fontSize: 23 }}>
+                {quantity}
+              </Text>
+            </View> */}
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <Text style={{ color: COLORS.yellow, fontSize: 23 }}>
+                Rating
+              </Text>
+              <Text style={{ color: COLORS.primary, fontSize: 23 }}>
+                {/* {trating} */}
+                STARS 5
+              </Text>
+            </View>
+          </View>
+          <View
+            style={{
+              flex: 1,
+              marginTop: SIZES.padding * 2,
+              justifyContent: "space-between",
+            }}
+          ></View>
+        </ScrollView>
+        <View style={{ marginBottom: 10 }}>
+          <TouchableOpacity
+            style={[
+              styles.inputContainer,
+              styles.btn,
+              {
+                backgroundColor: COLORS.darkGreen,
+                borderColor: COLORS.darkGreen,
+              },
+            ]}
+            onPress={() =>
+              props.navigation.navigate("updateService", {
+                service_name,
+                _id,
+                service_type,
+                picture,
+                // unitprice,
+                // quantity,
+                Description,
+              })
+            }
+          >
+            <Text
+              style={{ color: "white", fontSize: 20, fontWeight: "bold" }}
+            >
+              Edit
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.inputContainer,
+              styles.btn,
+              {
+                backgroundColor: COLORS.red,
+                borderColor: COLORS.red,
+              },
+            ]}
+            onPress={showAlert}
+          >
+            <Text
+              style={{ color: "white", fontSize: 20, fontWeight: "bold" }}
+            >
+              Delete
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </>
+    ) : (
+      <ActivityIndicator size="large" color={COLORS.primary} />
+    )}
+  </View>
+);
+}
+
+const styles = StyleSheet.create({
+container: {
+  flex: 1,
+  backgroundColor: COLORS.secondary,
+},
+
+btn: {
+  backgroundColor: "#306bff",
+  justifyContent: "flex-end",
+},
+inputContainer: {
+  flexDirection: "row",
+  alignItems: "center",
+  borderWidth: 2,
+  marginTop: 18,
+  paddingHorizontal: 20,
+  borderColor: "#306bff",
+  borderRadius: 23,
+  right: 85,
+  paddingVertical: 2,
+  height: 45,
+},
+});
