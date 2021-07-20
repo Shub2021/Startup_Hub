@@ -6,21 +6,21 @@ import Home from "./screens/products/Home";
 import Products from "./screens/products/Products";
 import AddProducts from "./screens/products/AddProduct";
 import ProductDetails from "./screens/products/ProductDetails";
-import updateProduct from "./screens/products/UpdateProduct";
-import Profile from "./screens/Profile";
-import Orders from "./screens/products/Orders";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
 import addService from "./screens/service/addService";
 import serviceCard from "./screens/service/serviceCard";
 import serviceDetails from "./screens/service/serviceDetails";
 import serviveHome from "./screens/service/serviveHome";
-import updateProfile from "./screens/UpdateProfile";
-import { NavigationContainer } from "@react-navigation/native";
+import updateService from "./screens/service/updateService";
+import addPackage from "./screens/service/addPackage";
+import packageCard from "./screens/service/packageCard";
+import {NavigationContainer, DefaultTheme, DarkTheme, useTheme} from '@react-navigation/native';
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
 import { DrawerContent } from "./screens/DrawerContent";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { COLORS } from "./constants";
 // import { createStore } from "redux";
 // import { Provider } from "react-redux";
 // import { reducer } from "./reducers/reducer";
@@ -32,7 +32,25 @@ const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const productStack = createStackNavigator();
 const serviceStack = createStackNavigator();
-const profileStack = createStackNavigator();
+
+const customDarkTheme={
+  ...DarkTheme,
+  colors:{
+    ...DarkTheme.colors,
+    headerColor:"#404040",
+    iconColor:"white",
+    tabIcon:"white",
+  }
+}
+const customDefaultTheme={
+  ...DefaultTheme,
+  colors:{
+    ...DefaultTheme.colors,
+    headerColor:"white",
+    iconColor:"black",
+    tabIcon:"green",
+  }
+}
 
 function ProductRoutes() {
   return (
@@ -52,28 +70,7 @@ function ProductRoutes() {
         component={ProductDetails}
         options={{ ...navoption, title: "ProductDetails", headerShown: false }}
       />
-      <productStack.Screen
-        name="UpdateProduct"
-        component={updateProduct}
-        options={{ ...navoption, title: "UpdateProduct", headerShown: false }}
-      />
     </productStack.Navigator>
-  );
-}
-function ProfileRoutes() {
-  return (
-    <profileStack.Navigator>
-      <profileStack.Screen
-        name="Profile"
-        component={Profile}
-        options={{ ...navoption, title: "Profile", headerShown: false }}
-      />
-      <profileStack.Screen
-        name="updateProfile"
-        component={updateProfile}
-        options={{ ...navoption, title: "updateProfile", headerShown: false }}
-      />
-    </profileStack.Navigator>
   );
 }
 function ServicetRoutes() {
@@ -94,6 +91,21 @@ function ServicetRoutes() {
         component={serviceDetails}
         options={{ ...navoption, title: "serviceDetails", headerShown: false }}
       />
+      <serviceStack.Screen
+        name="updateService"
+        component={updateService}
+        options={{ ...navoption, title: "updateService", headerShown: false }}
+      />
+      <serviceStack.Screen
+        name="addPackage"
+        component={addPackage}
+        options={{ ...navoption, title: "addPackage", headerShown: false }}
+      />
+       <serviceStack.Screen
+        name="packageCard"
+        component={packageCard}
+        options={{ ...navoption, title: "PackageCard", headerShown: false }}
+      />
     </serviceStack.Navigator>
   );
 }
@@ -103,8 +115,6 @@ function PDrawerRoutes() {
     <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
       <Drawer.Screen name="Home" component={Home} />
       <Drawer.Screen name="Products" component={ProductRoutes} />
-      <Drawer.Screen name="Orders" component={Orders} />
-      <Drawer.Screen name="Profile" component={ProfileRoutes} />
     </Drawer.Navigator>
   );
 }
@@ -113,7 +123,6 @@ function SDrawerRoutes() {
     <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
       <Drawer.Screen name="ServiceHome" component={serviveHome} />
       <Drawer.Screen name="Services" component={ServicetRoutes} />
-      <Drawer.Screen name="Profile" component={ProfileRoutes} />
     </Drawer.Navigator>
   );
 }
@@ -249,9 +258,8 @@ export default function App() {
                     headerShown: false,
                   }}
                 />
-
                 <Stack.Screen
-                  name="PDrawer"
+                  name="Drawer"
                   component={PDrawerRoutes}
                   options={{
                     ...navoption,
@@ -259,17 +267,6 @@ export default function App() {
                     headerShown: false,
                   }}
                 />
-
-                <Stack.Screen
-                  name="SDrawer"
-                  component={SDrawerRoutes}
-                  options={{
-                    ...navoption,
-                    title: "Drawer",
-                    headerShown: false,
-                  }}
-                />
-
                 <Stack.Screen
                   name="Products"
                   component={ProductRoutes}
@@ -293,7 +290,7 @@ export default function App() {
           </Stack.Navigator>
         )}
 
-        <StatusBar style="dark" />
+        <StatusBar style="auto" />
       </View>
     </NavigationContainer>
   );
@@ -302,7 +299,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "white",
     marginTop: Constants.statusBarHeight,
   },
 });
