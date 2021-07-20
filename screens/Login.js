@@ -75,36 +75,36 @@ export default function Login(props) {
       style={styles.container}
     >
       <ImageBackground
-        source={require("../assets/img1.png")}
+        
+        source={require("../assets/login.png")}
         style={styles.header}
-        imageStyle={{ borderBottomRightRadius: 65 }}
+        
       >
         <View style={styles.welcomeContainer}>
-          <Text style={styles.welcome}>Welcome To,</Text>
-          <Text style={styles.title}>STARTUP HUB</Text>
+          
         </View>
       </ImageBackground>
       <Text style={styles.logintxt}>Login</Text>
       <View style={styles.inputContainer}>
-        <Icons name="mail" color="#306bff" size={30} />
+        <Icons name="mail" color="#008c8c" size={30} />
         <TextInput
-          style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 20 }}
+          style={{ paddingHorizontal: 10, color: "#008c8c", fontSize: 20 }}
           placeholder="Email"
           value={email}
           onChangeText={(text) => setEmail(text)}
         />
       </View>
       <View style={styles.inputContainer}>
-        <Icons name="lock" color="#306bff" size={30} />
+        <Icons name="lock" color="#008c8c" size={30} />
         <TextInput
-          style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 20 }}
+          style={{ paddingHorizontal: 10, color: "#008c8c", fontSize: 20 }}
           placeholder="Password"
           value={password}
           onChangeText={(text) => setPassword(text)}
         />
       </View>
       <TouchableOpacity
-        style={[styles.inputContainer, styles.btn]}
+        style={[styles.inputContainer2, styles.btn]}
         onPress={signin}
       >
         <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
@@ -112,10 +112,10 @@ export default function Login(props) {
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={[styles.registerbtn, styles.inputContainer]}
+        style={[styles.registerbtn, styles.inputContainer2]}
         onPress={() => props.navigation.navigate("Register")}
       >
-        <Text style={{ color: "#306bff", fontSize: 20, fontWeight: "bold" }}>
+        <Text style={{ color: "#008c8c", fontSize: 20, fontWeight: "bold" }}>
           Register
         </Text>
       </TouchableOpacity>
@@ -126,7 +126,7 @@ export default function Login(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#ffffff",
   },
   header: {
     height: Keyboard.height,
@@ -134,9 +134,10 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 70,
   },
   title: {
-    fontSize: 40,
+    marginTop: 250,
+    fontSize: 30,
     fontWeight: "bold",
-    color: "white",
+    color: "black",
   },
   welcome: {
     fontSize: 25,
@@ -149,28 +150,41 @@ const styles = StyleSheet.create({
     height: 250,
     width: "100%",
     marginLeft: 10,
+    marginTop:10,
   },
   logintxt: {
     fontSize: 40,
     fontWeight: "bold",
     alignSelf: "center",
     marginTop: 28,
-    color: "#1255ff",
+    color: "#008c8c",
   },
   inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginHorizontal: 35,
+    borderWidth: 1,
+    marginTop: 24,
+    paddingHorizontal: 10,
+    borderColor: "#008c8c",
+    borderRadius: 15,
+    paddingVertical: 2,
+    height: 45,
+  },
+  inputContainer2: {
     flexDirection: "row",
     alignItems: "center",
     marginHorizontal: 35,
     borderWidth: 2,
     marginTop: 24,
     paddingHorizontal: 10,
-    borderColor: "#306bff",
-    borderRadius: 23,
+    borderColor: "#008c8c",
+    borderRadius: 15,
     paddingVertical: 2,
     height: 45,
   },
   btn: {
-    backgroundColor: "#306bff",
+    backgroundColor: "#008c8c",
     justifyContent: "center",
     marginTop: 40,
   },
