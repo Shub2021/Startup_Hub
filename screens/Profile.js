@@ -129,6 +129,7 @@ export default function Home(props) {
                 flexDirection: "row",
                 justifyContent: "space-between",
                 marginTop: SIZES.base * 2,
+                marginHorizontal: SIZES.base,
               }}
             >
               <Text style={{ color: COLORS.primary, fontSize: 23 }}>
@@ -140,6 +141,7 @@ export default function Home(props) {
                 flexDirection: "row",
                 justifyContent: "space-between",
                 marginTop: SIZES.base * 2,
+                marginHorizontal: SIZES.base,
               }}
             >
               <Text style={{ color: COLORS.primary, fontSize: 23 }}>
@@ -151,6 +153,7 @@ export default function Home(props) {
                 flexDirection: "row",
                 justifyContent: "space-between",
                 marginTop: SIZES.base * 2,
+                marginHorizontal: SIZES.base,
               }}
             >
               <Text style={{ color: COLORS.primary, fontSize: 23 }}>
@@ -162,6 +165,7 @@ export default function Home(props) {
                 flexDirection: "row",
                 justifyContent: "space-between",
                 marginTop: SIZES.base * 2,
+                marginHorizontal: SIZES.base,
               }}
             >
               <Text style={{ color: COLORS.primary, fontSize: 23 }}>
