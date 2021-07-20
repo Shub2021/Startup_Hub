@@ -2,16 +2,15 @@ import { StatusBar } from "expo-status-bar";
 import React, {useState, useEffect} from "react";
 import {
   StyleSheet,
-  SafeAreaView,
   Text,
   View,
   TextInput,
   KeyboardAvoidingView,
   Platform,
   TouchableOpacity,
-  ImageBackground,
   Image,
   ScrollView,
+  SafeAreaView,
   Alert,
 } from "react-native";
 import Constants from "expo-constants";
@@ -19,26 +18,23 @@ import Icons from "react-native-vector-icons/MaterialCommunityIcons";
 import { AntDesign,Feather,Ionicons } from '@expo/vector-icons'; 
 import { Appbar, Card } from "react-native-paper";
 import { Value } from "react-native-reanimated";
-import { SIZES, COLORS, icons } from "../../constants";
 import Urls from "../../constant";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
-import Note from "./Note";
+import { SIZES, COLORS, icons } from "../../constants";
 
 
 
-export default function addService(props) {
-  const [Service_type, setStype] = useState("");
-  const [picture, setPicture] = useState(
-    "https://res.cloudinary.com/hiruna/image/upload/c_fit,w_700/v1624803256/90343213-aquamarine-blue-rounded-arrow-up-in-light-blue-circle-icon-flat-upload-sign-isolated-on-white-point-_tzzhnf.jpg"
-  );
-  const [Service_name, setSname] = useState("");
-  // const [quantity, setQuantity] = useState("");
-  const [Description, setDescription] = useState("");
-  // const [product_category, setPCategory] = useState("");
+export default function addPackege(props) {
+
+  const service_id = props.route.params._id;
+  const [package_type, setStype] = useState();
+  const [price, setPrice] = useState();
+  const [pk_discription, setDescription] = useState();
   const br_number = props.route.params.br;
-  // const name = props.route.params.name;
-  // const email = props.route.params.email;
+  const package1 = [{package_type:package_type,price:price,pk_discription:pk_discription}];
+  const array = props.route.params.data;
+
   useEffect(() => {
     (async () => {
       if (Platform.OS !== "web") {
@@ -86,37 +82,31 @@ export default function addService(props) {
       });
   };
 
-
   const submitData = () => {
-    fetch(Urls.cn + "/service/", {
-      method: "post",
+   // array.push({package_type,price,pk_discription});
+   let newarray = package1.concat(array)
+    fetch(Urls.cn + "/service/package/", {
+      method: "patch",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        Service_name,
-        Service_type,
-        picture,
-        // unitprice,
-        // quantity,
-        Description,
-        br_number,
+        package:newarray,
       }),
     })
       .then((res) => res.json())
-      .then((item) => {
+      .then((data) => {
         Alert.alert(Service_name+"is successfuly added");
-        props.navigation.navigate("packageCard",{item});
+        props.navigation.navigate("addPackage");
       });
     console.log(br_number+"ggfffg");
   };
-
-
+  
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
-    <SafeAreaView
+      <SafeAreaView
         style={{
           height: 100,
           width: "100%",
@@ -152,7 +142,7 @@ export default function addService(props) {
               />
             </TouchableOpacity>
             <Text style={{ color: COLORS.white, marginLeft: 10, fontSize: 25 }}>
-              Add Service
+              Add Packege
             </Text>
           </View>
           <View>
@@ -165,59 +155,57 @@ export default function addService(props) {
           </View>
         </View>
       </SafeAreaView>
-    <ScrollView style={styles.scrollcontainer}>
-    <View style={styles.imageContainer}>
-      <Card style={styles.card} onPress={pickImage}>
-        <Card.Cover style={styles.image} source={{ uri: picture }} />
-      </Card>
-    </View>
+      <ScrollView style={styles.scrollcontainer}>
+        {/* <View style={styles.imageContainer}>
+          <Card style={styles.card} onPress={pickImage}>
+            <Card.Cover style={styles.image} source={{ uri: picture }} />
+          </Card>
+        </View> */}
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={{
+              paddingHorizontal: 10,
+              color: COLORS.yellow,
+              fontSize: 20,
+            }}
+            placeholder="Service Name"
+            placeholderTextColor={COLORS.primary}
+            value={package_type}
+            onChangeText={(text) => setStype(text)}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={{
+              paddingHorizontal: 10,
+              color: COLORS.yellow,
+              fontSize: 20,
+            }}
+            placeholder="Product Category"
+            placeholderTextColor={COLORS.primary}
+            value={price}
+            onChangeText={(text) => setPrice(text)}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={{
+              paddingHorizontal: 10,
+              color: COLORS.yellow,
+              fontSize: 20,
+            }}
+            placeholder="Description"
+            placeholderTextColor={COLORS.primary}
+            value={pk_discription}
+            onChangeText={(text) => setDescription(text)}
+          />
+        </View>
 
-
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={{ paddingHorizontal: 10, color: COLORS.yellow, fontSize: 20 }}
-          placeholder="Service Type"
-          placeholderTextColor={COLORS.primary}
-          value={Service_type}
-          onChangeText={(text) => setStype(text)}
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={{ paddingHorizontal: 10, color: COLORS.yellow, fontSize: 20 }}
-          placeholder="Service Name"
-          placeholderTextColor={COLORS.primary}
-          value={Service_name}
-          onChangeText={(text) => setSname(text)}
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={{ paddingHorizontal: 10, color: COLORS.yellow, fontSize: 20 }}
-          placeholder="Description"
-          placeholderTextColor={COLORS.primary}
-          value={Description}
-          onChangeText={(text) => setDescription(text)}
-        />
-      </View>
-      
-    
-
-      {/* <View style={styles.inputContainer}>
-        <TextInput
-          style={{ paddingHorizontal: 10, color: COLORS.yellow, fontSize: 20 }}
-          placeholder="Features plan"
-          placeholderTextColor={COLORS.primary}
-          //value={Description}
-          //onChangeText={(text) => setDescription(text)}
-        />
-      </View> */}
-      
-      <TouchableOpacity style={[styles.inputContainer, styles.btn]}
+        <TouchableOpacity style={[styles.inputContainer, styles.btn]}
         onPress={submitData}
       >
         <Text style={{ color: "white", fontSize: 20, fontWeight: "bold",textShadowOffset: {width: 1, height: 1},textShadowRadius: 1,textShadowColor: 'black',}}>
-         Add Service
+         Add
         </Text>
       </TouchableOpacity>
       </ScrollView>
@@ -230,7 +218,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
-
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -246,7 +233,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     flexDirection: "row",
     alignItems: "center",
-    alignSelf: "center",
+    marginHorizontal: 35,
     marginTop: 24,
     borderRadius: 23,
     height: 200,
@@ -269,17 +256,9 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     paddingLeft: 20,
     alignItems: "center",
-    marginTop: 24,
-    marginBottom: 4,
+    marginTop: 40,
+    marginBottom: 10,
   },
-  // btn1: {
-  //   backgroundColor: COLORS.darkGreen,
-  //   justifyContent: "flex-start",
-  //   paddingLeft: 20,
-  //   alignItems: "center",
-  //   marginTop: 24,
-  //   marginBottom: 4,
-  // },
   scrollcontainer: {
     flex: 1,
     marginTop: -22,
