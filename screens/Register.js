@@ -26,7 +26,6 @@ export default function Register(props) {
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [br_number, setBr] = useState("");
-  const [NIC, setNIC] = useState("");
   const [type, setType] = useState("");
   const [category, setCategory] = useState("");
   const [password, setPassword] = useState("");
@@ -59,7 +58,6 @@ export default function Register(props) {
           email,
           name: admin,
           password,
-          NIC,
         }),
       });
 
@@ -77,16 +75,16 @@ export default function Register(props) {
       style={styles.container}
     >
       <ImageBackground
-        source={require("../assets/img1.png")}
+        source={require("../assets/login.png")}
         style={styles.header}
-        imageStyle={{ borderBottomRightRadius: 30 }}
+        imageStyle={{ borderBottomRightRadius: 10 }}
       >
         <View style={styles.headerContainer}>
           <TouchableOpacity>
             <Ionicons
               name="arrow-back"
               size={28}
-              color="white"
+              color="#008c8c"
               onPress={() => props.navigation.navigate("Login")}
             />
           </TouchableOpacity>
@@ -96,7 +94,7 @@ export default function Register(props) {
       <ScrollView>
         <View style={styles.inputContainer}>
           <TextInput
-            style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 20 }}
+            style={{ paddingHorizontal: 10, color: "#008c8c", fontSize: 20 }}
             placeholder="Company Name"
             value={company_name}
             onChangeText={(text) => setCName(text)}
@@ -104,7 +102,7 @@ export default function Register(props) {
         </View>
         <View style={styles.inputContainer}>
           <TextInput
-            style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 20 }}
+            style={{ paddingHorizontal: 10, color: "#008c8c", fontSize: 20 }}
             placeholder="Contact Person"
             value={admin}
             onChangeText={(text) => setAdmin(text)}
@@ -112,7 +110,7 @@ export default function Register(props) {
         </View>
         <View style={styles.inputContainer}>
           <TextInput
-            style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 20 }}
+            style={{ paddingHorizontal: 10, color: "#008c8c", fontSize: 20 }}
             placeholder="Email"
             value={email}
             onChangeText={(text) => setEmail(text)}
@@ -120,7 +118,7 @@ export default function Register(props) {
         </View>
         <View style={styles.inputContainer}>
           <TextInput
-            style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 20 }}
+            style={{ paddingHorizontal: 10, color: "#008c8c", fontSize: 20 }}
             placeholder="Contact Number"
             keyboardType="number-pad"
             value={contact}
@@ -129,15 +127,7 @@ export default function Register(props) {
         </View>
         <View style={styles.inputContainer}>
           <TextInput
-            style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 20 }}
-            placeholder="NIC"
-            value={NIC}
-            onChangeText={(text) => setNIC(text)}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 20 }}
+            style={{ paddingHorizontal: 10, color: "#008c8c", fontSize: 20 }}
             placeholder="Address"
             value={address}
             onChangeText={(text) => setAddress(text)}
@@ -145,7 +135,7 @@ export default function Register(props) {
         </View>
         <View style={styles.inputContainer}>
           <TextInput
-            style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 20 }}
+            style={{ paddingHorizontal: 10, color: "#008c8c", fontSize: 20 }}
             placeholder="Business Registration Number"
             value={br_number}
             onChangeText={(text) => setBr(text)}
@@ -154,7 +144,7 @@ export default function Register(props) {
         <View style={styles.inputContainer}>
           <Picker
             selectedValue={type}
-            style={{ paddingLeft: 280, color: "#306bff", fontSize: 20 }}
+            style={{ paddingLeft: 280, color: "#008c8c", fontSize: 20 }}
             onValueChange={(itemValue) => setType(itemValue)}
           >
             <Picker.Item label="Product" value="product" />
@@ -165,7 +155,7 @@ export default function Register(props) {
           {type == "product" ? (
             <Picker
               selectedValue={category}
-              style={{ paddingLeft: 280, color: "#306bff", fontSize: 20 }}
+              style={{ paddingLeft: 280, color: "#008c8c", fontSize: 20 }}
               onValueChange={(itemValue) => setCategory(itemValue)}
             >
               <Picker.Item label="Apparel" value="Apparel" />
@@ -177,7 +167,7 @@ export default function Register(props) {
           ) : (
             <Picker
               selectedValue={category}
-              style={{ paddingLeft: 280, color: "#306bff", fontSize: 20 }}
+              style={{ paddingLeft: 280, color: "#008c8c", fontSize: 20 }}
               onValueChange={(itemValue) => setCategory(itemValue)}
             >
               <Picker.Item label="Design" value="design" />
@@ -191,7 +181,7 @@ export default function Register(props) {
 
         <View style={styles.inputContainer}>
           <TextInput
-            style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 20 }}
+            style={{ paddingHorizontal: 10, color: "#008c8c", fontSize: 20 }}
             placeholder="Password"
             value={password}
             onChangeText={(text) => setPassword(text)}
@@ -199,7 +189,7 @@ export default function Register(props) {
         </View>
         <View style={styles.inputContainer}>
           <TextInput
-            style={{ paddingHorizontal: 10, color: "#306bff", fontSize: 20 }}
+            style={{ paddingHorizontal: 10, color: "#008c8c", fontSize: 20 }}
             placeholder="Re Enter Password"
             value={repassword}
             onChangeText={(text) => setRePassword(text)}
@@ -232,7 +222,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 25,
     fontWeight: "bold",
-    color: "white",
+    color: "#000000",
     marginLeft: 10,
   },
   headerContainer: {
@@ -251,13 +241,13 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     marginTop: 24,
     paddingHorizontal: 10,
-    borderColor: "#306bff",
-    borderRadius: 23,
+    borderColor: "#008c8c",
+    borderRadius: 15,
     paddingVertical: 2,
     height: 45,
   },
   btn: {
-    backgroundColor: "#306bff",
+    backgroundColor: "#008c8c",
     justifyContent: "center",
     marginTop: 40,
     marginBottom: 10,
