@@ -12,25 +12,31 @@ import {
   Alert,
   KeyboardAvoidingView,
   ActivityIndicator,
+  Button,
+  Image,
   Keyboard,
   Platform,
   TouchableOpacity,
   Animated
  } from "react-native";
 
-  import { Card, FAB,Button } from "react-native-paper";
+  import { Card, FAB } from "react-native-paper";
   import AsyncStorage from "@react-native-async-storage/async-storage";
   import Icons from "react-native-vector-icons/MaterialCommunityIcons";
   import Urls from "../../constant";
   import { SIZES, COLORS, icons } from "../../constants";
   
 
-export default function serviceCard(props) {
+export default function packageCard(props) {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [br, setBr] = useState("");
-  const [data, setdata] = useState([]);
+  const [data, setdata] = useState();
   const [loading, setloading] = useState(true);
+
+  const service_name = props.route.params.item.service_name;
+  const picture = props.route.params.item.picture;
+  const id = props.route.params.item._id;
 
   const getData = async () => {
     const email = await AsyncStorage.getItem("email");
@@ -45,14 +51,14 @@ export default function serviceCard(props) {
   };
 
   const fetchData = () => {
-    fetch(Urls.cn + "/service/")
+    fetch(Urls.cn + "/service/"+id)
       .then((res) => res.json())
       .then((result) => {
-        //console.log(result);
-        setdata(result);
+        console.log(result);
+        setdata(result.package);
       });
   };
-
+  
   useEffect(() => {
     fetchData();
     getData();
@@ -61,25 +67,45 @@ export default function serviceCard(props) {
   
   const renderList = (item) => {
     return (
-      <Card
-        style={styles.card}
-        onPress={() => props.navigation.navigate("packageCard",{item})}
+      <TouchableOpacity
+        style={{
+          marginBottom: SIZES.radius,
+          borderRadius: SIZES.radius * 2,
+          paddingHorizontal: SIZES.padding,
+          paddingVertical: SIZES.radius,
+          backgroundColor: COLORS.gray3,
+        }}
       >
-        <Card.Cover style={styles.image}  source={{ uri: item.picture }} />
-        <Card.Actions>
-          <Card.Title titleStyle={{ color: COLORS.yellow }} title={item.service_name} />
-          <Button style={styles.editBtn}
-            onPress={() => props.navigation.navigate("serviceDetails",{item})}
-          ><Icons
-              name="delete-sweep"
-              style={{ padding: SIZES.padding }}
-              color="#ffffff"
-              size={25}
-          ></Icons></Button>
-        </Card.Actions>
-        
-        
-      </Card>
+        {/* <Text style={{ color: COLORS.lightYellow, fontSize: 24 }}>
+          {service_name}
+        </Text> */}
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginRight: 5,
+          }}
+        >
+          <Text style={{ color: COLORS.white, fontSize: 18 }}>
+            {service_name}
+          </Text>
+          <Text style={{ color: COLORS.white, fontSize: 18 }}>
+          {item.Package_type}
+          </Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginRight: 5,
+          }}
+        >
+          <Text style={{ color: COLORS.white, fontSize: 18 }}>Total</Text>
+          <Text style={{ color: COLORS.white, fontSize: 18 }}>
+            LKR .00
+          </Text>
+        </View>
+      </TouchableOpacity>
     );
   };
 
@@ -107,21 +133,34 @@ export default function serviceCard(props) {
                 }}
               >
                 <View style={{ flexDirection: "row", padding: SIZES.padding }}>
-                  <Icons
-                    name="menu"
-                    color="#ffffff"
-                    size={30}
-                    onPress={() => props.navigation.openDrawer()}
-                  />
+                <TouchableOpacity
+                  style={{
+                   // alignItems: "center",
+                    //justifyContent: "center",
+                    position: "relative",
+                    top: 8,
+                    left: 0,
+                    paddingRight: 5,
+                    borderRadius: SIZES.radius,
+                    backgroundColor: COLORS.darkGreen,
+                  }}
+                  onPress={() => props.navigation.navigate("ServiceCard")}
+                >
+              <Image
+                source={icons.leftArrow}
+                resizeMode="contain"
+                style={{ width: 25, height: 25, tintColor: COLORS.white }}
+              />
+            </TouchableOpacity>
                   <Text
                     style={{
                       color: COLORS.white,
-                      marginTop:-5,
-                      marginLeft: 15,
+                      marginLeft: 10,
                       fontSize: 25,
                     }}
+                   
                   >
-                   Services
+                  {service_name}Package
                   </Text>
                 </View>
                 <View>
@@ -135,6 +174,10 @@ export default function serviceCard(props) {
               </View>
             </SafeAreaView>
           </KeyboardAvoidingView>
+          <Image
+                
+               style={styles.image}  source={{ uri:picture}}
+            />
           <View style={styles.scrollcontainer}>
       <FlatList
         style={{ marginTop: 10, marginBottom: 10 }}
@@ -148,35 +191,13 @@ export default function serviceCard(props) {
       />
       
       </View>
-      {/* <FAB
-        style={styles.fab2}
-        small={true}
-        icon="plus"
-        onPress={() => props.navigation.navigate("addService",{br})}
-      /> */}
-      {/* <FAB
-        style={styles.fab1}
-        small={false}
-        icon="plus"
-        onPress={() => props.navigation.navigate("addPackage",{br})} 
-      /> */}
+      
       <FAB
         style={styles.fab}
         small={false}
         icon="plus"
-        onPress={() => props.navigation.navigate("addService",{br})}
+        onPress={() => props.navigation.navigate("addPackage",{br,data})}
       />
-      {/* <TouchableOpacity style={styles.addButton1}
-        onPress={() => props.navigation.navigate("addPackage",{br})}
-      >
-        <Text style={styles.addButtonText1}>Add Package</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.addButton}
-        onPress={() => props.navigation.navigate("addService",{br})}
-      >
-        <Text style={styles.addButtonText}>Add Service</Text>
-      </TouchableOpacity> */}
       </>
       ) : (
         <ActivityIndicator size="large" color="#0000ff" />
@@ -227,22 +248,6 @@ const styles = StyleSheet.create({
     height: 150,
     width: 300,
   },
-  // fab2: {
-  //   position: "absolute",
-  //   backgroundColor: COLORS.darkGreen,
-  //   marginBottom: 145,
-  //   marginRight: 28,
-  //   right: 0,
-  //   bottom: 0,
-  // },
-  // fab1: {
-  //   position: "absolute",
-  //   backgroundColor: COLORS.darkGreen,
-  //   marginBottom: 90,
-  //   marginRight: 20,
-  //   right: 0,
-  //   bottom: 0,
-  // },
   fab: {
     position: "absolute",
     backgroundColor: COLORS.yellow,
@@ -250,13 +255,6 @@ const styles = StyleSheet.create({
     marginRight: 20,
     right: 0,
     bottom: 0,
-  },
-  editBtn:{
-    backgroundColor: COLORS.darkGreen,
-    marginLeft:-60,
-    marginTop:-5,
-    height:30,
-    justifyContent: 'center',
   },
   scrollcontainer: {
     flex: 1,
