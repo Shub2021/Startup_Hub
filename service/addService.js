@@ -102,9 +102,9 @@ export default function addService(props) {
       }),
     })
       .then((res) => res.json())
-      .then((data) => {
+      .then((item) => {
         Alert.alert(Service_name+"is successfuly added");
-        props.navigation.navigate("ServiceCard");
+        props.navigation.navigate("packageCard",{item});
       });
     console.log(br_number+"ggfffg");
   };
@@ -203,7 +203,7 @@ export default function addService(props) {
       
     
 
-      <View style={styles.inputContainer}>
+      {/* <View style={styles.inputContainer}>
         <TextInput
           style={{ paddingHorizontal: 10, color: COLORS.yellow, fontSize: 20 }}
           placeholder="Features plan"
@@ -211,7 +211,7 @@ export default function addService(props) {
           //value={Description}
           //onChangeText={(text) => setDescription(text)}
         />
-      </View>
+      </View> */}
       
       <TouchableOpacity style={[styles.inputContainer, styles.btn]}
         onPress={submitData}

@@ -6,6 +6,7 @@ import {
   Text,
   View,
   ImageBackground,
+  Image,
   TextInput,
   Alert,
   KeyboardAvoidingView,
@@ -51,7 +52,7 @@ export default function serviceHome(props) {
               size={30}
               onPress={() => props.navigation.openDrawer()}
             />
-            <Text style={{ color: COLORS.white, marginLeft: 10, fontSize: 25 }}>
+            <Text style={{ color: COLORS.white, marginLeft: 20,marginTop: -5, fontSize: 25 }}>
               Home
             </Text>
           </View>
@@ -66,7 +67,14 @@ export default function serviceHome(props) {
         </View>
       </SafeAreaView>
       <ScrollView style={styles.scrollcontainer}>
-        <View></View>
+        <View>
+        <ImageBackground
+          source={require("../../assets/logo.png")}
+          style={{height:200,flex:1,justifyContent:"center",opacity:0.4,alignContent:"center",width: 400,marginTop:230}}
+       // imageStyle={{ borderBottomRightRadius: 65 }}
+        >
+        </ImageBackground>
+        </View>
       </ScrollView>
     </View>
   );
@@ -82,6 +90,6 @@ const styles = StyleSheet.create({
     marginTop: -22,
     borderTopLeftRadius: SIZES.radius * 2,
     borderTopRightRadius: SIZES.radius * 2,
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.white,
   },
 });

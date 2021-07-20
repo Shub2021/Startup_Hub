@@ -69,6 +69,7 @@ export default function serviceDetails(props) {
     {!loading ? (
       <>
         <ScrollView >
+        
           <View
             style={{
               width: "100%",
@@ -159,32 +160,6 @@ export default function serviceDetails(props) {
                 {service_type}
               </Text>
             </View>
-            {/* <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text style={{ color: COLORS.yellow, fontSize: 23 }}>
-                Unit Price
-              </Text>
-              <Text style={{ color: COLORS.primary, fontSize: 23 }}>
-                LKR {unitprice}.00
-              </Text>
-            </View> */}
-            {/* <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text style={{ color: COLORS.yellow, fontSize: 23 }}>
-                Quantity
-              </Text>
-              <Text style={{ color: COLORS.primary, fontSize: 23 }}>
-                {quantity}
-              </Text>
-            </View> */}
             <View
               style={{
                 flexDirection: "row",

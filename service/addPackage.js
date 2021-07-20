@@ -26,16 +26,15 @@ import { SIZES, COLORS, icons } from "../../constants";
 
 
 export default function addPackege(props) {
+
   const service_id = props.route.params._id;
-  const [Service_type, setStype] = useState(props.route.params.service_type);
-  const [picture, setPicture] = useState(props.route.params.picture);
-  const [Service_name, setSname] = useState(props.route.params.service_name);
-  // const [quantity, setQuantity] = useState("");
-  const [Description, setDescription] = useState(props.route.params.Description);
-  // const [product_category, setPCategory] = useState("");
+  const [package_type, setStype] = useState();
+  const [price, setPrice] = useState();
+  const [pk_discription, setDescription] = useState();
   const br_number = props.route.params.br;
-  // const name = props.route.params.name;
-  // const email = props.route.params.email;
+  const package1 = [{package_type:package_type,price:price,pk_discription:pk_discription}];
+  const array = props.route.params.data;
+
   useEffect(() => {
     (async () => {
       if (Platform.OS !== "web") {
@@ -84,17 +83,13 @@ export default function addPackege(props) {
   };
 
   const submitData = () => {
-    fetch(Urls.cn + "/service/", {
-      method: "post",
+   // array.push({package_type,price,pk_discription});
+   let newarray = package1.concat(array)
+    fetch(Urls.cn + "/service/package/", {
+      method: "patch",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        Service_name,
-        Service_type,
-        picture,
-        // unitprice,
-        // quantity,
-        Description,
-        br_number,
+        package:newarray,
       }),
     })
       .then((res) => res.json())
@@ -161,11 +156,11 @@ export default function addPackege(props) {
         </View>
       </SafeAreaView>
       <ScrollView style={styles.scrollcontainer}>
-        <View style={styles.imageContainer}>
+        {/* <View style={styles.imageContainer}>
           <Card style={styles.card} onPress={pickImage}>
             <Card.Cover style={styles.image} source={{ uri: picture }} />
           </Card>
-        </View>
+        </View> */}
         <View style={styles.inputContainer}>
           <TextInput
             style={{
@@ -175,8 +170,8 @@ export default function addPackege(props) {
             }}
             placeholder="Service Name"
             placeholderTextColor={COLORS.primary}
-            value={Service_name}
-            onChangeText={(text) => setSname(text)}
+            value={package_type}
+            onChangeText={(text) => setStype(text)}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -188,38 +183,10 @@ export default function addPackege(props) {
             }}
             placeholder="Product Category"
             placeholderTextColor={COLORS.primary}
-            value={Service_type}
-            onChangeText={(text) => setStype(text)}
+            value={price}
+            onChangeText={(text) => setPrice(text)}
           />
         </View>
-        {/* <View style={styles.inputContainer}>
-          <TextInput
-            style={{
-              paddingHorizontal: 10,
-              color: COLORS.yellow,
-              fontSize: 20,
-            }}
-            placeholder="Unit Price"
-            placeholderTextColor={COLORS.primary}
-            keyboardType="number-pad"
-            value={unitprice}
-            onChangeText={(text) => setUprice(text)}
-          />
-        </View> */}
-        {/* <View style={styles.inputContainer}>
-          <TextInput
-            style={{
-              paddingHorizontal: 10,
-              color: COLORS.yellow,
-              fontSize: 20,
-            }}
-            placeholder="Quantity"
-            placeholderTextColor={COLORS.primary}
-            keyboardType="number-pad"
-            value={quantity}
-            onChangeText={(text) => setQuantity(text)}
-          />
-        </View> */}
         <View style={styles.inputContainer}>
           <TextInput
             style={{
@@ -229,7 +196,7 @@ export default function addPackege(props) {
             }}
             placeholder="Description"
             placeholderTextColor={COLORS.primary}
-            value={Description}
+            value={pk_discription}
             onChangeText={(text) => setDescription(text)}
           />
         </View>
