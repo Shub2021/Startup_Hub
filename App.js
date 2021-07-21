@@ -15,7 +15,12 @@ import serviveHome from "./screens/service/serviveHome";
 import updateService from "./screens/service/updateService";
 import addPackage from "./screens/service/addPackage";
 import packageCard from "./screens/service/packageCard";
-import {NavigationContainer, DefaultTheme, DarkTheme, useTheme} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+  useTheme,
+} from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
 import { DrawerContent } from "./screens/DrawerContent";
@@ -33,24 +38,24 @@ const Drawer = createDrawerNavigator();
 const productStack = createStackNavigator();
 const serviceStack = createStackNavigator();
 
-const customDarkTheme={
+const customDarkTheme = {
   ...DarkTheme,
-  colors:{
+  colors: {
     ...DarkTheme.colors,
-    headerColor:"#404040",
-    iconColor:"white",
-    tabIcon:"white",
-  }
-}
-const customDefaultTheme={
+    headerColor: "#404040",
+    iconColor: "white",
+    tabIcon: "white",
+  },
+};
+const customDefaultTheme = {
   ...DefaultTheme,
-  colors:{
+  colors: {
     ...DefaultTheme.colors,
-    headerColor:"white",
-    iconColor:"black",
-    tabIcon:"green",
-  }
-}
+    headerColor: "white",
+    iconColor: "black",
+    tabIcon: "green",
+  },
+};
 
 function ProductRoutes() {
   return (
@@ -101,7 +106,7 @@ function ServicetRoutes() {
         component={addPackage}
         options={{ ...navoption, title: "addPackage", headerShown: false }}
       />
-       <serviceStack.Screen
+      <serviceStack.Screen
         name="packageCard"
         component={packageCard}
         options={{ ...navoption, title: "PackageCard", headerShown: false }}
@@ -259,8 +264,17 @@ export default function App() {
                   }}
                 />
                 <Stack.Screen
-                  name="Drawer"
+                  name="PDrawer"
                   component={PDrawerRoutes}
+                  options={{
+                    ...navoption,
+                    title: "Drawer",
+                    headerShown: false,
+                  }}
+                />
+                <Stack.Screen
+                  name="SDrawer"
+                  component={SDrawerRoutes}
                   options={{
                     ...navoption,
                     title: "Drawer",
