@@ -157,10 +157,9 @@ export default function packageCard(props) {
                       color: COLORS.white,
                       marginLeft: 10,
                       fontSize: 25,
-                    }}
-                   
+                    }} 
                   >
-                  {service_name}Package
+                  {service_name}
                   </Text>
                 </View>
                 <View>
@@ -174,11 +173,13 @@ export default function packageCard(props) {
               </View>
             </SafeAreaView>
           </KeyboardAvoidingView>
-          <Image
-                
-               style={styles.image}  source={{ uri:picture}}
-            />
-          <View style={styles.scrollcontainer}>
+      <View style={styles.background}>    
+          <View style={styles.imageView}>
+          <Image   
+                style={styles.image}  source={{ uri:picture}}
+             />
+          </View>
+      <View style={styles.scrollcontainer}>
       <FlatList
         style={{ marginTop: 10, marginBottom: 10 }}
         data={data}
@@ -188,10 +189,9 @@ export default function packageCard(props) {
         keyExtractor={(item) => item._id.toString()}
         onRefresh={() => fetchData()}
         refreshing={loading}
-      />
-      
+      /> 
       </View>
-      
+      </View>
       <FAB
         style={styles.fab}
         small={false}
@@ -209,6 +209,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+
   },
   header: {
     height: 75,
@@ -231,7 +232,12 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     paddingBottom: 10,
   },
-
+  background: {
+    marginTop: -20,
+    backgroundColor: COLORS.white,
+    borderTopLeftRadius: SIZES.radius * 2,
+    borderTopRightRadius: SIZES.radius * 2
+  },
   card: {
     borderRadius: 23,
     height: 200,
@@ -241,12 +247,17 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   image: {
-    marginHorizontal: 0,
     borderRadius: 23,
-    borderTopStartRadius: 23,
-    borderTopEndRadius: 23,
-    height: 150,
+    marginTop:50,
+    marginBottom:40,
+    height: 200,
     width: 300,
+    borderColor: COLORS.darkGreen,
+    borderWidth:2,
+  },
+  imageView: {
+    justifyContent:'center',
+    alignItems:'center',
   },
   fab: {
     position: "absolute",
@@ -261,7 +272,7 @@ const styles = StyleSheet.create({
     marginTop: -22,
     borderTopLeftRadius: SIZES.radius * 2,
     borderTopRightRadius: SIZES.radius * 2,
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.white,
   },
   addButton: {
     position: 'absolute',
