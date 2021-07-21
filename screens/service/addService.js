@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   SafeAreaView,
@@ -16,7 +16,7 @@ import {
 } from "react-native";
 import Constants from "expo-constants";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
-import { AntDesign,Feather,Ionicons } from '@expo/vector-icons'; 
+import { AntDesign, Feather, Ionicons } from "@expo/vector-icons";
 import { Appbar, Card } from "react-native-paper";
 import { Value } from "react-native-reanimated";
 import { SIZES, COLORS, icons } from "../../constants";
@@ -24,8 +24,6 @@ import Urls from "../../constant";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import Note from "./Note";
-
-
 
 export default function addService(props) {
   const [Service_type, setStype] = useState("");
@@ -86,7 +84,6 @@ export default function addService(props) {
       });
   };
 
-
   const submitData = () => {
     fetch(Urls.cn + "/service/", {
       method: "post",
@@ -103,24 +100,23 @@ export default function addService(props) {
     })
       .then((res) => res.json())
       .then((item) => {
-        Alert.alert(Service_name+"is successfuly added");
-        props.navigation.navigate("packageCard",{item});
+        Alert.alert(Service_name + "is successfuly added");
+        //props.navigation.navigate("packageCard",{item});
+        props.navigation.navigate("serviceCard");
       });
-    console.log(br_number+"ggfffg");
+    console.log(br_number + "ggfffg");
   };
-
-
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
-    <SafeAreaView
+      <SafeAreaView
         style={{
           height: 100,
           width: "100%",
-          backgroundColor: COLORS.darkGreen,
+          backgroundColor: COLORS.green,
           flexDirection: "row",
         }}
       >
@@ -141,7 +137,7 @@ export default function addService(props) {
                 left: 0,
                 padding: 10,
                 borderRadius: SIZES.radius,
-                backgroundColor: COLORS.darkGreen,
+                backgroundColor: COLORS.green,
               }}
               onPress={() => props.navigation.navigate("ServiceCard")}
             >
@@ -165,45 +161,54 @@ export default function addService(props) {
           </View>
         </View>
       </SafeAreaView>
-    <ScrollView style={styles.scrollcontainer}>
-    <View style={styles.imageContainer}>
-      <Card style={styles.card} onPress={pickImage}>
-        <Card.Cover style={styles.image} source={{ uri: picture }} />
-      </Card>
-    </View>
+      <ScrollView style={styles.scrollcontainer}>
+        <View style={styles.imageContainer}>
+          <Card style={styles.card} onPress={pickImage}>
+            <Card.Cover style={styles.image} source={{ uri: picture }} />
+          </Card>
+        </View>
 
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={{
+              paddingHorizontal: 10,
+              color: COLORS.green,
+              fontSize: 20,
+            }}
+            placeholder="Service Type"
+            placeholderTextColor={COLORS.primary}
+            value={Service_type}
+            onChangeText={(text) => setStype(text)}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={{
+              paddingHorizontal: 10,
+              color: COLORS.green,
+              fontSize: 20,
+            }}
+            placeholder="Service Name"
+            placeholderTextColor={COLORS.primary}
+            value={Service_name}
+            onChangeText={(text) => setSname(text)}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={{
+              paddingHorizontal: 10,
+              color: COLORS.green,
+              fontSize: 20,
+            }}
+            placeholder="Description"
+            placeholderTextColor={COLORS.primary}
+            value={Description}
+            onChangeText={(text) => setDescription(text)}
+          />
+        </View>
 
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={{ paddingHorizontal: 10, color: COLORS.yellow, fontSize: 20 }}
-          placeholder="Service Type"
-          placeholderTextColor={COLORS.primary}
-          value={Service_type}
-          onChangeText={(text) => setStype(text)}
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={{ paddingHorizontal: 10, color: COLORS.yellow, fontSize: 20 }}
-          placeholder="Service Name"
-          placeholderTextColor={COLORS.primary}
-          value={Service_name}
-          onChangeText={(text) => setSname(text)}
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={{ paddingHorizontal: 10, color: COLORS.yellow, fontSize: 20 }}
-          placeholder="Description"
-          placeholderTextColor={COLORS.primary}
-          value={Description}
-          onChangeText={(text) => setDescription(text)}
-        />
-      </View>
-      
-    
-
-      {/* <View style={styles.inputContainer}>
+        {/* <View style={styles.inputContainer}>
         <TextInput
           style={{ paddingHorizontal: 10, color: COLORS.yellow, fontSize: 20 }}
           placeholder="Features plan"
@@ -212,14 +217,28 @@ export default function addService(props) {
           //onChangeText={(text) => setDescription(text)}
         />
       </View> */}
-      
-      <TouchableOpacity style={[styles.inputContainer, styles.btn]}
-        onPress={submitData}
-      >
-        <Text style={{ color: "white", fontSize: 20, fontWeight: "bold",textShadowOffset: {width: 1, height: 1},textShadowRadius: 1,textShadowColor: 'black',}}>
-         Add Service
-        </Text>
-      </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[
+            styles.inputContainer,
+            styles.btn,
+            { borderColor: COLORS.green },
+          ]}
+          onPress={submitData}
+        >
+          <Text
+            style={{
+              color: "white",
+              fontSize: 20,
+              fontWeight: "bold",
+              textShadowOffset: { width: 1, height: 1 },
+              textShadowRadius: 1,
+              textShadowColor: "black",
+            }}
+          >
+            Add Service
+          </Text>
+        </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -239,7 +258,7 @@ const styles = StyleSheet.create({
     left: 40,
     paddingHorizontal: 10,
     borderColor: COLORS.lightGreen,
-    borderRadius: 23,
+    borderRadius: 15,
     paddingVertical: 2,
     height: 45,
   },
@@ -265,7 +284,7 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   btn: {
-    backgroundColor: COLORS.darkGreen,
+    backgroundColor: COLORS.green,
     justifyContent: "flex-start",
     paddingLeft: 20,
     alignItems: "center",
@@ -285,6 +304,6 @@ const styles = StyleSheet.create({
     marginTop: -22,
     borderTopLeftRadius: SIZES.radius * 2,
     borderTopRightRadius: SIZES.radius * 2,
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.white,
   },
 });

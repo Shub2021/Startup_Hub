@@ -34,7 +34,7 @@ export default function serviceHome(props) {
         style={{
           height: 100,
           width: "100%",
-          backgroundColor: COLORS.darkGreen,
+          backgroundColor: COLORS.green,
           flexDirection: "row",
         }}
       >
@@ -52,7 +52,14 @@ export default function serviceHome(props) {
               size={30}
               onPress={() => props.navigation.openDrawer()}
             />
-            <Text style={{ color: COLORS.white, marginLeft: 20,marginTop: -5, fontSize: 25 }}>
+            <Text
+              style={{
+                color: COLORS.white,
+                marginLeft: 20,
+                marginTop: -5,
+                fontSize: 25,
+              }}
+            >
               Home
             </Text>
           </View>
@@ -68,12 +75,20 @@ export default function serviceHome(props) {
       </SafeAreaView>
       <ScrollView style={styles.scrollcontainer}>
         <View>
-        <ImageBackground
-          source={require("../../assets/logo.png")}
-          style={{height:200,flex:1,justifyContent:"center",opacity:0.4,alignContent:"center",width: 400,marginTop:230}}
-       // imageStyle={{ borderBottomRightRadius: 65 }}
-        >
-        </ImageBackground>
+          <ImageBackground
+            source={require("../../assets/logo.png")}
+            style={{
+              height: 200,
+              flex: 1,
+              justifyContent: "center",
+              opacity: 0.4,
+              alignContent: "center",
+              width: 350,
+              marginLeft: 10,
+              marginTop: 190,
+            }}
+            // imageStyle={{ borderBottomRightRadius: 65 }}
+          ></ImageBackground>
         </View>
       </ScrollView>
     </View>

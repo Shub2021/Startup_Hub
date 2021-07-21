@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import {  
+import {
   StyleSheet,
   SafeAreaView,
   ScrollView,
@@ -17,15 +17,14 @@ import {
   Keyboard,
   Platform,
   TouchableOpacity,
-  Animated
- } from "react-native";
+  Animated,
+} from "react-native";
 
-  import { Card, FAB } from "react-native-paper";
-  import AsyncStorage from "@react-native-async-storage/async-storage";
-  import Icons from "react-native-vector-icons/MaterialCommunityIcons";
-  import Urls from "../../constant";
-  import { SIZES, COLORS, icons } from "../../constants";
-  
+import { Card, FAB } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Icons from "react-native-vector-icons/MaterialCommunityIcons";
+import Urls from "../../constant";
+import { SIZES, COLORS, icons } from "../../constants";
 
 export default function packageCard(props) {
   const [email, setEmail] = useState("");
@@ -42,29 +41,29 @@ export default function packageCard(props) {
     const email = await AsyncStorage.getItem("email");
     const name = await AsyncStorage.getItem("name");
     const br_number = await AsyncStorage.getItem("br");
-   
+
     setEmail(email);
     setBr(br_number);
-    
+
     setName(name);
     setloading(false);
   };
 
   const fetchData = () => {
-    fetch(Urls.cn + "/service/"+id)
+    fetch(Urls.cn + "/service/" + id)
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
         setdata(result.package);
       });
   };
-  
+
   useEffect(() => {
     fetchData();
     getData();
     console.log(br);
   }, []);
-  
+
   const renderList = (item) => {
     return (
       <TouchableOpacity
@@ -73,7 +72,7 @@ export default function packageCard(props) {
           borderRadius: SIZES.radius * 2,
           paddingHorizontal: SIZES.padding,
           paddingVertical: SIZES.radius,
-          backgroundColor: COLORS.gray3,
+          backgroundColor: COLORS.green,
         }}
       >
         {/* <Text style={{ color: COLORS.lightYellow, fontSize: 24 }}>
@@ -90,7 +89,7 @@ export default function packageCard(props) {
             {service_name}
           </Text>
           <Text style={{ color: COLORS.white, fontSize: 18 }}>
-          {item.Package_type}
+            {item.Package_type}
           </Text>
         </View>
         <View
@@ -101,27 +100,24 @@ export default function packageCard(props) {
           }}
         >
           <Text style={{ color: COLORS.white, fontSize: 18 }}>Total</Text>
-          <Text style={{ color: COLORS.white, fontSize: 18 }}>
-            LKR .00
-          </Text>
+          <Text style={{ color: COLORS.white, fontSize: 18 }}>LKR .00</Text>
         </View>
       </TouchableOpacity>
     );
   };
 
-
   return (
     <View style={styles.container}>
-    {!loading ? (
-      <>
-      <KeyboardAvoidingView 
+      {!loading ? (
+        <>
+          <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "position"}
           >
             <SafeAreaView
               style={{
                 height: 100,
                 width: "100%",
-                backgroundColor: COLORS.darkGreen,
+                backgroundColor: COLORS.green,
                 flexDirection: "row",
               }}
             >
@@ -133,33 +129,33 @@ export default function packageCard(props) {
                 }}
               >
                 <View style={{ flexDirection: "row", padding: SIZES.padding }}>
-                <TouchableOpacity
-                  style={{
-                   // alignItems: "center",
-                    //justifyContent: "center",
-                    position: "relative",
-                    top: 8,
-                    left: 0,
-                    paddingRight: 5,
-                    borderRadius: SIZES.radius,
-                    backgroundColor: COLORS.darkGreen,
-                  }}
-                  onPress={() => props.navigation.navigate("ServiceCard")}
-                >
-              <Image
-                source={icons.leftArrow}
-                resizeMode="contain"
-                style={{ width: 25, height: 25, tintColor: COLORS.white }}
-              />
-            </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      // alignItems: "center",
+                      //justifyContent: "center",
+                      position: "relative",
+                      top: 8,
+                      left: 0,
+                      paddingRight: 5,
+                      borderRadius: SIZES.radius,
+                      backgroundColor: COLORS.green,
+                    }}
+                    onPress={() => props.navigation.navigate("ServiceCard")}
+                  >
+                    <Image
+                      source={icons.leftArrow}
+                      resizeMode="contain"
+                      style={{ width: 25, height: 25, tintColor: COLORS.white }}
+                    />
+                  </TouchableOpacity>
                   <Text
                     style={{
                       color: COLORS.white,
                       marginLeft: 10,
                       fontSize: 25,
-                    }} 
+                    }}
                   >
-                  {service_name}
+                    {service_name}
                   </Text>
                 </View>
                 <View>
@@ -173,32 +169,32 @@ export default function packageCard(props) {
               </View>
             </SafeAreaView>
           </KeyboardAvoidingView>
-      <View style={styles.background}>    
-          <View style={styles.imageView}>
-          <Image   
-                style={styles.image}  source={{ uri:picture}}
-             />
+          <View style={styles.background}>
+            <View style={styles.imageView}>
+              <Image style={styles.image} source={{ uri: picture }} />
+            </View>
+            <View style={styles.scrollcontainer}>
+              <FlatList
+                style={{ marginTop: 10, marginBottom: 10 }}
+                data={data}
+                renderItem={({ item }) => {
+                  return renderList(item);
+                }}
+                keyExtractor={(item) => item._id.toString()}
+                onRefresh={() => fetchData()}
+                refreshing={loading}
+              />
+            </View>
           </View>
-      <View style={styles.scrollcontainer}>
-      <FlatList
-        style={{ marginTop: 10, marginBottom: 10 }}
-        data={data}
-        renderItem={({ item }) => {
-          return renderList(item);
-        }}
-        keyExtractor={(item) => item._id.toString()}
-        onRefresh={() => fetchData()}
-        refreshing={loading}
-      /> 
-      </View>
-      </View>
-      <FAB
-        style={styles.fab}
-        small={false}
-        icon="plus"
-        onPress={() => props.navigation.navigate("addPackage",{br,data})}
-      />
-      </>
+          <FAB
+            style={styles.fab}
+            small={false}
+            icon="plus"
+            onPress={() =>
+              props.navigation.navigate("addPackage", { br, data })
+            }
+          />
+        </>
       ) : (
         <ActivityIndicator size="large" color="#0000ff" />
       )}
@@ -209,7 +205,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-
   },
   header: {
     height: 75,
@@ -236,7 +231,7 @@ const styles = StyleSheet.create({
     marginTop: -20,
     backgroundColor: COLORS.white,
     borderTopLeftRadius: SIZES.radius * 2,
-    borderTopRightRadius: SIZES.radius * 2
+    borderTopRightRadius: SIZES.radius * 2,
   },
   card: {
     borderRadius: 23,
@@ -248,20 +243,20 @@ const styles = StyleSheet.create({
   },
   image: {
     borderRadius: 23,
-    marginTop:50,
-    marginBottom:40,
+    marginTop: 50,
+    marginBottom: 40,
     height: 200,
     width: 300,
     borderColor: COLORS.darkGreen,
-    borderWidth:2,
+    borderWidth: 2,
   },
   imageView: {
-    justifyContent:'center',
-    alignItems:'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   fab: {
     position: "absolute",
-    backgroundColor: COLORS.yellow,
+    backgroundColor: COLORS.green,
     marginBottom: 20,
     marginRight: 20,
     right: 0,
@@ -275,7 +270,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
   },
   addButton: {
-    position: 'absolute',
+    position: "absolute",
     zIndex: 11,
     right: 20,
     bottom: 90,
@@ -284,33 +279,33 @@ const styles = StyleSheet.create({
     height: 60,
     marginBottom: -70,
     borderRadius: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     elevation: 5,
-},
-addButtonText: {
+  },
+  addButtonText: {
     textAlign: "center",
     color: COLORS.black,
     fontSize: 12,
     fontWeight: "bold",
-},
-addButton1: {
-  position: 'absolute',
-  zIndex: 11,
-  right: 20,
-  bottom: 90,
-  backgroundColor: COLORS.darkGreen,
-  width: 60,
-  height: 60,
-  borderRadius: 50,
-  alignItems: 'center',
-  justifyContent: 'center',
-  elevation: 5,
-},
-addButtonText1: {
-  textAlign: "center",
-  color: COLORS.white,
-  fontSize: 12,
-  fontWeight: "bold",
-},
+  },
+  addButton1: {
+    position: "absolute",
+    zIndex: 11,
+    right: 20,
+    bottom: 90,
+    backgroundColor: COLORS.darkGreen,
+    width: 60,
+    height: 60,
+    borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 5,
+  },
+  addButtonText1: {
+    textAlign: "center",
+    color: COLORS.white,
+    fontSize: 12,
+    fontWeight: "bold",
+  },
 });
