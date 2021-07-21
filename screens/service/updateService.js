@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import Constants from "expo-constants";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
-import { AntDesign,Feather,Ionicons } from '@expo/vector-icons'; 
+import { AntDesign, Feather, Ionicons } from "@expo/vector-icons";
 import { Appbar, Card } from "react-native-paper";
 import { Value } from "react-native-reanimated";
 import Urls from "../../constant";
@@ -23,15 +23,15 @@ import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import { SIZES, COLORS, icons } from "../../constants";
 
-
-
 export default function updateService(props) {
   const service_id = props.route.params._id;
   const [Service_type, setStype] = useState(props.route.params.service_type);
   const [picture, setPicture] = useState(props.route.params.picture);
   const [Service_name, setSname] = useState(props.route.params.service_name);
   // const [quantity, setQuantity] = useState("");
-  const [Description, setDescription] = useState(props.route.params.Description);
+  const [Description, setDescription] = useState(
+    props.route.params.Description
+  );
   // const [product_category, setPCategory] = useState("");
   const br_number = props.route.params.br;
   // const name = props.route.params.name;
@@ -84,7 +84,7 @@ export default function updateService(props) {
   };
 
   const updateData = () => {
-    fetch(Urls.cn + "/service/"+service_id, {
+    fetch(Urls.cn + "/service/" + service_id, {
       method: "patch",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -99,12 +99,11 @@ export default function updateService(props) {
     })
       .then((res) => res.json())
       .then((data) => {
-        Alert.alert(Service_name+"is successfuly added");
+        Alert.alert(Service_name + "is successfuly added");
         props.navigation.navigate("ServiceCard");
       });
-    console.log(br_number+"ggfffg");
+    console.log(br_number + "ggfffg");
   };
-  
 
   return (
     <KeyboardAvoidingView
@@ -115,7 +114,7 @@ export default function updateService(props) {
         style={{
           height: 100,
           width: "100%",
-          backgroundColor: COLORS.darkGreen,
+          backgroundColor: COLORS.green,
           flexDirection: "row",
         }}
       >
@@ -136,7 +135,7 @@ export default function updateService(props) {
                 left: 0,
                 padding: 10,
                 borderRadius: SIZES.radius,
-                backgroundColor: COLORS.darkGreen,
+                backgroundColor: COLORS.green,
               }}
               onPress={() => props.navigation.navigate("ServiceCard")}
             >
@@ -170,7 +169,7 @@ export default function updateService(props) {
           <TextInput
             style={{
               paddingHorizontal: 10,
-              color: COLORS.yellow,
+              color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="Service Name"
@@ -183,7 +182,7 @@ export default function updateService(props) {
           <TextInput
             style={{
               paddingHorizontal: 10,
-              color: COLORS.yellow,
+              color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="Product Category"
@@ -224,7 +223,7 @@ export default function updateService(props) {
           <TextInput
             style={{
               paddingHorizontal: 10,
-              color: COLORS.yellow,
+              color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="Description"
@@ -238,7 +237,7 @@ export default function updateService(props) {
           style={[
             styles.inputContainer,
             styles.btn,
-            { borderColor: COLORS.darkGreen },
+            { borderColor: COLORS.green },
           ]}
           onPress={updateData}
         >
@@ -264,7 +263,7 @@ const styles = StyleSheet.create({
     left: 40,
     paddingHorizontal: 10,
     borderColor: COLORS.lightGreen,
-    borderRadius: 23,
+    borderRadius: 15,
     paddingVertical: 2,
     height: 45,
   },
@@ -290,7 +289,7 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   btn: {
-    backgroundColor: COLORS.darkGreen,
+    backgroundColor: COLORS.green,
     justifyContent: "flex-start",
     paddingLeft: 20,
     alignItems: "center",
@@ -302,6 +301,6 @@ const styles = StyleSheet.create({
     marginTop: -22,
     borderTopLeftRadius: SIZES.radius * 2,
     borderTopRightRadius: SIZES.radius * 2,
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.white,
   },
 });

@@ -66,197 +66,206 @@ export default function serviceDetails(props) {
     );
   return (
     <View style={styles.container}>
-    {!loading ? (
-      <>
-        <ScrollView >
-        
-          <View
-            style={{
-              width: "100%",
-              height: 280,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+      {!loading ? (
+        <>
+          <ScrollView>
             <View
               style={{
-                position: "absolute",
-                top: 0,
-                // width:320,
-                bottom: 0,
-                right: 0,
-                left: 40,
-                borderBottomLeftRadius: 100,
-                backgroundColor: COLORS.primary,
-              }}
-            />
-            <Image
-              source={{ uri: picture }}
-              style={{
-                position: "absolute",
-                top: 0,
-                bottom: 0,
-                right: 0,
-                left: 40,
-                borderBottomLeftRadius: 100,
-              }}
-            />
-            {/* back Button */}
-            <TouchableOpacity
-              style={{
+                width: "100%",
+                height: 280,
                 alignItems: "center",
                 justifyContent: "center",
-                position: "absolute",
-                top: 25,
-                left: 20,
-                padding: 10,
-                borderRadius: SIZES.radius,
-                backgroundColor: COLORS.black,
               }}
-              onPress={() => props.navigation.navigate("ServiceCard")}
             >
-              <Image
-                source={icons.leftArrow}
-                resizeMode="contain"
-                style={{ width: 25, height: 25, tintColor: COLORS.white }}
-              />
-            </TouchableOpacity>
-          </View>
-          <View
-            style={{
-              flex: 1,
-              paddingHorizontal: 15,
-              marginTop: SIZES.padding,
-              justifyContent: "space-between",
-            }}
-          >
-            <View>
-              <Text style={{ 
-                color: COLORS.lightYellow,
-                 fontSize: 28 }}>
-                {service_name}
-              </Text>
-              <Text
+              <View
                 style={{
-                  marginTop: SIZES.base,
-                  color: COLORS.white,
-                  fontSize: 18,
+                  position: "absolute",
+                  top: 0,
+                  // width:320,
+                  bottom: 0,
+                  right: 0,
+                  left: 0,
+                  borderBottomLeftRadius: 25,
+                  borderBottomRightRadius: 25,
+                  backgroundColor: COLORS.primary,
+                  borderWidth: 2,
+                  borderColor: COLORS.green,
+                }}
+              />
+              <Image
+                source={{ uri: picture }}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  bottom: 0,
+                  right: 0,
+                  left: 0,
+                  borderBottomLeftRadius: 25,
+                  borderBottomRightRadius: 25,
+                  borderWidth: 2,
+                  borderColor: COLORS.green,
+                }}
+              />
+              {/* back Button */}
+              <TouchableOpacity
+                style={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                  position: "absolute",
+                  top: 25,
+                  left: 20,
+                  padding: 10,
+                  borderRadius: SIZES.radius,
+                  backgroundColor: COLORS.green,
+                }}
+                onPress={() => props.navigation.navigate("ServiceCard")}
+              >
+                <Image
+                  source={icons.leftArrow}
+                  resizeMode="contain"
+                  style={{ width: 25, height: 25, tintColor: COLORS.white }}
+                />
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                paddingHorizontal: 15,
+                marginTop: SIZES.padding,
+                justifyContent: "space-between",
+              }}
+            >
+              <View>
+                <Text
+                  style={{
+                    color: COLORS.green,
+                    fontSize: 28,
+                    fontWeight: "700",
+                  }}
+                >
+                  {service_name}
+                </Text>
+                <Text
+                  style={{
+                    marginTop: SIZES.base,
+                    color: COLORS.green,
+                    fontSize: 18,
+                  }}
+                >
+                  {Description}
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  marginTop: SIZES.base * 2,
                 }}
               >
-                {Description}
-              </Text>
+                <Text style={{ color: COLORS.black, fontSize: 23 }}>
+                  Category
+                </Text>
+                <Text style={{ color: COLORS.green, fontSize: 23 }}>
+                  {service_type}
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text style={{ color: COLORS.black, fontSize: 23 }}>
+                  Rating
+                </Text>
+                <Text style={{ color: COLORS.green, fontSize: 23 }}>
+                  {/* {trating} */}
+                  STARS 5
+                </Text>
+              </View>
             </View>
             <View
               style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                marginTop: SIZES.base * 2,
-              }}
-            >
-              <Text style={{ color: COLORS.yellow, fontSize: 23 }}>
-                Category
-              </Text>
-              <Text style={{ color: COLORS.primary, fontSize: 23 }}>
-                {service_type}
-              </Text>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
+                flex: 1,
+                marginTop: SIZES.padding * 2,
                 justifyContent: "space-between",
               }}
+            ></View>
+          </ScrollView>
+          <View style={{ marginBottom: 10 }}>
+            <TouchableOpacity
+              style={[
+                styles.inputContainer,
+                styles.btn,
+                {
+                  backgroundColor: COLORS.green,
+                  borderColor: COLORS.green,
+                },
+              ]}
+              onPress={() =>
+                props.navigation.navigate("updateService", {
+                  service_name,
+                  _id,
+                  service_type,
+                  picture,
+                  // unitprice,
+                  // quantity,
+                  Description,
+                })
+              }
             >
-              <Text style={{ color: COLORS.yellow, fontSize: 23 }}>
-                Rating
+              <Text
+                style={{ color: "white", fontSize: 20, fontWeight: "bold" }}
+              >
+                Edit
               </Text>
-              <Text style={{ color: COLORS.primary, fontSize: 23 }}>
-                {/* {trating} */}
-                STARS 5
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.inputContainer,
+                styles.btn,
+                {
+                  backgroundColor: COLORS.red,
+                  borderColor: COLORS.red,
+                },
+              ]}
+              onPress={showAlert}
+            >
+              <Text
+                style={{ color: "white", fontSize: 20, fontWeight: "bold" }}
+              >
+                Delete
               </Text>
-            </View>
+            </TouchableOpacity>
           </View>
-          <View
-            style={{
-              flex: 1,
-              marginTop: SIZES.padding * 2,
-              justifyContent: "space-between",
-            }}
-          ></View>
-        </ScrollView>
-        <View style={{ marginBottom: 10 }}>
-          <TouchableOpacity
-            style={[
-              styles.inputContainer,
-              styles.btn,
-              {
-                backgroundColor: COLORS.darkGreen,
-                borderColor: COLORS.darkGreen,
-              },
-            ]}
-            onPress={() =>
-              props.navigation.navigate("updateService", {
-                service_name,
-                _id,
-                service_type,
-                picture,
-                // unitprice,
-                // quantity,
-                Description,
-              })
-            }
-          >
-            <Text
-              style={{ color: "white", fontSize: 20, fontWeight: "bold" }}
-            >
-              Edit
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.inputContainer,
-              styles.btn,
-              {
-                backgroundColor: COLORS.red,
-                borderColor: COLORS.red,
-              },
-            ]}
-            onPress={showAlert}
-          >
-            <Text
-              style={{ color: "white", fontSize: 20, fontWeight: "bold" }}
-            >
-              Delete
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </>
-    ) : (
-      <ActivityIndicator size="large" color={COLORS.primary} />
-    )}
-  </View>
-);
+        </>
+      ) : (
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      )}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-container: {
-  flex: 1,
-  backgroundColor: COLORS.secondary,
-},
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.white,
+  },
 
-btn: {
-  backgroundColor: "#306bff",
-  justifyContent: "flex-end",
-},
-inputContainer: {
-  flexDirection: "row",
-  alignItems: "center",
-  borderWidth: 2,
-  marginTop: 18,
-  paddingHorizontal: 20,
-  borderColor: "#306bff",
-  borderRadius: 23,
-  right: 85,
-  paddingVertical: 2,
-  height: 45,
-},
+  btn: {
+    backgroundColor: "#306bff",
+    justifyContent: "flex-end",
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 2,
+    marginTop: 18,
+    paddingHorizontal: 20,
+    borderColor: "#306bff",
+    borderRadius: 15,
+    right: 85,
+    paddingVertical: 2,
+    height: 45,
+  },
 });

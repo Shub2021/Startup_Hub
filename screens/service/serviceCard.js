@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import {  
+import {
   StyleSheet,
   SafeAreaView,
   ScrollView,
@@ -15,15 +15,14 @@ import {
   Keyboard,
   Platform,
   TouchableOpacity,
-  Animated
- } from "react-native";
+  Animated,
+} from "react-native";
 
-  import { Card, FAB,Button } from "react-native-paper";
-  import AsyncStorage from "@react-native-async-storage/async-storage";
-  import Icons from "react-native-vector-icons/MaterialCommunityIcons";
-  import Urls from "../../constant";
-  import { SIZES, COLORS, icons } from "../../constants";
-  
+import { Card, FAB, Button } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Icons from "react-native-vector-icons/MaterialCommunityIcons";
+import Urls from "../../constant";
+import { SIZES, COLORS, icons } from "../../constants";
 
 export default function serviceCard(props) {
   const [email, setEmail] = useState("");
@@ -36,10 +35,10 @@ export default function serviceCard(props) {
     const email = await AsyncStorage.getItem("email");
     const name = await AsyncStorage.getItem("name");
     const br_number = await AsyncStorage.getItem("br");
-   
+
     setEmail(email);
     setBr(br_number);
-    
+
     setName(name);
     setloading(false);
   };
@@ -58,44 +57,49 @@ export default function serviceCard(props) {
     getData();
     console.log(br);
   }, []);
-  
+
   const renderList = (item) => {
     return (
       <Card
         style={styles.card}
-        onPress={() => props.navigation.navigate("packageCard",{item})}
+        onPress={() => props.navigation.navigate("packageCard", { item })}
       >
-        <Card.Cover style={styles.image}  source={{ uri: item.picture }} />
+        <Card.Cover style={styles.image} source={{ uri: item.picture }} />
         <Card.Actions>
-          <Card.Title titleStyle={{ color: COLORS.yellow }} title={item.service_name} />
-          <Button style={styles.editBtn}
-            onPress={() => props.navigation.navigate("serviceDetails",{item})}
-          ><Icons
-              name="delete-sweep"
+          <Card.Title
+            titleStyle={{ color: COLORS.green }}
+            title={item.service_name}
+          />
+          <Button
+            style={styles.editBtn}
+            onPress={() =>
+              props.navigation.navigate("serviceDetails", { item })
+            }
+          >
+            <Icons
+              name="file-document-edit-outline"
               style={{ padding: SIZES.padding }}
               color="#ffffff"
-              size={25}
-          ></Icons></Button>
+              size={23}
+            ></Icons>
+          </Button>
         </Card.Actions>
-        
-        
       </Card>
     );
   };
 
-
   return (
     <View style={styles.container}>
-    {!loading ? (
-      <>
-      <KeyboardAvoidingView 
+      {!loading ? (
+        <>
+          <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "position"}
           >
             <SafeAreaView
               style={{
                 height: 100,
                 width: "100%",
-                backgroundColor: COLORS.darkGreen,
+                backgroundColor: COLORS.green,
                 flexDirection: "row",
               }}
             >
@@ -116,12 +120,12 @@ export default function serviceCard(props) {
                   <Text
                     style={{
                       color: COLORS.white,
-                      marginTop:-5,
+                      marginTop: -5,
                       marginLeft: 15,
                       fontSize: 25,
                     }}
                   >
-                   Services
+                    Services
                   </Text>
                 </View>
                 <View>
@@ -136,37 +140,36 @@ export default function serviceCard(props) {
             </SafeAreaView>
           </KeyboardAvoidingView>
           <View style={styles.scrollcontainer}>
-      <FlatList
-        style={{ marginTop: 10, marginBottom: 10 }}
-        data={data}
-        renderItem={({ item }) => {
-          return renderList(item);
-        }}
-        keyExtractor={(item) => item._id.toString()}
-        onRefresh={() => fetchData()}
-        refreshing={loading}
-      />
-      
-      </View>
-      {/* <FAB
+            <FlatList
+              style={{ marginTop: 10, marginBottom: 10 }}
+              data={data}
+              renderItem={({ item }) => {
+                return renderList(item);
+              }}
+              keyExtractor={(item) => item._id.toString()}
+              onRefresh={() => fetchData()}
+              refreshing={loading}
+            />
+          </View>
+          {/* <FAB
         style={styles.fab2}
         small={true}
         icon="plus"
         onPress={() => props.navigation.navigate("addService",{br})}
       /> */}
-      {/* <FAB
+          {/* <FAB
         style={styles.fab1}
         small={false}
         icon="plus"
         onPress={() => props.navigation.navigate("addPackage",{br})} 
       /> */}
-      <FAB
-        style={styles.fab}
-        small={false}
-        icon="plus"
-        onPress={() => props.navigation.navigate("addService",{br})}
-      />
-      {/* <TouchableOpacity style={styles.addButton1}
+          <FAB
+            style={styles.fab}
+            small={false}
+            icon="plus"
+            onPress={() => props.navigation.navigate("addService", { br })}
+          />
+          {/* <TouchableOpacity style={styles.addButton1}
         onPress={() => props.navigation.navigate("addPackage",{br})}
       >
         <Text style={styles.addButtonText1}>Add Package</Text>
@@ -177,7 +180,7 @@ export default function serviceCard(props) {
       >
         <Text style={styles.addButtonText}>Add Service</Text>
       </TouchableOpacity> */}
-      </>
+        </>
       ) : (
         <ActivityIndicator size="large" color="#0000ff" />
       )}
@@ -216,12 +219,11 @@ const styles = StyleSheet.create({
     height: 200,
     width: 300,
     marginHorizontal: 30,
-    backgroundColor: COLORS.gray3,
+    backgroundColor: COLORS.white,
     marginBottom: 15,
   },
   image: {
     marginHorizontal: 0,
-    borderRadius: 23,
     borderTopStartRadius: 23,
     borderTopEndRadius: 23,
     height: 150,
@@ -245,28 +247,28 @@ const styles = StyleSheet.create({
   // },
   fab: {
     position: "absolute",
-    backgroundColor: COLORS.yellow,
+    backgroundColor: COLORS.green,
     marginBottom: 20,
     marginRight: 20,
     right: 0,
     bottom: 0,
   },
-  editBtn:{
-    backgroundColor: COLORS.darkGreen,
-    marginLeft:-60,
-    marginTop:-5,
-    height:30,
-    justifyContent: 'center',
+  editBtn: {
+    backgroundColor: COLORS.green,
+    marginLeft: -60,
+    marginTop: -5,
+    height: 30,
+    justifyContent: "center",
   },
   scrollcontainer: {
     flex: 1,
     marginTop: -22,
     borderTopLeftRadius: SIZES.radius * 2,
     borderTopRightRadius: SIZES.radius * 2,
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.white,
   },
   addButton: {
-    position: 'absolute',
+    position: "absolute",
     zIndex: 11,
     right: 20,
     bottom: 90,
@@ -275,33 +277,33 @@ const styles = StyleSheet.create({
     height: 60,
     marginBottom: -70,
     borderRadius: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     elevation: 5,
-},
-addButtonText: {
+  },
+  addButtonText: {
     textAlign: "center",
     color: COLORS.black,
     fontSize: 12,
     fontWeight: "bold",
-},
-addButton1: {
-  position: 'absolute',
-  zIndex: 11,
-  right: 20,
-  bottom: 90,
-  backgroundColor: COLORS.darkGreen,
-  width: 60,
-  height: 60,
-  borderRadius: 50,
-  alignItems: 'center',
-  justifyContent: 'center',
-  elevation: 5,
-},
-addButtonText1: {
-  textAlign: "center",
-  color: COLORS.white,
-  fontSize: 12,
-  fontWeight: "bold",
-},
+  },
+  addButton1: {
+    position: "absolute",
+    zIndex: 11,
+    right: 20,
+    bottom: 90,
+    backgroundColor: COLORS.darkGreen,
+    width: 60,
+    height: 60,
+    borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 5,
+  },
+  addButtonText1: {
+    textAlign: "center",
+    color: COLORS.white,
+    fontSize: 12,
+    fontWeight: "bold",
+  },
 });
