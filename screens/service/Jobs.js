@@ -31,7 +31,7 @@ export default function Jobs(props) {
         style={{
           height: 100,
           width: "100%",
-          backgroundColor: COLORS.darkGreen,
+          backgroundColor: COLORS.green,
           flexDirection: "row",
         }}
       >
@@ -81,7 +81,7 @@ export default function Jobs(props) {
             >
               <Text
                 style={{
-                  color: selected === "0" ? COLORS.primary : COLORS.gray,
+                  color: selected === "0" ? COLORS.primary : COLORS.green,
                   fontSize: 18,
                 }}
               >
@@ -93,7 +93,7 @@ export default function Jobs(props) {
                   height: selected === "0" ? 4 : 2,
                   width: "100%",
                   backgroundColor:
-                    selected === "0" ? COLORS.primary : COLORS.gray,
+                    selected === "0" ? COLORS.primary : COLORS.green,
                 }}
               />
             </TouchableOpacity>
@@ -158,6 +158,6 @@ const styles = StyleSheet.create({
     marginTop: -22,
     borderTopLeftRadius: SIZES.radius * 2,
     borderTopRightRadius: SIZES.radius * 2,
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.white,
   },
 });
