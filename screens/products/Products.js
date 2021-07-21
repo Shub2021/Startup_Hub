@@ -124,7 +124,7 @@ export default function Products(props) {
                 return renderList(item);
               }}
               keyExtractor={(item) => item._id.toString()}
-              onRefresh={() => fetchData()}
+              onRefresh={() => getData()}
               refreshing={loading}
             />
           </View>
