@@ -110,7 +110,7 @@ export default function UpdateProduct(props) {
         style={{
           height: 100,
           width: "100%",
-          backgroundColor: COLORS.darkGreen,
+          backgroundColor: COLORS.green,
           flexDirection: "row",
         }}
       >
@@ -131,7 +131,7 @@ export default function UpdateProduct(props) {
                 left: 0,
                 padding: 10,
                 borderRadius: SIZES.radius,
-                backgroundColor: COLORS.darkGreen,
+                backgroundColor: COLORS.green,
               }}
               onPress={() => props.navigation.navigate("Profile")}
             >
@@ -165,11 +165,11 @@ export default function UpdateProduct(props) {
           <TextInput
             style={{
               paddingHorizontal: 10,
-              color: COLORS.yellow,
+              color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="Name"
-            placeholderTextColor={COLORS.primary}
+            placeholderTextColor={COLORS.green}
             value={user_name}
             onChangeText={(text) => setSname(text)}
           />
@@ -178,11 +178,11 @@ export default function UpdateProduct(props) {
           <TextInput
             style={{
               paddingHorizontal: 10,
-              color: COLORS.yellow,
+              color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="Email"
-            placeholderTextColor={COLORS.primary}
+            placeholderTextColor={COLORS.green}
             value={email}
             onChangeText={(text) => setEmail(text)}
           />
@@ -191,11 +191,11 @@ export default function UpdateProduct(props) {
           <TextInput
             style={{
               paddingHorizontal: 10,
-              color: COLORS.yellow,
+              color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="NIC"
-            placeholderTextColor={COLORS.primary}
+            placeholderTextColor={COLORS.green}
             value={NIC}
             onChangeText={(text) => setNIC(text)}
           />
@@ -204,11 +204,11 @@ export default function UpdateProduct(props) {
           <TextInput
             style={{
               paddingHorizontal: 10,
-              color: COLORS.yellow,
+              color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="Phone Number"
-            placeholderTextColor={COLORS.primary}
+            placeholderTextColor={COLORS.green}
             keyboardType="number-pad"
             value={mobile}
             onChangeText={(text) => setMobile(text)}
@@ -218,11 +218,11 @@ export default function UpdateProduct(props) {
           <TextInput
             style={{
               paddingHorizontal: 10,
-              color: COLORS.yellow,
+              color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="Address"
-            placeholderTextColor={COLORS.primary}
+            placeholderTextColor={COLORS.green}
             value={address}
             onChangeText={(text) => setAddress(text)}
           />
@@ -232,7 +232,7 @@ export default function UpdateProduct(props) {
           style={[
             styles.inputContainer,
             styles.btn,
-            { borderColor: COLORS.darkGreen },
+            { borderColor: COLORS.green },
           ]}
           onPress={updateData}
         >
@@ -253,12 +253,12 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    borderWidth: 2,
+    borderWidth: 1,
     marginTop: 24,
     left: 40,
     paddingHorizontal: 10,
-    borderColor: COLORS.lightGreen,
-    borderRadius: 23,
+    borderColor: COLORS.green,
+    borderRadius: 15,
     paddingVertical: 2,
     height: 45,
   },
@@ -268,24 +268,23 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignSelf: "center",
     marginTop: 24,
-    borderRadius: 100,
+    borderRadius: 200,
     height: 200,
     width: 200,
   },
   card: {
-    borderRadius: 100,
+    borderRadius: 200,
     height: 200,
     width: 200,
   },
   image: {
     marginHorizontal: 0,
-    borderRadius: 100,
+    borderRadius: 200,
     height: 200,
     width: 200,
-    resizeMode: "contain",
   },
   btn: {
-    backgroundColor: COLORS.darkGreen,
+    backgroundColor: COLORS.green,
     justifyContent: "flex-start",
     paddingLeft: 20,
     alignItems: "center",
@@ -297,6 +296,6 @@ const styles = StyleSheet.create({
     marginTop: -22,
     borderTopLeftRadius: SIZES.radius * 2,
     borderTopRightRadius: SIZES.radius * 2,
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.white,
   },
 });

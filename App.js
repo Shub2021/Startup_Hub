@@ -15,6 +15,9 @@ import serviveHome from "./screens/service/serviveHome";
 import updateService from "./screens/service/updateService";
 import addPackage from "./screens/service/addPackage";
 import packageCard from "./screens/service/packageCard";
+import Profile from "./screens/Profile";
+import updateProfile from "./screens/UpdateProfile";
+import Jobs from "./screens/service/Jobs";
 import {
   NavigationContainer,
   DefaultTheme,
@@ -37,6 +40,8 @@ const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const productStack = createStackNavigator();
 const serviceStack = createStackNavigator();
+const jobStack = createStackNavigator();
+const profileStack = createStackNavigator();
 
 const customDarkTheme = {
   ...DarkTheme,
@@ -76,6 +81,33 @@ function ProductRoutes() {
         options={{ ...navoption, title: "ProductDetails", headerShown: false }}
       />
     </productStack.Navigator>
+  );
+}
+function JobRoutes() {
+  return (
+    <jobStack.Navigator>
+      <jobStack.Screen
+        name="Jobs"
+        component={Jobs}
+        options={{ ...navoption, title: "Jobs", headerShown: false }}
+      />
+    </jobStack.Navigator>
+  );
+}
+function ProfileRoutes() {
+  return (
+    <profileStack.Navigator>
+      <profileStack.Screen
+        name="Profile"
+        component={Profile}
+        options={{ ...navoption, title: "Profile", headerShown: false }}
+      />
+      <profileStack.Screen
+        name="updateProfile"
+        component={updateProfile}
+        options={{ ...navoption, title: "updateProfile", headerShown: false }}
+      />
+    </profileStack.Navigator>
   );
 }
 function ServicetRoutes() {
@@ -120,6 +152,7 @@ function PDrawerRoutes() {
     <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
       <Drawer.Screen name="Home" component={Home} />
       <Drawer.Screen name="Products" component={ProductRoutes} />
+      <Drawer.Screen name="Profile" component={ProfileRoutes} />
     </Drawer.Navigator>
   );
 }
@@ -128,6 +161,8 @@ function SDrawerRoutes() {
     <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
       <Drawer.Screen name="ServiceHome" component={serviveHome} />
       <Drawer.Screen name="Services" component={ServicetRoutes} />
+      <Drawer.Screen name="Jobs" component={JobRoutes} />
+      <Drawer.Screen name="Profile" component={ProfileRoutes} />
     </Drawer.Navigator>
   );
 }

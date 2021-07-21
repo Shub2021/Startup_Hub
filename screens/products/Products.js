@@ -39,19 +39,18 @@ export default function Products(props) {
     setBr(br);
     setCategory(cmp);
     setName(name);
-    setloading(false);
-  };
-  const fetchData = () => {
-    fetch(Urls.cn + "/product/")
+    fetch(Urls.cn + "/product/br/" + br)
       .then((res) => res.json())
       .then((result) => {
         //console.log(result);
         setdata(result);
       });
+    setloading(false);
   };
+  const fetchData = () => {};
   useEffect(() => {
-    fetchData();
     getData();
+    //fetchData();
   }, []);
   const renderList = (item) => {
     return (
@@ -62,7 +61,7 @@ export default function Products(props) {
         <Card.Cover style={styles.image} source={{ uri: item.picture }} />
         <Card.Title
           title={item.product_name}
-          titleStyle={{ color: COLORS.yellow }}
+          titleStyle={{ color: COLORS.green }}
         />
       </Card>
     );
@@ -78,7 +77,7 @@ export default function Products(props) {
               style={{
                 height: 100,
                 width: "100%",
-                backgroundColor: COLORS.darkGreen,
+                backgroundColor: COLORS.green,
                 flexDirection: "row",
               }}
             >
@@ -182,12 +181,12 @@ const styles = StyleSheet.create({
     height: 200,
     width: 300,
     marginHorizontal: 30,
-    backgroundColor: COLORS.gray3,
+    backgroundColor: COLORS.white,
     marginBottom: 15,
   },
   image: {
     marginHorizontal: 0,
-    borderRadius: 23,
+
     borderTopStartRadius: 23,
     borderTopEndRadius: 23,
     height: 150,
@@ -195,7 +194,7 @@ const styles = StyleSheet.create({
   },
   fab: {
     position: "absolute",
-    backgroundColor: COLORS.yellow,
+    backgroundColor: COLORS.green,
     marginBottom: 20,
     marginRight: 20,
     right: 0,
@@ -206,6 +205,6 @@ const styles = StyleSheet.create({
     marginTop: -22,
     borderTopLeftRadius: SIZES.radius * 2,
     borderTopRightRadius: SIZES.radius * 2,
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.white,
   },
 });

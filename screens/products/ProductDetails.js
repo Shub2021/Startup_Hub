@@ -89,7 +89,7 @@ export default function ProductDetails(props) {
                   right: 0,
                   left: 40,
                   borderBottomLeftRadius: 100,
-                  backgroundColor: COLORS.primary,
+                  backgroundColor: COLORS.green,
                 }}
               />
               <Image
@@ -113,7 +113,7 @@ export default function ProductDetails(props) {
                   left: 20,
                   padding: 10,
                   borderRadius: SIZES.radius,
-                  backgroundColor: COLORS.black,
+                  backgroundColor: COLORS.green,
                 }}
                 onPress={() => props.navigation.navigate("Products")}
               >
@@ -133,13 +133,19 @@ export default function ProductDetails(props) {
               }}
             >
               <View>
-                <Text style={{ color: COLORS.lightYellow, fontSize: 28 }}>
+                <Text
+                  style={{
+                    color: COLORS.green,
+                    fontSize: 28,
+                    fontWeight: "700",
+                  }}
+                >
                   {product_name}
                 </Text>
                 <Text
                   style={{
                     marginTop: SIZES.base,
-                    color: COLORS.white,
+                    color: COLORS.green,
                     fontSize: 18,
                   }}
                 >
@@ -153,10 +159,10 @@ export default function ProductDetails(props) {
                   marginTop: SIZES.base * 2,
                 }}
               >
-                <Text style={{ color: COLORS.yellow, fontSize: 23 }}>
+                <Text style={{ color: COLORS.black, fontSize: 23 }}>
                   Category
                 </Text>
-                <Text style={{ color: COLORS.primary, fontSize: 23 }}>
+                <Text style={{ color: COLORS.green, fontSize: 23 }}>
                   {product_category}
                 </Text>
               </View>
@@ -166,10 +172,10 @@ export default function ProductDetails(props) {
                   justifyContent: "space-between",
                 }}
               >
-                <Text style={{ color: COLORS.yellow, fontSize: 23 }}>
+                <Text style={{ color: COLORS.black, fontSize: 23 }}>
                   Unit Price
                 </Text>
-                <Text style={{ color: COLORS.primary, fontSize: 23 }}>
+                <Text style={{ color: COLORS.green, fontSize: 23 }}>
                   LKR {unitprice}.00
                 </Text>
               </View>
@@ -179,10 +185,10 @@ export default function ProductDetails(props) {
                   justifyContent: "space-between",
                 }}
               >
-                <Text style={{ color: COLORS.yellow, fontSize: 23 }}>
+                <Text style={{ color: COLORS.black, fontSize: 23 }}>
                   Quantity
                 </Text>
-                <Text style={{ color: COLORS.primary, fontSize: 23 }}>
+                <Text style={{ color: COLORS.green, fontSize: 23 }}>
                   {quantity}
                 </Text>
               </View>
@@ -192,10 +198,10 @@ export default function ProductDetails(props) {
                   justifyContent: "space-between",
                 }}
               >
-                <Text style={{ color: COLORS.yellow, fontSize: 23 }}>
+                <Text style={{ color: COLORS.black, fontSize: 23 }}>
                   Rating
                 </Text>
-                <Text style={{ color: COLORS.primary, fontSize: 23 }}>
+                <Text style={{ color: COLORS.green, fontSize: 23 }}>
                   {trating}
                 </Text>
               </View>
@@ -214,8 +220,8 @@ export default function ProductDetails(props) {
                 styles.inputContainer,
                 styles.btn,
                 {
-                  backgroundColor: COLORS.darkGreen,
-                  borderColor: COLORS.darkGreen,
+                  backgroundColor: COLORS.green,
+                  borderColor: COLORS.green,
                 },
               ]}
               onPress={() =>
@@ -265,7 +271,7 @@ export default function ProductDetails(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.white,
   },
 
   btn: {
@@ -279,7 +285,7 @@ const styles = StyleSheet.create({
     marginTop: 18,
     paddingHorizontal: 20,
     borderColor: "#306bff",
-    borderRadius: 23,
+    borderRadius: 15,
     right: 85,
     paddingVertical: 2,
     height: 45,

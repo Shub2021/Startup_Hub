@@ -15,12 +15,15 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icons from "@expo/vector-icons/AntDesign";
+import Iconics from "react-native-vector-icons/MaterialCommunityIcons";
 import Urls from "../constant";
+import { SIZES, COLORS, icons } from "../constants";
 //import { useSelector, useDispatch } from "react-redux";
 
 export default function Login(props) {
   //const dispatch = useDispatch();
   const [password, setPassword] = useState("");
+  const [notvisible, setVisible] = useState(true);
   const [email, setEmail] = useState("");
   const signin = async () => {
     //console.log(email);
@@ -45,6 +48,7 @@ export default function Login(props) {
             fetch(Urls.cn + "/company/" + result.br_number)
               .then((res) => res.json())
               .then(async (cmp) => {
+                console.log(cmp);
                 await AsyncStorage.setItem("type", cmp.type);
                 await AsyncStorage.setItem("category", cmp.category);
                 if (cmp.type === "product") {
@@ -75,48 +79,71 @@ export default function Login(props) {
       style={styles.container}
     >
       <ImageBackground
-        
         source={require("../assets/login.png")}
         style={styles.header}
-        
       >
-        <View style={styles.welcomeContainer}>
-          
-        </View>
+        <View style={styles.welcomeContainer}></View>
       </ImageBackground>
       <Text style={styles.logintxt}>Login</Text>
       <View style={styles.inputContainer}>
-        <Icons name="mail" color="#008c8c" size={30} />
+        <Icons name="mail" color={COLORS.green} size={30} />
         <TextInput
-          style={{ paddingHorizontal: 10, color: "#008c8c", fontSize: 20 }}
+          style={{ paddingHorizontal: 10, color: COLORS.green, fontSize: 20 }}
           placeholder="Email"
           value={email}
           onChangeText={(text) => setEmail(text)}
         />
       </View>
       <View style={styles.inputContainer}>
-        <Icons name="lock" color="#008c8c" size={30} />
+        <Icons name="lock" color={COLORS.green} size={30} />
         <TextInput
-          style={{ paddingHorizontal: 10, color: "#008c8c", fontSize: 20 }}
+          style={{
+            paddingHorizontal: 10,
+            color: COLORS.green,
+            fontSize: 20,
+          }}
           placeholder="Password"
           value={password}
+          secureTextEntry={notvisible}
           onChangeText={(text) => setPassword(text)}
         />
+        <TouchableOpacity
+          style={{ marginLeft: 250, top: 6, position: "absolute" }}
+          onPress={() => setVisible(!notvisible)}
+        >
+          {notvisible ? (
+            <Iconics name="eye-outline" color={COLORS.green} size={30} />
+          ) : (
+            <Iconics name="eye-off-outline" color={COLORS.green} size={30} />
+          )}
+        </TouchableOpacity>
       </View>
       <TouchableOpacity
         style={[styles.inputContainer2, styles.btn]}
         onPress={signin}
       >
         <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
-          Log in
+          Login
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.registerbtn, styles.inputContainer2]}
         onPress={() => props.navigation.navigate("Register")}
       >
-        <Text style={{ color: "#008c8c", fontSize: 20, fontWeight: "bold" }}>
+        <Text style={{ color: COLORS.green, fontSize: 20, fontWeight: "bold" }}>
           Register
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{
+          justifyContent: "center",
+          marginTop: 10,
+          alignItems: "center",
+        }}
+        onPress={() => props.navigation.navigate("Register")}
+      >
+        <Text style={{ color: COLORS.green, fontSize: 15 }}>
+          Forgot Password
         </Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
@@ -150,14 +177,14 @@ const styles = StyleSheet.create({
     height: 250,
     width: "100%",
     marginLeft: 10,
-    marginTop:10,
+    marginTop: 10,
   },
   logintxt: {
     fontSize: 40,
     fontWeight: "bold",
     alignSelf: "center",
     marginTop: 28,
-    color: "#008c8c",
+    color: COLORS.green,
   },
   inputContainer: {
     flexDirection: "row",
@@ -166,7 +193,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 24,
     paddingHorizontal: 10,
-    borderColor: "#008c8c",
+    borderColor: COLORS.green,
     borderRadius: 15,
     paddingVertical: 2,
     height: 45,
@@ -178,13 +205,13 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     marginTop: 24,
     paddingHorizontal: 10,
-    borderColor: "#008c8c",
+    borderColor: COLORS.green,
     borderRadius: 15,
     paddingVertical: 2,
     height: 45,
   },
   btn: {
-    backgroundColor: "#008c8c",
+    backgroundColor: COLORS.green,
     justifyContent: "center",
     marginTop: 40,
   },
