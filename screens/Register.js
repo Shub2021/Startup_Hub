@@ -88,9 +88,9 @@ export default function Register(props) {
               onPress={() => props.navigation.navigate("Login")}
             />
           </TouchableOpacity>
-          <Text style={styles.title}>Register</Text>
         </View>
       </ImageBackground>
+      <Text style={styles.title}>Register Your startups</Text>
       <ScrollView>
         <View style={styles.inputContainer}>
           <TextInput
@@ -200,7 +200,7 @@ export default function Register(props) {
           onPress={submitData}
         >
           <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
-            Register
+            SIGNUP
           </Text>
         </TouchableOpacity>
       </ScrollView>
@@ -220,10 +220,11 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 70,
   },
   title: {
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: "bold",
-    color: "#000000",
-    marginLeft: 10,
+    marginTop: 10,
+    alignSelf: "center",
+    color: "#008c8c",
   },
   headerContainer: {
     height: 70,
