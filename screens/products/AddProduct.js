@@ -115,7 +115,7 @@ export default function AddProduct(props) {
         style={{
           height: 100,
           width: "100%",
-          backgroundColor: COLORS.darkGreen,
+          backgroundColor: COLORS.green,
           flexDirection: "row",
         }}
       >
@@ -136,7 +136,7 @@ export default function AddProduct(props) {
                 left: 0,
                 padding: 10,
                 borderRadius: SIZES.radius,
-                backgroundColor: COLORS.darkGreen,
+                backgroundColor: COLORS.green,
               }}
               onPress={() => props.navigation.navigate("Products")}
             >
@@ -170,7 +170,7 @@ export default function AddProduct(props) {
           <TextInput
             style={{
               paddingHorizontal: 10,
-              color: COLORS.yellow,
+              color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="Product Name"
@@ -183,7 +183,7 @@ export default function AddProduct(props) {
           <TextInput
             style={{
               paddingHorizontal: 10,
-              color: COLORS.yellow,
+              color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="Product Category"
@@ -196,7 +196,7 @@ export default function AddProduct(props) {
           <TextInput
             style={{
               paddingHorizontal: 10,
-              color: COLORS.yellow,
+              color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="Unit Price"
@@ -221,7 +221,7 @@ export default function AddProduct(props) {
             <TextInput
               style={{
                 paddingHorizontal: 10,
-                color: COLORS.yellow,
+                color: COLORS.green,
                 fontSize: 20,
               }}
               placeholder="Max order per day"
@@ -236,7 +236,7 @@ export default function AddProduct(props) {
             <TextInput
               style={{
                 paddingHorizontal: 10,
-                color: COLORS.yellow,
+                color: COLORS.green,
                 fontSize: 20,
               }}
               placeholder="Quantity"
@@ -252,11 +252,14 @@ export default function AddProduct(props) {
           <TextInput
             style={{
               paddingHorizontal: 10,
-              color: COLORS.yellow,
+              color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="Description"
             placeholderTextColor={COLORS.primary}
+            multiline={true}
+            maxLength={600}
+            numberOfLines={5}
             value={description}
             onChangeText={(text) => setDescription(text)}
           />
@@ -266,7 +269,7 @@ export default function AddProduct(props) {
           style={[
             styles.inputContainer,
             styles.btn,
-            { borderColor: COLORS.darkGreen },
+            { borderColor: COLORS.green },
           ]}
           onPress={submitData}
         >
@@ -288,23 +291,23 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    borderWidth: 2,
+    borderWidth: 1,
     marginTop: 24,
     left: 40,
     paddingHorizontal: 10,
-    borderColor: COLORS.lightGreen,
-    borderRadius: 23,
+    borderColor: COLORS.green,
+    borderRadius: 15,
     paddingVertical: 2,
     height: 45,
   },
   imageContainer: {
     flexDirection: "row",
     alignItems: "center",
-    alignSelf: "center",
+    justifyContent: "center",
     marginTop: 24,
     borderRadius: 23,
     height: 200,
-    width: 300,
+    width: "100%",
   },
   card: {
     borderRadius: 23,
@@ -319,7 +322,7 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   btn: {
-    backgroundColor: COLORS.darkGreen,
+    backgroundColor: COLORS.green,
     justifyContent: "flex-start",
     paddingLeft: 20,
     alignItems: "center",
@@ -332,6 +335,6 @@ const styles = StyleSheet.create({
     marginTop: -22,
     borderTopLeftRadius: SIZES.radius * 2,
     borderTopRightRadius: SIZES.radius * 2,
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.white,
   },
 });

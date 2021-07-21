@@ -52,7 +52,7 @@ export function DrawerContent(props) {
     console.log("Done.");
   };
   return (
-    <View style={{ flex: 1, backgroundColor: COLORS.secondary }}>
+    <View style={{ flex: 1, backgroundColor: COLORS.white }}>
       {!loading ? (
         <DrawerContentScrollView {...props}>
           <View style={styles.drawerContent}>
@@ -83,7 +83,7 @@ export function DrawerContent(props) {
               <Icon
                 name="close"
                 color="#000000"
-                style={{ marginTop: 10, marginRight: 5, color: COLORS.white }}
+                style={{ marginTop: 10, marginRight: 5, color: COLORS.green }}
                 size={28}
                 onPress={() => props.navigation.closeDrawer()}
               />
@@ -95,13 +95,13 @@ export function DrawerContent(props) {
                     icon={() => (
                       <Icon
                         name="home-outline"
-                        color={COLORS.white}
+                        color={COLORS.green}
                         size={28}
                       />
                     )}
-                    pressColor={COLORS.yellow}
+                    pressColor={COLORS.lightGreen3}
                     label="Home"
-                    labelStyle={{ color: COLORS.white, fontSize: SIZES.h3 }}
+                    labelStyle={{ color: COLORS.green, fontSize: SIZES.h3 }}
                     onPress={() => {
                       props.navigation.navigate("Home");
                     }}
@@ -110,13 +110,13 @@ export function DrawerContent(props) {
                     icon={() => (
                       <Icon
                         name="gift-outline"
-                        color={COLORS.white}
+                        color={COLORS.green}
                         size={28}
                       />
                     )}
-                    pressColor={COLORS.yellow}
+                    pressColor={COLORS.lightGreen3}
                     label="Products"
-                    labelStyle={{ color: COLORS.white, fontSize: SIZES.h3 }}
+                    labelStyle={{ color: COLORS.green, fontSize: SIZES.h3 }}
                     onPress={() => {
                       props.navigation.navigate("Products");
                     }}
@@ -125,15 +125,26 @@ export function DrawerContent(props) {
                     icon={() => (
                       <Icon
                         name="truck-outline"
-                        color={COLORS.white}
+                        color={COLORS.green}
                         size={28}
                       />
                     )}
-                    pressColor={COLORS.yellow}
+                    pressColor={COLORS.lightGreen3}
                     label="Orders"
-                    labelStyle={{ color: COLORS.white, fontSize: SIZES.h3 }}
+                    labelStyle={{ color: COLORS.green, fontSize: SIZES.h3 }}
                     onPress={() => {
                       props.navigation.navigate("Orders");
+                    }}
+                  />
+                  <DrawerItem
+                    icon={() => (
+                      <Icon name="cog-outline" color={COLORS.green} size={28} />
+                    )}
+                    label="Profile"
+                    pressColor={COLORS.lightGreen3}
+                    labelStyle={{ color: COLORS.green, fontSize: SIZES.h3 }}
+                    onPress={() => {
+                      props.navigation.navigate("Profile");
                     }}
                   />
                 </>
@@ -143,13 +154,13 @@ export function DrawerContent(props) {
                     icon={() => (
                       <Icon
                         name="home-outline"
-                        color={COLORS.white}
+                        color={COLORS.green}
                         size={28}
                       />
                     )}
-                    label="SHome"
-                    pressColor={COLORS.yellow}
-                    labelStyle={{ color: COLORS.white, fontSize: SIZES.h3 }}
+                    label="Home"
+                    pressColor={COLORS.lightGreen3}
+                    labelStyle={{ color: COLORS.green, fontSize: SIZES.h3 }}
                     onPress={() => {
                       props.navigation.navigate("ServiceHome");
                     }}
@@ -158,31 +169,45 @@ export function DrawerContent(props) {
                     icon={() => (
                       <Icon
                         name="account-outline"
-                        color={COLORS.white}
+                        color={COLORS.green}
                         size={28}
                       />
                     )}
                     label="Services"
-                    pressColor={COLORS.yellow}
-                    labelStyle={{ color: COLORS.white, fontSize: SIZES.h3 }}
+                    pressColor={COLORS.lightGreen3}
+                    labelStyle={{ color: COLORS.green, fontSize: SIZES.h3 }}
                     onPress={() => {
                       props.navigation.navigate("Services");
                     }}
                   />
+                  <DrawerItem
+                    icon={() => (
+                      <Icon
+                        name="truck-outline"
+                        color={COLORS.green}
+                        size={28}
+                      />
+                    )}
+                    pressColor={COLORS.lightGreen3}
+                    label="Jobs"
+                    labelStyle={{ color: COLORS.green, fontSize: SIZES.h3 }}
+                    onPress={() => {
+                      props.navigation.navigate("Jobs");
+                    }}
+                  />
+                  <DrawerItem
+                    icon={() => (
+                      <Icon name="cog-outline" color={COLORS.green} size={28} />
+                    )}
+                    label="Profile"
+                    pressColor={COLORS.lightGreen3}
+                    labelStyle={{ color: COLORS.green, fontSize: SIZES.h3 }}
+                    onPress={() => {
+                      props.navigation.navigate("Profile");
+                    }}
+                  />
                 </>
               )}
-
-              <DrawerItem
-                icon={() => (
-                  <Icon name="cog-outline" color={COLORS.white} size={28} />
-                )}
-                label="Profile"
-                pressColor={COLORS.yellow}
-                labelStyle={{ color: COLORS.white, fontSize: SIZES.h3 }}
-                onPress={() => {
-                  props.navigation.navigate("Profile");
-                }}
-              />
             </Drawer.Section>
           </View>
         </DrawerContentScrollView>
@@ -192,11 +217,11 @@ export function DrawerContent(props) {
       <Drawer.Section style={styles.bottomDrawerSection}>
         <DrawerItem
           icon={() => (
-            <Icon name="exit-to-app" color={COLORS.white} size={28} />
+            <Icon name="exit-to-app" color={COLORS.green} size={28} />
           )}
           label="Sign Out"
-          pressColor={COLORS.yellow}
-          labelStyle={{ color: COLORS.white, fontSize: SIZES.h3 }}
+          pressColor={COLORS.lightGreen3}
+          labelStyle={{ color: COLORS.green, fontSize: SIZES.h3 }}
           onPress={() => logout()}
         />
       </Drawer.Section>
@@ -214,12 +239,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: "normal",
-    color: COLORS.white,
+    color: COLORS.green,
   },
   caption: {
     fontSize: 14,
     lineHeight: 14,
-    color: COLORS.white,
+    color: COLORS.green,
   },
   drawerSection: {
     marginTop: 15,

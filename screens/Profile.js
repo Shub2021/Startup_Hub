@@ -11,7 +11,7 @@ import {
   Modal,
   ActivityIndicator,
   KeyboardAvoidingView,
-  Button,
+  Alert,
   Keyboard,
   Image,
   Platform,
@@ -26,7 +26,13 @@ import Urls from "../constant";
 
 export default function Home(props) {
   //const data = props.route.params.data;
+  const [notvisible1, setVisible1] = useState(true);
+  const [notvisible2, setVisible2] = useState(true);
+  const [notvisible3, setVisible3] = useState(true);
   const [email, setEmail] = useState("");
+  const [curpass, setCpass] = useState("");
+  const [newpass, setNpass] = useState("");
+  const [repass, setRpass] = useState("");
   const [name, setName] = useState("");
   const [br, setBr] = useState("");
   const [cmpcategory, setCategory] = useState("");
@@ -60,7 +66,29 @@ export default function Home(props) {
     setloading(false);
     //console.log(data[0]);
   }, []);
-
+  const resetPassword = () => {
+    if (newpass === repass) {
+      fetch(Urls.cn + "/users/reset/" + email, {
+        method: "patch",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          curpass,
+          newpass,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.message === "Reset successful") {
+            console.log(data);
+            Alert.alert("Password reset successfull");
+          } else {
+            Alert.alert("Password reset unsuccessfull");
+          }
+        });
+    } else {
+      Alert.alert("New passwords does not match");
+    }
+  };
   return (
     <View
       behavior={Platform.OS === "ios" ? "padding" : "position"}
@@ -72,7 +100,7 @@ export default function Home(props) {
             style={{
               height: 100,
               width: "100%",
-              backgroundColor: COLORS.darkGreen,
+              backgroundColor: COLORS.green,
               flexDirection: "row",
             }}
           >
@@ -117,10 +145,14 @@ export default function Home(props) {
           >
             <View style={styles.imageContainer}>
               <Image style={styles.image} source={{ uri: data.img }} />
-              <Text style={{ fontSize: 30, color: COLORS.white }}>
+              <Text
+                style={{ fontSize: 25, fontWeight: "700", color: COLORS.green }}
+              >
                 {data.name}
               </Text>
-              <Text style={{ fontSize: 20, color: COLORS.white }}>
+              <Text
+                style={{ fontSize: 20, fontWeight: "600", color: COLORS.green }}
+              >
                 {data.accountType}
               </Text>
             </View>
@@ -129,10 +161,11 @@ export default function Home(props) {
                 flexDirection: "row",
                 justifyContent: "space-between",
                 marginTop: SIZES.base * 2,
-                marginHorizontal: SIZES.base,
+                marginHorizontal: SIZES.base * 2,
               }}
             >
-              <Text style={{ color: COLORS.primary, fontSize: 23 }}>
+              <Text style={{ color: COLORS.black, fontSize: 20 }}>Email</Text>
+              <Text style={{ color: COLORS.green, fontSize: 20 }}>
                 {data.email}
               </Text>
             </View>
@@ -141,10 +174,11 @@ export default function Home(props) {
                 flexDirection: "row",
                 justifyContent: "space-between",
                 marginTop: SIZES.base * 2,
-                marginHorizontal: SIZES.base,
+                marginHorizontal: SIZES.base * 2,
               }}
             >
-              <Text style={{ color: COLORS.primary, fontSize: 23 }}>
+              <Text style={{ color: COLORS.black, fontSize: 20 }}>NIC</Text>
+              <Text style={{ color: COLORS.green, fontSize: 20 }}>
                 {data.NIC}
               </Text>
             </View>
@@ -153,10 +187,11 @@ export default function Home(props) {
                 flexDirection: "row",
                 justifyContent: "space-between",
                 marginTop: SIZES.base * 2,
-                marginHorizontal: SIZES.base,
+                marginHorizontal: SIZES.base * 2,
               }}
             >
-              <Text style={{ color: COLORS.primary, fontSize: 23 }}>
+              <Text style={{ color: COLORS.black, fontSize: 20 }}>Phone</Text>
+              <Text style={{ color: COLORS.green, fontSize: 20 }}>
                 {data.mobile === "" ? "not set" : data.mobile}
               </Text>
             </View>
@@ -165,10 +200,11 @@ export default function Home(props) {
                 flexDirection: "row",
                 justifyContent: "space-between",
                 marginTop: SIZES.base * 2,
-                marginHorizontal: SIZES.base,
+                marginHorizontal: SIZES.base * 2,
               }}
             >
-              <Text style={{ color: COLORS.primary, fontSize: 23 }}>
+              <Text style={{ color: COLORS.black, fontSize: 20 }}>Address</Text>
+              <Text style={{ color: COLORS.green, fontSize: 20 }}>
                 {data.Address === "" ? "not set" : data.Address}
               </Text>
             </View>
@@ -178,8 +214,8 @@ export default function Home(props) {
                   styles.inputContainer,
                   styles.btn,
                   {
-                    backgroundColor: COLORS.darkGreen,
-                    borderColor: COLORS.darkGreen,
+                    backgroundColor: COLORS.green,
+                    borderColor: COLORS.green,
                   },
                 ]}
                 onPress={() =>
@@ -223,7 +259,7 @@ export default function Home(props) {
               <View
                 style={[
                   styles.inputContainer,
-                  { right: 0, marginHorizontal: 20, borderColor: COLORS.black },
+                  { right: 0, marginHorizontal: 20, borderColor: COLORS.green },
                 ]}
               >
                 <TextInput
@@ -234,18 +270,123 @@ export default function Home(props) {
                   }}
                   placeholder="Current Password"
                   placeholderTextColor={COLORS.primary}
-                  value={email}
-                  onChangeText={(text) => setEmail(text)}
+                  value={curpass}
+                  secureTextEntry={notvisible1}
+                  onChangeText={(text) => setCpass(text)}
                 />
+                <TouchableOpacity
+                  style={{ marginLeft: 270, top: 6, position: "absolute" }}
+                  onPress={() => setVisible1(!notvisible1)}
+                >
+                  {notvisible1 ? (
+                    <Icons name="eye-outline" color={COLORS.green} size={30} />
+                  ) : (
+                    <Icons
+                      name="eye-off-outline"
+                      color={COLORS.green}
+                      size={30}
+                    />
+                  )}
+                </TouchableOpacity>
+              </View>
+              <View
+                style={[
+                  styles.inputContainer,
+                  { right: 0, marginHorizontal: 20, borderColor: COLORS.green },
+                ]}
+              >
+                <TextInput
+                  style={{
+                    paddingHorizontal: 10,
+                    color: COLORS.black,
+                    fontSize: 20,
+                  }}
+                  placeholder="New Password"
+                  placeholderTextColor={COLORS.primary}
+                  value={newpass}
+                  secureTextEntry={notvisible2}
+                  onChangeText={(text) => setNpass(text)}
+                />
+                <TouchableOpacity
+                  style={{ marginLeft: 270, top: 6, position: "absolute" }}
+                  onPress={() => setVisible2(!notvisible2)}
+                >
+                  {notvisible2 ? (
+                    <Icons name="eye-outline" color={COLORS.green} size={30} />
+                  ) : (
+                    <Icons
+                      name="eye-off-outline"
+                      color={COLORS.green}
+                      size={30}
+                    />
+                  )}
+                </TouchableOpacity>
+              </View>
+              <View
+                style={[
+                  styles.inputContainer,
+                  { right: 0, marginHorizontal: 20, borderColor: COLORS.green },
+                ]}
+              >
+                <TextInput
+                  style={{
+                    paddingHorizontal: 10,
+                    color: COLORS.black,
+                    fontSize: 20,
+                  }}
+                  placeholder="Re-Enter Password"
+                  placeholderTextColor={COLORS.primary}
+                  value={repass}
+                  secureTextEntry={notvisible3}
+                  onChangeText={(text) => setRpass(text)}
+                />
+                <TouchableOpacity
+                  style={{ marginLeft: 270, top: 6, position: "absolute" }}
+                  onPress={() => setVisible3(!notvisible3)}
+                >
+                  {notvisible3 ? (
+                    <Icons name="eye-outline" color={COLORS.green} size={30} />
+                  ) : (
+                    <Icons
+                      name="eye-off-outline"
+                      color={COLORS.green}
+                      size={30}
+                    />
+                  )}
+                </TouchableOpacity>
               </View>
               <TouchableOpacity
                 style={[
                   styles.inputContainer,
-                  { right: 0, marginHorizontal: 20, borderColor: COLORS.black },
+                  styles.buttonview,
+                  {
+                    right: 0,
+                    marginHorizontal: 20,
+                    borderColor: COLORS.green,
+                    justifyContent: "center",
+                    backgroundColor: COLORS.green,
+                  },
+                ]}
+                onPress={resetPassword}
+              >
+                <Text style={{ color: COLORS.white, fontSize: 20 }}>Reset</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[
+                  styles.inputContainer2,
+                  {
+                    right: 0,
+                    marginHorizontal: 20,
+                    borderColor: COLORS.darkGreen,
+                    justifyContent: "center",
+                  },
                 ]}
                 onPress={() => setmodal(false)}
               >
-                <Text>Cancel</Text>
+                <Text style={{ fontSize: 20, color: COLORS.darkGreen }}>
+                  Cancel
+                </Text>
               </TouchableOpacity>
             </View>
           </Modal>
@@ -267,7 +408,7 @@ const styles = StyleSheet.create({
     marginTop: -22,
     borderTopLeftRadius: SIZES.radius * 2,
     borderTopRightRadius: SIZES.radius * 2,
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.white,
   },
   imageContainer: {
     alignItems: "center",
@@ -283,27 +424,29 @@ const styles = StyleSheet.create({
     borderRadius: 90,
     height: 180,
     width: 180,
-    resizeMode: "contain",
+    borderColor: COLORS.green,
+    borderWidth: 2,
   },
   btn: {
-    backgroundColor: COLORS.lightGreen2,
+    backgroundColor: COLORS.green,
     justifyContent: "flex-end",
   },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    borderWidth: 2,
+    borderWidth: 1,
     marginTop: 18,
     paddingHorizontal: 20,
-    borderColor: COLORS.lightGreen2,
-    borderRadius: 23,
+    borderColor: COLORS.green,
+    backgroundColor: COLORS.white,
+    borderRadius: 15,
     right: 85,
     paddingVertical: 2,
     height: 45,
   },
   buttonview: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "flex-end",
     padding: 10,
   },
   modalview: {
@@ -312,8 +455,21 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     paddingTop: 10,
     width: "100%",
-    backgroundColor: COLORS.lightGray3,
-    borderTopLeftRadius: 23,
-    borderTopRightRadius: 23,
+    backgroundColor: COLORS.lightGreen3,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+  },
+  inputContainer2: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginHorizontal: 35,
+    borderWidth: 2,
+    marginTop: 24,
+    paddingHorizontal: 10,
+    borderColor: COLORS.green,
+    backgroundColor: COLORS.white,
+    borderRadius: 15,
+    paddingVertical: 2,
+    height: 45,
   },
 });

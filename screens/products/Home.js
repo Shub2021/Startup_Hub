@@ -31,7 +31,7 @@ export default function Home(props) {
         style={{
           height: 100,
           width: "100%",
-          backgroundColor: COLORS.darkGreen,
+          backgroundColor: COLORS.green,
           flexDirection: "row",
         }}
       >
@@ -80,6 +80,6 @@ const styles = StyleSheet.create({
     marginTop: -22,
     borderTopLeftRadius: SIZES.radius * 2,
     borderTopRightRadius: SIZES.radius * 2,
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.white,
   },
 });
