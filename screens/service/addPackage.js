@@ -46,41 +46,41 @@ export default function addPackege(props) {
       }
     })();
   }, []);
-  const pickImage = async () => {
-    let data = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
+  // const pickImage = async () => {
+  //   let data = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
+  //     allowsEditing: true,
+  //     aspect: [4, 3],
+  //     quality: 1,
+  //   });
 
-    //console.log(data);
+  //   //console.log(data);
 
-    if (!data.cancelled) {
-      let newfile = {
-        uri: data.uri,
-        type: `test/${data.uri.split(".")[1]}`,
-        name: `test/${data.uri.split(".")[1]}`,
-      };
-      handleUpload(newfile);
-    }
-  };
-  const handleUpload = (image) => {
-    const data = new FormData();
-    data.append("file", image);
-    data.append("upload_preset", "StartupHub");
-    data.append("cloud_name", "hiruna");
+  //   if (!data.cancelled) {
+  //     let newfile = {
+  //       uri: data.uri,
+  //       type: `test/${data.uri.split(".")[1]}`,
+  //       name: `test/${data.uri.split(".")[1]}`,
+  //     };
+  //     handleUpload(newfile);
+  //   }
+  // };
+  // const handleUpload = (image) => {
+  //   const data = new FormData();
+  //   data.append("file", image);
+  //   data.append("upload_preset", "StartupHub");
+  //   data.append("cloud_name", "hiruna");
 
-    fetch("https://api.cloudinary.com/v1_1/hiruna/image/upload", {
-      method: "post",
-      body: data,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        //console.log(data);
-        setPicture(data.url);
-      });
-  };
+  //   fetch("https://api.cloudinary.com/v1_1/hiruna/image/upload", {
+  //     method: "post",
+  //     body: data,
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       //console.log(data);
+  //       setPicture(data.url);
+  //     });
+  // };
 
   const submitData = () => {
    // array.push({package_type,price,pk_discription});
@@ -110,7 +110,7 @@ export default function addPackege(props) {
         style={{
           height: 100,
           width: "100%",
-          backgroundColor: COLORS.darkGreen,
+          backgroundColor: COLORS.green,
           flexDirection: "row",
         }}
       >
@@ -131,7 +131,7 @@ export default function addPackege(props) {
                 left: 0,
                 padding: 10,
                 borderRadius: SIZES.radius,
-                backgroundColor: COLORS.darkGreen,
+                backgroundColor: COLORS.green,
               }}
               onPress={() => props.navigation.navigate("ServiceCard")}
             >
@@ -165,11 +165,11 @@ export default function addPackege(props) {
           <TextInput
             style={{
               paddingHorizontal: 10,
-              color: COLORS.yellow,
+              color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="Service Name"
-            placeholderTextColor={COLORS.primary}
+            placeholderTextColor={COLORS.green}
             value={package_type}
             onChangeText={(text) => setStype(text)}
           />
@@ -178,11 +178,11 @@ export default function addPackege(props) {
           <TextInput
             style={{
               paddingHorizontal: 10,
-              color: COLORS.yellow,
+              color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="Product Category"
-            placeholderTextColor={COLORS.primary}
+            placeholderTextColor={COLORS.green}
             value={price}
             onChangeText={(text) => setPrice(text)}
           />
@@ -191,11 +191,11 @@ export default function addPackege(props) {
           <TextInput
             style={{
               paddingHorizontal: 10,
-              color: COLORS.yellow,
+              color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="Description"
-            placeholderTextColor={COLORS.primary}
+            placeholderTextColor={COLORS.green}
             value={pk_discription}
             onChangeText={(text) => setDescription(text)}
           />
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
     left: 40,
     paddingHorizontal: 10,
-    borderColor: COLORS.lightGreen,
+    borderColor: COLORS.green,
     borderRadius: 23,
     paddingVertical: 2,
     height: 45,
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   btn: {
-    backgroundColor: COLORS.darkGreen,
+    backgroundColor: COLORS.green,
     justifyContent: "flex-start",
     paddingLeft: 20,
     alignItems: "center",
@@ -264,6 +264,6 @@ const styles = StyleSheet.create({
     marginTop: -22,
     borderTopLeftRadius: SIZES.radius * 2,
     borderTopRightRadius: SIZES.radius * 2,
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.white,
   },
 });
