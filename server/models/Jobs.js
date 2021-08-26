@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
 
 const ToDoSchema = new mongoose.Schema({
+    id: Number,
     task : String,
-    status : String,
+    completed: Boolean,
+
   });
 
 const JobsSchema = new mongoose.Schema({
@@ -11,6 +13,8 @@ const JobsSchema = new mongoose.Schema({
   description: String,
   serviceid: String,
   clientid: String,
+  br_number: String,
+  job_status: String,
   taskarray: [ToDoSchema],
 });
 
