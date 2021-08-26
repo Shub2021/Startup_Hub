@@ -19,6 +19,7 @@ import Profile from "./screens/Profile";
 import updateProfile from "./screens/UpdateProfile";
 import Jobs from "./screens/service/Jobs";
 import Orders from "./screens/products/Orders";
+import JobTask from "./screens/service/JobTask";
 import {
   NavigationContainer,
   DefaultTheme,
@@ -94,6 +95,11 @@ function JobRoutes() {
         name="Jobs"
         component={Jobs}
         options={{ ...navoption, title: "Jobs", headerShown: false }}
+      />
+      <jobStack.Screen
+        name="JobTask"
+        component={JobTask}
+        options={{ ...navoption, title: "JobTask", headerShown: false }}
       />
     </jobStack.Navigator>
   );
