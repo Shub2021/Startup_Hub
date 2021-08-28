@@ -38,6 +38,24 @@ router.get("/:email", (req, res, next) => {
       res.status(500).json({ error: err });
     });
 });
+router.get("/br/:br", (req, res, next) => {
+  const br = req.params.br;
+  User.find({ br_number: br })
+    .exec()
+    .then((doc) => {
+      console.log(doc);
+
+      if (doc) {
+        res.status(200).json(doc);
+      } else {
+        res.status(404).json({ message: "No valide entry found" });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
+});
 router.post("/signup", (req, res, next) => {
   User.find({ email: req.body.email })
     .exec()
@@ -61,8 +79,8 @@ router.post("/signup", (req, res, next) => {
               password: hash,
               mobile: "",
               Address: "",
-              NIC: req.body.NIC,
-              accountType: "admin",
+              NIC: "",
+              accountType: req.body.accountType,
               img: "https://res.cloudinary.com/hiruna/image/upload/v1625729331/startupHub/PngItem_4212266_rd09ab.png",
             });
             user
@@ -117,6 +135,7 @@ router.post("/login", (req, res, next) => {
             token: token,
             br_number: user[0].br_number,
             name: user[0].name,
+            usertype: user[0].accountType,
           });
         }
         res.status(401).json({
@@ -152,8 +171,8 @@ router.patch("/reset/:userID", (req, res, next) => {
                 message: "Reset faild b",
               });
             } else {
-              User.findByIdAndUpdate(
-                { _id: id },
+              User.findOneAndUpdate(
+                { email: id },
                 {
                   password: hash,
                 }
@@ -197,6 +216,19 @@ router.patch("/:userID", (req, res, next) => {
       mobile: req.body.mobile,
     }
   )
+    .exec()
+    .then((result) => {
+      console.log(result);
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
+});
+router.delete("/:id", (req, res, next) => {
+  const id = req.params.id;
+  User.remove({ _id: id })
     .exec()
     .then((result) => {
       console.log(result);

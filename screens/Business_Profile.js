@@ -24,26 +24,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import Urls from "../constant";
 
-export default function Profile(props) {
+export default function Business_Profile(props) {
   //const data = props.route.params.data;
-  const [notvisible1, setVisible1] = useState(true);
-  const [notvisible2, setVisible2] = useState(true);
-  const [notvisible3, setVisible3] = useState(true);
   const [email, setEmail] = useState("");
-  const [curpass, setCpass] = useState("");
-  const [newpass, setNpass] = useState("");
-  const [repass, setRpass] = useState("");
   const [name, setName] = useState("");
   const [br, setBr] = useState("");
   const [cmpcategory, setCategory] = useState("");
-  const [img, setimg] = useState("");
-  const [address, setAddress] = useState("");
-  const [NIC, setNIC] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [accountType, setAcc] = useState("");
+  const [location, setLocation] = useState("");
   const [data, setData] = useState("");
   const [loading, setloading] = useState(true);
-  const [modal, setmodal] = useState(null);
   const getData = async () => {
     const email = await AsyncStorage.getItem("email");
     const name = await AsyncStorage.getItem("name");
@@ -54,10 +43,12 @@ export default function Profile(props) {
     setBr(br);
     setCategory(cmp);
     setName(name);
-    fetch(Urls.cn + "/users/" + email)
+    fetch(Urls.cn + "/company/" + br)
       .then((res) => res.json())
       .then((result) => {
-        setData(result[0]);
+        console.log(result.location);
+        setData(result);
+        setLocation(result.location);
       });
   };
 
@@ -66,29 +57,7 @@ export default function Profile(props) {
     setloading(false);
     //console.log(data[0]);
   }, []);
-  const resetPassword = () => {
-    if (newpass === repass) {
-      fetch(Urls.cn + "/users/reset/" + email, {
-        method: "patch",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          curpass,
-          newpass,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.message === "Reset successful") {
-            console.log(data);
-            Alert.alert("Password reset successfull");
-          } else {
-            Alert.alert("Password reset unsuccessfull");
-          }
-        });
-    } else {
-      Alert.alert("New passwords does not match");
-    }
-  };
+
   return (
     <View
       behavior={Platform.OS === "ios" ? "padding" : "position"}
@@ -121,7 +90,7 @@ export default function Profile(props) {
                 <Text
                   style={{ color: COLORS.white, marginLeft: 10, fontSize: 25 }}
                 >
-                  Profile
+                  Business Profile
                 </Text>
               </View>
               <View>
@@ -144,16 +113,16 @@ export default function Profile(props) {
             }
           >
             <View style={styles.imageContainer}>
-              <Image style={styles.image} source={{ uri: data.img }} />
+              <Image style={styles.image} source={{ uri: data.image }} />
               <Text
                 style={{ fontSize: 25, fontWeight: "700", color: COLORS.green }}
               >
-                {data.name}
+                {data.company_name}
               </Text>
               <Text
                 style={{ fontSize: 20, fontWeight: "600", color: COLORS.green }}
               >
-                {data.accountType}
+                {data.category}
               </Text>
             </View>
             <View
@@ -177,9 +146,11 @@ export default function Profile(props) {
                 marginHorizontal: SIZES.base * 2,
               }}
             >
-              <Text style={{ color: COLORS.black, fontSize: 20 }}>NIC</Text>
+              <Text style={{ color: COLORS.black, fontSize: 20 }}>
+                Br Number
+              </Text>
               <Text style={{ color: COLORS.green, fontSize: 20 }}>
-                {data.NIC}
+                {data.br_number}
               </Text>
             </View>
             <View
@@ -192,7 +163,7 @@ export default function Profile(props) {
             >
               <Text style={{ color: COLORS.black, fontSize: 20 }}>Phone</Text>
               <Text style={{ color: COLORS.green, fontSize: 20 }}>
-                {data.mobile === "" ? "not set" : data.mobile}
+                {data.contact === "" ? "not set" : data.contact}
               </Text>
             </View>
             <View
@@ -205,7 +176,22 @@ export default function Profile(props) {
             >
               <Text style={{ color: COLORS.black, fontSize: 20 }}>Address</Text>
               <Text style={{ color: COLORS.green, fontSize: 20 }}>
-                {data.Address === "" ? "not set" : data.Address}
+                {data.address === "" ? "not set" : data.address}
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginTop: SIZES.base * 2,
+                marginHorizontal: SIZES.base * 2,
+              }}
+            >
+              <Text style={{ color: COLORS.black, fontSize: 20 }}>
+                Location
+              </Text>
+              <Text style={{ color: COLORS.green, fontSize: 20 }}>
+                {location.lat === null ? "not set" : "set"}
               </Text>
             </View>
             <View style={{ marginBottom: 10 }}>
@@ -219,7 +205,7 @@ export default function Profile(props) {
                   },
                 ]}
                 onPress={() =>
-                  props.navigation.navigate("updateProfile", {
+                  props.navigation.navigate("Business_Profile_Update", {
                     data,
                   })
                 }
@@ -244,152 +230,11 @@ export default function Profile(props) {
                 <Text
                   style={{ color: "white", fontSize: 20, fontWeight: "bold" }}
                 >
-                  Reset Password
+                  Pay Here
                 </Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modal}
-            onRequestClose={() => setmodal(false)}
-          >
-            <View style={styles.modalview}>
-              <View
-                style={[
-                  styles.inputContainer,
-                  { right: 0, marginHorizontal: 20, borderColor: COLORS.green },
-                ]}
-              >
-                <TextInput
-                  style={{
-                    paddingHorizontal: 10,
-                    color: COLORS.black,
-                    fontSize: 20,
-                  }}
-                  placeholder="Current Password"
-                  placeholderTextColor={COLORS.primary}
-                  value={curpass}
-                  secureTextEntry={notvisible1}
-                  onChangeText={(text) => setCpass(text)}
-                />
-                <TouchableOpacity
-                  style={{ marginLeft: 270, top: 6, position: "absolute" }}
-                  onPress={() => setVisible1(!notvisible1)}
-                >
-                  {notvisible1 ? (
-                    <Icons name="eye-outline" color={COLORS.green} size={30} />
-                  ) : (
-                    <Icons
-                      name="eye-off-outline"
-                      color={COLORS.green}
-                      size={30}
-                    />
-                  )}
-                </TouchableOpacity>
-              </View>
-              <View
-                style={[
-                  styles.inputContainer,
-                  { right: 0, marginHorizontal: 20, borderColor: COLORS.green },
-                ]}
-              >
-                <TextInput
-                  style={{
-                    paddingHorizontal: 10,
-                    color: COLORS.black,
-                    fontSize: 20,
-                  }}
-                  placeholder="New Password"
-                  placeholderTextColor={COLORS.primary}
-                  value={newpass}
-                  secureTextEntry={notvisible2}
-                  onChangeText={(text) => setNpass(text)}
-                />
-                <TouchableOpacity
-                  style={{ marginLeft: 270, top: 6, position: "absolute" }}
-                  onPress={() => setVisible2(!notvisible2)}
-                >
-                  {notvisible2 ? (
-                    <Icons name="eye-outline" color={COLORS.green} size={30} />
-                  ) : (
-                    <Icons
-                      name="eye-off-outline"
-                      color={COLORS.green}
-                      size={30}
-                    />
-                  )}
-                </TouchableOpacity>
-              </View>
-              <View
-                style={[
-                  styles.inputContainer,
-                  { right: 0, marginHorizontal: 20, borderColor: COLORS.green },
-                ]}
-              >
-                <TextInput
-                  style={{
-                    paddingHorizontal: 10,
-                    color: COLORS.black,
-                    fontSize: 20,
-                  }}
-                  placeholder="Re-Enter Password"
-                  placeholderTextColor={COLORS.primary}
-                  value={repass}
-                  secureTextEntry={notvisible3}
-                  onChangeText={(text) => setRpass(text)}
-                />
-                <TouchableOpacity
-                  style={{ marginLeft: 270, top: 6, position: "absolute" }}
-                  onPress={() => setVisible3(!notvisible3)}
-                >
-                  {notvisible3 ? (
-                    <Icons name="eye-outline" color={COLORS.green} size={30} />
-                  ) : (
-                    <Icons
-                      name="eye-off-outline"
-                      color={COLORS.green}
-                      size={30}
-                    />
-                  )}
-                </TouchableOpacity>
-              </View>
-              <TouchableOpacity
-                style={[
-                  styles.inputContainer,
-                  styles.buttonview,
-                  {
-                    right: 0,
-                    marginHorizontal: 20,
-                    borderColor: COLORS.green,
-                    justifyContent: "center",
-                    backgroundColor: COLORS.green,
-                  },
-                ]}
-                onPress={resetPassword}
-              >
-                <Text style={{ color: COLORS.white, fontSize: 20 }}>Reset</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[
-                  styles.inputContainer2,
-                  {
-                    right: 0,
-                    marginHorizontal: 20,
-                    borderColor: COLORS.darkGreen,
-                    justifyContent: "center",
-                  },
-                ]}
-                onPress={() => setmodal(false)}
-              >
-                <Text style={{ fontSize: 20, color: COLORS.darkGreen }}>
-                  Cancel
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </Modal>
         </>
       ) : (
         <ActivityIndicator size="large" color="#0000ff" />
@@ -414,18 +259,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",
-    marginTop: 10,
     borderRadius: 23,
     height: 250,
     width: "100%",
   },
   image: {
     marginHorizontal: 0,
-    borderRadius: 90,
-    height: 180,
-    width: 180,
-    borderColor: COLORS.green,
-    borderWidth: 2,
+    height: 200,
+    width: "100%",
+    borderBottomLeftRadius: 23,
+    borderBottomRightRadius: 23,
   },
   btn: {
     backgroundColor: COLORS.green,

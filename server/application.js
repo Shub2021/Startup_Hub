@@ -9,6 +9,12 @@ const companyRoutes = require("./routes/company");
 const productRoutes = require("./routes/products");
 const orderRoutes = require("./routes/orders");
 const serviceRoutes = require("./routes/service");
+const prequestRoutes = require("./routes/prequest");
+const investorRoutes = require("./routes/investor");
+const investor_requestRoutes = require("./routes/investor_request");
+const startup_requestRoutes = require("./routes/startup_request");
+const subscribetRoutes = require("./routes/subscribe");
+const planRoutes = require("./routes/plan");
 
 application.use(bodyParser.json());
 
@@ -19,7 +25,7 @@ const Order = mongoose.model("Order");
 const Service = mongoose.model("Service");
 
 const mongoUri =
-  "mongodb+srv://startupuser:AknzsBEIJHUfyULI@cluster0.qb28g.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+  "mongodb+srv://startupuser:AknzsBEIJHUfyULI@cluster0.qb28g.mongodb.net/userdb?retryWrites=true&w=majority";
 
 mongoose.connect(mongoUri, {
   useNewUrlParser: true,
@@ -39,6 +45,12 @@ application.use("/company", companyRoutes);
 application.use("/product", productRoutes);
 application.use("/order", orderRoutes);
 application.use("/service", serviceRoutes);
+application.use("/prequest", prequestRoutes);
+application.use("/investor", investorRoutes);
+application.use("/investorrequest", investor_requestRoutes);
+application.use("/startuprequest", startup_requestRoutes);
+application.use("/subscribe", subscribetRoutes);
+application.use("/plan", planRoutes);
 
 application.listen(3000, () => {
   console.log("server runnig");

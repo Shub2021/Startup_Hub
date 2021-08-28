@@ -16,24 +16,20 @@ import {
   Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { SIZES, COLORS, icons } from "../../constants";
+import { SIZES, COLORS, icons } from "../constants";
 import { Card } from "react-native-paper";
-import Urls from "../../constant";
+import Urls from "../constant";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 
-export default function AddProduct(props) {
-  const [product_name, setPname] = useState("");
+export default function AddMember(props) {
+  const [member_name, setMname] = useState("");
+  const [nic, setNIC] = useState("");
   const [picture, setPicture] = useState(
-    "https://res.cloudinary.com/hiruna/image/upload/c_fit,w_700/v1624803256/90343213-aquamarine-blue-rounded-arrow-up-in-light-blue-circle-icon-flat-upload-sign-isolated-on-white-point-_tzzhnf.jpg"
+    "https://res.cloudinary.com/hiruna/image/upload/v1625729331/startupHub/PngItem_4212266_rd09ab.png"
   );
-  const [unitprice, setUprice] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [expence, setExpence] = useState("");
-  const [description, setDescription] = useState("");
-  const [product_category, setPCategory] = useState("");
-  const [ordercategory, setOCategory] = useState("");
+  const [memail, setMemail] = useState("");
   const br_number = props.route.params.br;
   const company_category = props.route.params.cmpcategory;
   const email = props.route.params.email;
@@ -68,6 +64,11 @@ export default function AddProduct(props) {
       handleUpload(newfile);
     }
   };
+  function randnum () {
+      const max = 99999;
+      const min = 10000;
+    return Math.floor(Math.random() * (max - min)) + min;
+  }
   const handleUpload = (image) => {
     const data = new FormData();
     data.append("file", image);
@@ -85,26 +86,24 @@ export default function AddProduct(props) {
       });
   };
   const submitData = () => {
-    fetch(Urls.cn + "/product/", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        product_name,
-        product_category,
-        company_category,
-        ordercategory,
-        picture,
-        unitprice,
-        expence,
-        quantity,
-        description,
-        br_number,
-      }),
-    })
-      .then((res) => res.json())
+    var password = randnum().toString();
+    var acctype = "member";
+    console.log(password);
+    fetch(Urls.cn + "/users/signup", {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          br_number,
+          email: memail,
+          name: member_name,
+          password,
+          accountType : acctype,
+
+        }),
+      }).then((res) => res.json())
       .then((data) => {
-        Alert.alert(`${data.createProduct.product_name} is successfuly added`);
-        props.navigation.navigate("Products");
+        Alert.alert("Created Successfully");
+        props.navigation.navigate("Members");
       });
   };
 
@@ -140,7 +139,7 @@ export default function AddProduct(props) {
                 borderRadius: SIZES.radius,
                 backgroundColor: COLORS.green,
               }}
-              onPress={() => props.navigation.navigate("Products")}
+              onPress={() => props.navigation.navigate("Members")}
             >
               <Image
                 source={icons.leftArrow}
@@ -163,11 +162,7 @@ export default function AddProduct(props) {
         </View>
       </SafeAreaView>
       <ScrollView style={styles.scrollcontainer}>
-        <View style={styles.imageContainer}>
-          <Card style={styles.card} onPress={pickImage}>
-            <Card.Cover style={styles.image} source={{ uri: picture }} />
-          </Card>
-        </View>
+        
         <View style={styles.inputContainer}>
           <TextInput
             style={{
@@ -175,10 +170,10 @@ export default function AddProduct(props) {
               color: COLORS.green,
               fontSize: 20,
             }}
-            placeholder="Product Name"
+            placeholder="Member Name"
             placeholderTextColor={COLORS.primary}
-            value={product_name}
-            onChangeText={(text) => setPname(text)}
+            value={member_name}
+            onChangeText={(text) => setMname(text)}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -188,73 +183,13 @@ export default function AddProduct(props) {
               color: COLORS.green,
               fontSize: 20,
             }}
-            placeholder="Product Category"
+            placeholder="Email"
             placeholderTextColor={COLORS.primary}
-            value={product_category}
-            onChangeText={(text) => setPCategory(text)}
+            value={memail}
+            onChangeText={(text) => setMemail(text)}
           />
         </View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={{
-              paddingHorizontal: 10,
-              color: COLORS.green,
-              fontSize: 20,
-            }}
-            placeholder="Unit Price"
-            placeholderTextColor={COLORS.primary}
-            value={unitprice}
-            keyboardType="number-pad"
-            onChangeText={(text) => setUprice(text)}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={{
-              paddingHorizontal: 10,
-              color: COLORS.green,
-              fontSize: 20,
-            }}
-            placeholder="Unit Cost"
-            placeholderTextColor={COLORS.primary}
-            keyboardType="number-pad"
-            value={expence}
-            onChangeText={(text) => setExpence(text)}
-          />
-        </View>
-
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={{
-              paddingHorizontal: 10,
-              color: COLORS.green,
-              fontSize: 20,
-            }}
-            placeholder="Quantity"
-            placeholderTextColor={COLORS.primary}
-            keyboardType="number-pad"
-            value={quantity}
-            onChangeText={(text) => setQuantity(text)}
-          />
-        </View>
-
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={{
-              paddingHorizontal: 10,
-              color: COLORS.green,
-              fontSize: 20,
-            }}
-            placeholder="Description"
-            placeholderTextColor={COLORS.primary}
-            multiline={true}
-            maxLength={600}
-            numberOfLines={5}
-            value={description}
-            onChangeText={(text) => setDescription(text)}
-          />
-        </View>
-
+       
         <TouchableOpacity
           style={[
             styles.inputContainer,
@@ -264,7 +199,7 @@ export default function AddProduct(props) {
           onPress={submitData}
         >
           <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
-            Create
+            Create Account
           </Text>
         </TouchableOpacity>
       </ScrollView>

@@ -5,7 +5,7 @@ import {
   SafeAreaView,
   Text,
   View,
-  ImageBackground,
+  Image,
   TextInput,
   Alert,
   KeyboardAvoidingView,
@@ -30,28 +30,49 @@ export default function Home(props) {
   const [br, setBr] = useState("");
   const [cmpcategory, setCategory] = useState("");
   const [data, setdata] = useState([]);
+  const [rdata, setrdata] = useState([]);
   const [placed, setPlaced] = useState([]);
   const [processing, setProcessing] = useState([]);
-  const [completed, setCompleted] = useState([]);
+  const [partners, setPartners] = useState([]);
+  const [mycmp, setMycmp] = useState("");
   const [loading, setloading] = useState(true);
   const getData = async () => {
     const email = await AsyncStorage.getItem("email");
     const name = await AsyncStorage.getItem("name");
     const br = await AsyncStorage.getItem("br");
     const cmp = await AsyncStorage.getItem("category");
-    fetch(Urls.cn + "/order/" + br)
+    setEmail(email);
+    setBr(br);
+    setCategory(cmp);
+    setName(name);
+    fetch(Urls.cn + "/company/category/" + cmp)
       .then((res) => res.json())
       .then((result) => {
         //console.log(result);
         setdata(result);
       });
-    setEmail(email);
-    setBr(br);
-    setCategory(cmp);
-    setName(name);
+    fetch(Urls.cn + "/prequest/recieved/" + br)
+      .then((res) => res.json())
+      .then((result) => {
+        //console.log(result);
+        setrdata(result);
+      });
+    fetch(Urls.cn + "/company/" + br)
+      .then((res) => res.json())
+      .then((result) => {
+        //console.log(result.partners[0]);
+        setMycmp(result);
+        setPartners(result.partners);
+        //console.log(result.partners);
+      });
     setloading(false);
   };
+  // const fetchData = () => {
+  //   if (!loading) {
+  //     console.log(cmpcategory);
 
+  //   }
+  // };
   const putData = () => {
     var plcd = data.map(function (val) {
       if (val.order_status == "placed") {
@@ -63,49 +84,29 @@ export default function Home(props) {
   };
   useEffect(() => {
     getData();
+    //fetchData();
+
     //putData();
   }, []);
-  const startProduction = (item) => {
-    fetch(Urls.cn + "/order/" + item._id, {
-      method: "patch",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        order_status: "processing",
-        payment_status: item.payment_status,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        //Alert.alert(product_name + " is successfuly added");
-        props.navigation.navigate("Orders");
-      });
-  };
-  const showAlert1 = (item) =>
-    Alert.alert(
-      item.product_name,
-      "Required Date : " +
-        item.req_date +
-        "\nQuantity : " +
-        item.quantity +
-        "\n \nAre you sure to start production?",
-      [
-        {
-          text: "Yes",
-          onPress: () => startProduction(item),
-          style: "cancel",
-        },
-        {
-          text: "No",
-          style: "cancel",
-        },
-      ],
-      {
-        cancelable: true,
+
+  const renderList = (item) => {
+    const cmpbr = item.br_number;
+    const email = item.email;
+    let flag = false;
+    let pflag = false;
+    for (let i = 0; i < rdata.length; i++) {
+      const element = rdata[i];
+      if (item.br_number === element.from) {
+        flag = true;
       }
-    );
-  const renderList1 = (item) => {
-    const id = item._id.slice(18, 23);
-    if (item.order_status === "placed") {
+    }
+    for (let i = 0; i < partners.length; i++) {
+      const element = partners[i];
+      if (item.br_number === element) {
+        pflag = true;
+      }
+    }
+    if (item.br_number !== br && flag !== true && pflag !== true) {
       return (
         <TouchableOpacity
           style={{
@@ -113,84 +114,78 @@ export default function Home(props) {
             borderRadius: SIZES.radius * 2,
             paddingHorizontal: SIZES.padding,
             paddingVertical: SIZES.radius,
-            backgroundColor: COLORS.gray3,
+            backgroundColor: COLORS.green,
+            flexDirection: "row",
           }}
-          onPress={() => showAlert1(item)}
+          onPress={() =>
+            props.navigation.navigate("Partners_Products", {
+              item,
+              flag,
+              pflag,
+            })
+          }
         >
-          <Text style={{ color: COLORS.lightYellow, fontSize: 24 }}>
-            Order #{id}
-          </Text>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginRight: 5,
-            }}
-          >
-            <Text style={{ color: COLORS.white, fontSize: 18 }}>
-              {item.product_name}
+          <Image style={styles.image} source={{ uri: item.image }} />
+          <View style={{ flexDirection: "column", marginLeft: 10, padding: 8 }}>
+            <Text style={{ color: COLORS.white, fontSize: 23 }}>
+              {item.company_name}
             </Text>
-            <Text style={{ color: COLORS.white, fontSize: 18 }}>
-              {item.quantity}
+            <Text style={{ color: COLORS.white, fontSize: 23 }}>
+              {item.address}
             </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginRight: 5,
-            }}
-          >
-            <Text style={{ color: COLORS.white, fontSize: 18 }}>Total</Text>
-            <Text style={{ color: COLORS.white, fontSize: 18 }}>
-              LKR {item.total}.00
-            </Text>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <TouchableOpacity
+                style={{
+                  width: 120,
+                  borderRadius: 23,
+                  paddingLeft: 5,
+                  marginTop: 5,
+                  borderColor: COLORS.white,
+                  borderWidth: 2,
+                  flexDirection: "row",
+                }}
+                onPress={() =>
+                  props.navigation.navigate("Partners_Business_Profile", {
+                    cmpbr,
+                    email,
+                    flag,
+                    pflag,
+                  })
+                }
+              >
+                <Icons name="account-outline" color="#ffffff" size={30} />
+                <Text
+                  style={{ color: COLORS.white, fontSize: 18, paddingTop: 3 }}
+                >
+                  Profile
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </TouchableOpacity>
       );
     }
   };
-  const completedProduction = (item) => {
-    fetch(Urls.cn + "/order/" + item._id, {
-      method: "patch",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        order_status: "completed",
-        payment_status: "done",
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        //Alert.alert(product_name + " is successfuly added");
-        props.navigation.navigate("Orders");
-      });
-  };
-  const showAlert2 = (item) =>
-    Alert.alert(
-      item.product_name,
-      "Required Date : " +
-        item.req_date +
-        "\nQuantity : " +
-        item.quantity +
-        "\n \nAre you sure to mark as completed?",
-      [
-        {
-          text: "Yes",
-          onPress: () => completedProduction(item),
-          style: "cancel",
-        },
-        {
-          text: "No",
-          style: "cancel",
-        },
-      ],
-      {
-        cancelable: true,
-      }
-    );
   const renderList2 = (item) => {
-    const id = item._id.slice(18, 23);
-    if (item.order_status === "processing") {
+    const cmpbr = item.br_number;
+    const email = item.email;
+    let pflag = false;
+    let flag = false;
+    for (let i = 0; i < rdata.length; i++) {
+      const element = rdata[i];
+      if (item.br_number === element.from) {
+        flag = true;
+      }
+    }
+    for (let i = 0; i < partners.length; i++) {
+      const element = partners[i];
+      if (item.br_number === element) {
+        pflag = true;
+      }
+    }
+    if (item.br_number !== br && flag === true && pflag !== true) {
       return (
         <TouchableOpacity
           style={{
@@ -198,46 +193,78 @@ export default function Home(props) {
             borderRadius: SIZES.radius * 2,
             paddingHorizontal: SIZES.padding,
             paddingVertical: SIZES.radius,
-            backgroundColor: COLORS.gray3,
+            backgroundColor: COLORS.green,
+            flexDirection: "row",
           }}
-          onPress={() => showAlert2(item)}
+          onPress={() =>
+            props.navigation.navigate("Partners_Products", {
+              item,
+              flag,
+              pflag,
+            })
+          }
         >
-          <Text style={{ color: COLORS.lightYellow, fontSize: 24 }}>
-            Order #{id}
-          </Text>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginRight: 5,
-            }}
-          >
-            <Text style={{ color: COLORS.white, fontSize: 18 }}>
-              {item.product_name}
+          <Image style={styles.image} source={{ uri: item.image }} />
+          <View style={{ flexDirection: "column", marginLeft: 10, padding: 8 }}>
+            <Text style={{ color: COLORS.white, fontSize: 23 }}>
+              {item.company_name}
             </Text>
-            <Text style={{ color: COLORS.white, fontSize: 18 }}>
-              {item.quantity}
+            <Text style={{ color: COLORS.white, fontSize: 23 }}>
+              {item.address}
             </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginRight: 5,
-            }}
-          >
-            <Text style={{ color: COLORS.white, fontSize: 18 }}>Total</Text>
-            <Text style={{ color: COLORS.white, fontSize: 18 }}>
-              LKR {item.total}.00
-            </Text>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <TouchableOpacity
+                style={{
+                  width: 120,
+                  borderRadius: 23,
+                  paddingLeft: 5,
+                  marginTop: 5,
+                  borderColor: COLORS.white,
+                  borderWidth: 2,
+                  flexDirection: "row",
+                }}
+                onPress={() =>
+                  props.navigation.navigate("Partners_Business_Profile", {
+                    cmpbr,
+                    email,
+                    flag,
+                    pflag,
+                  })
+                }
+              >
+                <Icons name="account-outline" color="#ffffff" size={30} />
+                <Text
+                  style={{ color: COLORS.white, fontSize: 18, paddingTop: 3 }}
+                >
+                  Profile
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </TouchableOpacity>
       );
     }
   };
   const renderList3 = (item) => {
-    const id = item._id.slice(18, 23);
-    if (item.order_status === "completed") {
+    const cmpbr = item.br_number;
+    const email = item.email;
+    let pflag = false;
+    let flag = false;
+    for (let i = 0; i < rdata.length; i++) {
+      const element = rdata[i];
+      if (item.br_number === element.from) {
+        flag = true;
+      }
+    }
+    for (let i = 0; i < partners.length; i++) {
+      const element = partners[i];
+      if (item.br_number === element) {
+        pflag = true;
+      }
+    }
+    if (item.br_number !== br && pflag === true) {
       return (
         <TouchableOpacity
           style={{
@@ -245,37 +272,51 @@ export default function Home(props) {
             borderRadius: SIZES.radius * 2,
             paddingHorizontal: SIZES.padding,
             paddingVertical: SIZES.radius,
-            backgroundColor: COLORS.gray3,
+            backgroundColor: COLORS.green,
+            flexDirection: "row",
           }}
+          onPress={() =>
+            props.navigation.navigate("Partners_Products", { item, flag , pflag})
+          }
         >
-          <Text style={{ color: COLORS.lightYellow, fontSize: 24 }}>
-            Order #{id}
-          </Text>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginRight: 5,
-            }}
-          >
-            <Text style={{ color: COLORS.white, fontSize: 18 }}>
-              {item.product_name}
+          <Image style={styles.image} source={{ uri: item.image }} />
+          <View style={{ flexDirection: "column", marginLeft: 10, padding: 8 }}>
+            <Text style={{ color: COLORS.white, fontSize: 23 }}>
+              {item.company_name}
             </Text>
-            <Text style={{ color: COLORS.white, fontSize: 18 }}>
-              {item.quantity}
+            <Text style={{ color: COLORS.white, fontSize: 23 }}>
+              {item.address}
             </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginRight: 5,
-            }}
-          >
-            <Text style={{ color: COLORS.white, fontSize: 18 }}>Total</Text>
-            <Text style={{ color: COLORS.white, fontSize: 18 }}>
-              LKR {item.total}.00
-            </Text>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <TouchableOpacity
+                style={{
+                  width: 120,
+                  borderRadius: 23,
+                  paddingLeft: 5,
+                  marginTop: 5,
+                  borderColor: COLORS.white,
+                  borderWidth: 2,
+                  flexDirection: "row",
+                }}
+                onPress={() =>
+                  props.navigation.navigate("Partners_Business_Profile", {
+                    cmpbr,
+                    email,
+                    flag,
+                    pflag,
+                  })
+                }
+              >
+                <Icons name="account-outline" color="#ffffff" size={30} />
+                <Text
+                  style={{ color: COLORS.white, fontSize: 18, paddingTop: 3 }}
+                >
+                  Profile
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </TouchableOpacity>
       );
@@ -313,7 +354,7 @@ export default function Home(props) {
                 <Text
                   style={{ color: COLORS.white, marginLeft: 10, fontSize: 25 }}
                 >
-                  Orders
+                  Partners
                 </Text>
               </View>
               <View>
@@ -348,7 +389,7 @@ export default function Home(props) {
                       fontSize: 18,
                     }}
                   >
-                    Received
+                    All
                   </Text>
                   <View
                     style={{
@@ -370,7 +411,7 @@ export default function Home(props) {
                       fontSize: 18,
                     }}
                   >
-                    Processing
+                    Requested
                   </Text>
                   <View
                     style={{
@@ -392,7 +433,7 @@ export default function Home(props) {
                       fontSize: 18,
                     }}
                   >
-                    Completed
+                    Partners
                   </Text>
                   <View
                     style={{
@@ -409,16 +450,15 @@ export default function Home(props) {
 
             {selected === "0" ? (
               <View>
-                {/* Placed Orders */}
+                {/* All */}
                 <FlatList
                   style={{
                     marginTop: SIZES.radius,
-                    marginBottom: SIZES.radius*5,
                     paddingHorizontal: SIZES.radius,
                   }}
                   data={data}
                   renderItem={({ item }) => {
-                    return renderList1(item);
+                    return renderList(item);
                   }}
                   keyExtractor={(item) => item._id.toString()}
                   onRefresh={() => getData()}
@@ -427,12 +467,11 @@ export default function Home(props) {
               </View>
             ) : selected === "1" ? (
               <View>
-                {/* Processing Orders */}
+                {/* Requested */}
                 <FlatList
                   style={{
                     marginTop: SIZES.radius,
                     paddingHorizontal: SIZES.radius,
-                    marginBottom: SIZES.radius*5,
                   }}
                   data={data}
                   renderItem={({ item }) => {
@@ -445,11 +484,10 @@ export default function Home(props) {
               </View>
             ) : (
               <View>
-                {/* Completed Orders */}
+                {/* Partners */}
                 <FlatList
                   style={{
                     marginTop: SIZES.radius,
-                    marginBottom: SIZES.radius*5,
                     paddingHorizontal: SIZES.radius,
                   }}
                   data={data}
@@ -482,5 +520,13 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: SIZES.radius * 2,
     borderTopRightRadius: SIZES.radius * 2,
     backgroundColor: COLORS.white,
+  },
+  image: {
+    marginHorizontal: 0,
+    borderRadius: SIZES.radius,
+    borderTopLeftRadius: SIZES.radius,
+    borderTopRightRadius: SIZES.radius,
+    height: 100,
+    width: 120,
   },
 });

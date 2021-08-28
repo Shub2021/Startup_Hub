@@ -18,12 +18,18 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Urls from "../constant";
+import { SIZES, COLORS, icons } from "../constants";
+import Input from "../components/Input";
 
 export default function Register(props) {
   const [company_name, setCName] = useState("");
+  const [company_namevalid, setCNamevalid] = useState(false);
   const [admin, setAdmin] = useState("");
+  const [adminvalid, setAdminvalid] = useState(false);
   const [contact, setPhone] = useState("");
+  const [contactvalid, setPhonevalid] = useState(false);
   const [email, setEmail] = useState("");
+  const [emailvalid, setEmailvalid] = useState(true);
   const [address, setAddress] = useState("");
   const [br_number, setBr] = useState("");
   const [type, setType] = useState("");
@@ -34,37 +40,42 @@ export default function Register(props) {
   const abortController = new AbortController();
 
   const submitData = () => {
-    if (password == repassword) {
-      fetch(Urls.cn + "/company", {
-        method: "post",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          company_name,
-          name: admin,
-          contact,
-          email,
-          address,
-          br_number,
-          type,
-          category,
-          password,
-        }),
-      });
-      fetch(Urls.cn + "/users/signup", {
-        method: "post",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          br_number,
-          email,
-          name: admin,
-          password,
-        }),
-      });
+    if (adminvalid && company_namevalid) {
+      if (password == repassword) {
+        fetch(Urls.cn + "/company", {
+          method: "post",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            company_name,
+            name: admin,
+            contact,
+            email,
+            address,
+            br_number,
+            type,
+            category,
+            password,
+          }),
+        });
+        fetch(Urls.cn + "/users/signup", {
+          method: "post",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            br_number,
+            email,
+            name: admin,
+            password,
+            accountType: "admin",
+          }),
+        });
 
-      Alert.alert("Registered Successfully");
-      props.navigation.navigate("Login");
+        Alert.alert("Registered Successfully");
+        props.navigation.navigate("Login");
+      } else {
+        Alert.alert("Password and re entered passwors does not match");
+      }
     } else {
-      Alert.alert("Password and re entered passwors does not match");
+      Alert.alert("Please fill the required feilds");
     }
     abortController.abort();
   };
@@ -93,37 +104,77 @@ export default function Register(props) {
       <Text style={styles.title}>Register Your startups</Text>
       <ScrollView>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{ paddingHorizontal: 10, color: "#008c8c", fontSize: 20 }}
             placeholder="Company Name"
+            pattern={"[^s]"}
+            onValidation={(isValid) => setCNamevalid(isValid)}
             value={company_name}
             onChangeText={(text) => setCName(text)}
           />
         </View>
+        <View style={{ marginHorizontal: 40, height: 10 }}>
+          {!company_namevalid ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : (
+            <Text></Text>
+          )}
+        </View>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{ paddingHorizontal: 10, color: "#008c8c", fontSize: 20 }}
             placeholder="Contact Person"
             value={admin}
+            pattern={"[^s]"}
+            onValidation={(isValid) => setAdminvalid(isValid)}
             onChangeText={(text) => setAdmin(text)}
           />
         </View>
+        <View style={{ marginHorizontal: 40, height: 10 }}>
+          {!adminvalid ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : (
+            <Text></Text>
+          )}
+        </View>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{ paddingHorizontal: 10, color: "#008c8c", fontSize: 20 }}
             placeholder="Email"
+            pattern={"^[^@]+@[^@]+.[^@]+$"}
+            onValidation={(isValid) => setEmailvalid(isValid)}
             value={email}
             onChangeText={(text) => setEmail(text)}
           />
         </View>
+        <View style={{ marginHorizontal: 40, height: 10 }}>
+          {!emailvalid ? (
+            <Text style={{ color: COLORS.red }}>Enter a valid email</Text>
+          ) : email === "" ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : (
+            <Text style={{ color: COLORS.red }}></Text>
+          )}
+        </View>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{ paddingHorizontal: 10, color: "#008c8c", fontSize: 20 }}
             placeholder="Contact Number"
             keyboardType="number-pad"
             value={contact}
+            pattern={"0[0-9]{9}"}
+            onValidation={(isValid) => setPhonevalid(isValid)}
             onChangeText={(text) => setPhone(text)}
           />
+        </View>
+        <View style={{ marginHorizontal: 40, height: 10 }}>
+          {contactvalid ? (
+            <Text style={{ color: COLORS.red }}>Enter a valid email</Text>
+          ) : contact === "" ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : (
+            <Text style={{ color: COLORS.red }}></Text>
+          )}
         </View>
         <View style={styles.inputContainer}>
           <TextInput
@@ -161,6 +212,7 @@ export default function Register(props) {
               <Picker.Item label="Apparel" value="Apparel" />
               <Picker.Item label="Healthcare" value="Helthcare" />
               <Picker.Item label="Household" value="Household" />
+              <Picker.Item label="Cosmetics" value="Cosmetics" />
               <Picker.Item label="Foods & Beverages" value="Food & Bev" />
               <Picker.Item label="Other" value="Other" />
             </Picker>

@@ -41,7 +41,7 @@ router.post("/", (req, res, next) => {
     product_category: req.body.product_category,
     company_category: req.body.company_category,
     picture: req.body.picture,
-    order_category: req.body.ordercategory,
+    expence: req.body.expence,
     unitprice: req.body.unitprice,
     quantity: req.body.quantity,
     description: req.body.description,
