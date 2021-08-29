@@ -4,7 +4,8 @@ const { width, height } = Dimensions.get("window");
 export const COLORS = {
   primary: "#37A372", // Green
   secondary: "#2C2C2C", // Gray
-
+  green: "#0E357A",
+  lightGreen3: "#83d4d4",
   lightPurple: "#7B789F",
   purple: "#595683",
   yellow: "#F1CD7C",
@@ -39,7 +40,8 @@ export const SIZES = {
   font: 14,
   radius: 12,
   padding: 26,
-
+  borderWidth: 0.7,
+  elevation: 4,
   // font sizes
   largeTitle: 40,
   h1: 30,
@@ -96,14 +98,14 @@ export const darkTheme = {
   tabBackgroundColor: COLORS.lightGray,
   cardBackgroundColor: COLORS.gray3,
   bottomTabBarBackgroundColor: COLORS.gray3,
-  headerColor: COLORS.yellow,
+  headerColor: COLORS.green,
 };
 
 export const lightTheme = {
   name: "light",
   backgroundColor: COLORS.lightGray3,
   textColor: COLORS.black,
-  tabBackgroundColor: COLORS.yellow,
+  tabBackgroundColor: COLORS.green,
   cardBackgroundColor: COLORS.lightYellow,
   bottomTabBarBackgroundColor: COLORS.lightYellow,
   headerColor: COLORS.red,
@@ -114,3 +116,4 @@ export const selectedTheme = darkTheme;
 const appTheme = { COLORS, SIZES, FONTS, darkTheme, lightTheme };
 
 export default appTheme;
+
