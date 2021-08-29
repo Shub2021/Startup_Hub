@@ -55,29 +55,30 @@ export default function Jobs(props) {
   }, []);
 
   const startJob = (item, flag1) => {
-    props.navigation.navigate("JobTask", {item, flag1});
-   };
- const showAlert1 = (item, flag1) =>
-     Alert.alert(
-       "Alert",
-         "Are you sure to start job?",
-       [
-         {
-           text: "Yes",
-           onPress: () => startJob(item, flag1),
-           style: "cancel",
-         },
-         {
-           text: "No",
-           style: "cancel",
-         },
-       ],
-       {
-         cancelable: true,
-       }
-     );
+    props.navigation.navigate("JobTask", { item, flag1 });
+  };
+  const showAlert1 = (item, flag1) =>
+    Alert.alert(
+      "Alert",
+      "Are you sure to start job?",
+      [
+        {
+          text: "Yes",
+          onPress: () => startJob(item, flag1),
+          style: "cancel",
+        },
+        {
+          text: "No",
+          style: "cancel",
+        },
+      ],
+      {
+        cancelable: true,
+      }
+    );
+
   const renderList1 = (item) => {
-    const flag1 = true; 
+    const flag1 = true;
     const id = item._id.slice(18, 23);
     if (item.job_status === "placed") {
       return (
@@ -87,11 +88,14 @@ export default function Jobs(props) {
             borderRadius: SIZES.radius * 2,
             paddingHorizontal: SIZES.padding,
             paddingVertical: SIZES.radius,
-            backgroundColor: COLORS.gray3,
+            backgroundColor: COLORS.white,
+            borderWidth: SIZES.borderWidth,
+            borderColor: COLORS.green,
+            elevation: SIZES.elevation,
           }}
           onPress={() => showAlert1(item, flag1)}
         >
-          <Text style={{ color: COLORS.lightYellow, fontSize: 24 }}>
+          <Text style={{ color: COLORS.green, fontSize: 20 }}>
             Job #{id}
           </Text>
           <View
@@ -101,10 +105,10 @@ export default function Jobs(props) {
               marginRight: 5,
             }}
           >
-            <Text style={{ color: COLORS.white, fontSize: 18 }}>
+            <Text style={{ color: COLORS.gray3, fontSize: 16 }}>
               {item.description}
             </Text>
-            <Text style={{ color: COLORS.white, fontSize: 18 }}>
+            <Text style={{ color: COLORS.black, fontSize: 16 }}>
               {item.job_status}
             </Text>
           </View>
@@ -124,11 +128,14 @@ export default function Jobs(props) {
             borderRadius: SIZES.radius * 2,
             paddingHorizontal: SIZES.padding,
             paddingVertical: SIZES.radius,
-            backgroundColor: COLORS.gray3,
+            backgroundColor: COLORS.white,
+            borderWidth: SIZES.borderWidth,
+            borderColor: COLORS.green,
+            elevation: SIZES.elevation,
           }}
-          onPress={() => showAlert1(item, flag1)}
+          onPress={() => startJob(item, flag1)}
         >
-          <Text style={{ color: COLORS.lightYellow, fontSize: 24 }}>
+          <Text style={{ color: COLORS.green, fontSize: 20 }}>
             Job #{id}
           </Text>
           <View
@@ -138,10 +145,10 @@ export default function Jobs(props) {
               marginRight: 5,
             }}
           >
-            <Text style={{ color: COLORS.white, fontSize: 18 }}>
+            <Text style={{ color: COLORS.gray3, fontSize: 16 }}>
               {item.description}
             </Text>
-            <Text style={{ color: COLORS.white, fontSize: 18 }}>
+            <Text style={{ color: COLORS.black, fontSize: 16 }}>
               {item.job_status}
             </Text>
           </View>
@@ -160,10 +167,13 @@ export default function Jobs(props) {
             borderRadius: SIZES.radius * 2,
             paddingHorizontal: SIZES.padding,
             paddingVertical: SIZES.radius,
-            backgroundColor: COLORS.gray3,
+            backgroundColor: COLORS.white,
+            borderWidth: SIZES.borderWidth,
+            borderColor: COLORS.green,
+            elevation: SIZES.elevation,
           }}
         >
-          <Text style={{ color: COLORS.lightYellow, fontSize: 24 }}>
+          <Text style={{ color: COLORS.green, fontSize: 20 }}>
             Job #{id}
           </Text>
           <View
@@ -173,10 +183,10 @@ export default function Jobs(props) {
               marginRight: 5,
             }}
           >
-            <Text style={{ color: COLORS.white, fontSize: 18 }}>
+            <Text style={{ color: COLORS.gray3, fontSize: 16 }}>
               {item.description}
             </Text>
-            <Text style={{ color: COLORS.white, fontSize: 18 }}>
+            <Text style={{ color: COLORS.red, fontSize: 16 }}>
               {item.job_status}
             </Text>
           </View>
@@ -212,7 +222,7 @@ export default function Jobs(props) {
               size={30}
               onPress={() => props.navigation.openDrawer()}
             />
-            <Text style={{ color: COLORS.white, marginLeft: 10, fontSize: 25 }}>
+            <Text style={{ color: COLORS.white, marginLeft: 10, fontSize: 23 }}>
               Jobs
             </Text>
           </View>
@@ -233,6 +243,7 @@ export default function Jobs(props) {
             height: 50,
             marginTop: SIZES.radius,
             justifyContent: "center",
+            alignItems: "center",
             paddingHorizontal: SIZES.padding * 1.7,
           }}
         >
@@ -244,7 +255,7 @@ export default function Jobs(props) {
             >
               <Text
                 style={{
-                  color: selected === "0" ? COLORS.primary : COLORS.green,
+                  color: selected === "0" ? COLORS.green : COLORS.gray,
                   fontSize: 18,
                 }}
               >
@@ -256,7 +267,7 @@ export default function Jobs(props) {
                   height: selected === "0" ? 4 : 2,
                   width: "100%",
                   backgroundColor:
-                    selected === "0" ? COLORS.primary : COLORS.green,
+                    selected === "0" ? COLORS.green : COLORS.gray,
                 }}
               />
             </TouchableOpacity>
@@ -266,7 +277,7 @@ export default function Jobs(props) {
             >
               <Text
                 style={{
-                  color: selected === "1" ? COLORS.primary : COLORS.gray,
+                  color: selected === "1" ? COLORS.green : COLORS.gray,
                   fontSize: 18,
                 }}
               >
@@ -278,7 +289,7 @@ export default function Jobs(props) {
                   height: selected === "1" ? 4 : 2,
                   width: "100%",
                   backgroundColor:
-                    selected === "1" ? COLORS.primary : COLORS.gray,
+                    selected === "1" ? COLORS.green : COLORS.gray,
                 }}
               />
             </TouchableOpacity>
@@ -288,7 +299,7 @@ export default function Jobs(props) {
             >
               <Text
                 style={{
-                  color: selected === "2" ? COLORS.primary : COLORS.gray,
+                  color: selected === "2" ? COLORS.green : COLORS.gray,
                   fontSize: 18,
                 }}
               >
@@ -300,64 +311,64 @@ export default function Jobs(props) {
                   height: selected === "2" ? 4 : 2,
                   width: "100%",
                   backgroundColor:
-                    selected === "2" ? COLORS.primary : COLORS.gray,
+                    selected === "2" ? COLORS.green : COLORS.gray,
                 }}
               />
             </TouchableOpacity>
           </View>
         </View>
         {selected === "0" ? (
-              <View>
-                {/* Placed Orders */}
-                <FlatList
-                  style={{
-                    marginTop: SIZES.radius,
-                    paddingHorizontal: SIZES.radius,
-                  }}
-                  data={data}
-                  renderItem={({ item }) => {
-                    return renderList1(item);
-                  }}
-                  keyExtractor={(item) => item._id.toString()}
-                  onRefresh={() => getData()}
-                  refreshing={loading}
-                />
-              </View>
-            ) : selected === "1" ? (
-              <View>
-                {/* Processing Orders */}
-                <FlatList
-                  style={{
-                    marginTop: SIZES.radius,
-                    paddingHorizontal: SIZES.radius,
-                  }}
-                  data={data}
-                  renderItem={({ item }) => {
-                    return renderList2(item);
-                  }}
-                  keyExtractor={(item) => item._id.toString()}
-                  onRefresh={() => getData()}
-                  refreshing={loading}
-                />
-              </View>
-            ) : (
-              <View>
-                {/* Completed Orders */}
-                <FlatList
-                  style={{
-                    marginTop: SIZES.radius,
-                    paddingHorizontal: SIZES.radius,
-                  }}
-                  data={data}
-                  renderItem={({ item }) => {
-                    return renderList3(item);
-                  }}
-                  keyExtractor={(item) => item._id.toString()}
-                  onRefresh={() => getData()}
-                  refreshing={loading}
-                />
-              </View>
-            )}
+          <View>
+            {/* Placed Orders */}
+            <FlatList
+              style={{
+                marginTop: SIZES.radius,
+                paddingHorizontal: SIZES.radius,
+              }}
+              data={data}
+              renderItem={({ item }) => {
+                return renderList1(item);
+              }}
+              keyExtractor={(item) => item._id.toString()}
+              onRefresh={() => getData()}
+              refreshing={loading}
+            />
+          </View>
+        ) : selected === "1" ? (
+          <View>
+            {/* Processing Orders */}
+            <FlatList
+              style={{
+                marginTop: SIZES.radius,
+                paddingHorizontal: SIZES.radius,
+              }}
+              data={data}
+              renderItem={({ item }) => {
+                return renderList2(item);
+              }}
+              keyExtractor={(item) => item._id.toString()}
+              onRefresh={() => getData()}
+              refreshing={loading}
+            />
+          </View>
+        ) : (
+          <View>
+            {/* Completed Orders */}
+            <FlatList
+              style={{
+                marginTop: SIZES.radius,
+                paddingHorizontal: SIZES.radius,
+              }}
+              data={data}
+              renderItem={({ item }) => {
+                return renderList3(item);
+              }}
+              keyExtractor={(item) => item._id.toString()}
+              onRefresh={() => getData()}
+              refreshing={loading}
+            />
+          </View>
+        )}
       </View>
     </View>
   );
