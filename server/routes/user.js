@@ -203,6 +203,49 @@ router.patch("/reset/:userID", (req, res, next) => {
       res.status(500).json({ error: err });
     });
 });
+router.patch("/forgot/:userID", (req, res, next) => {
+  const id = req.params.userID;
+  User.find({ email: id })
+    .exec()
+    .then((user) => {
+      if (user.length < 1) {
+        return res.status(401).json({
+          message: "Reset faild a",
+        });
+      }
+
+      bcrypt.hash(req.body.newpass, 10, (err, hash) => {
+        if (err) {
+          return res.status(500).json({
+            message: "Reset faild b",
+          });
+        } else {
+          User.findOneAndUpdate(
+            { email: id },
+            {
+              password: hash,
+            }
+          )
+            .exec()
+            .then((result) => {
+              console.log(result);
+            })
+            .catch((err) => {
+              console.log(err);
+              res.status(500).json({ error: err });
+            });
+
+          return res.status(200).json({
+            message: "Reset successful",
+          });
+        }
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
+});
 router.patch("/:userID", (req, res, next) => {
   const id = req.params.userID;
   User.findByIdAndUpdate(

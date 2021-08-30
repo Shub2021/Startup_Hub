@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
 
 const ToDoSchema = new mongoose.Schema({
-    task : String,
-    status : String,
-  });
+  id: Number,
+  task: String,
+  completed: Boolean,
+});
 
 const JobsSchema = new mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
@@ -11,6 +12,8 @@ const JobsSchema = new mongoose.Schema({
   description: String,
   serviceid: String,
   clientid: String,
+  br_number: String,
+  job_status: String,
   taskarray: [ToDoSchema],
 });
 

@@ -15,6 +15,8 @@ const investor_requestRoutes = require("./routes/investor_request");
 const startup_requestRoutes = require("./routes/startup_request");
 const subscribetRoutes = require("./routes/subscribe");
 const planRoutes = require("./routes/plan");
+const mailRoutes = require("./routes/mailer");
+const jobRoutes = require("./routes/jobs");
 
 application.use(bodyParser.json());
 
@@ -51,6 +53,8 @@ application.use("/investorrequest", investor_requestRoutes);
 application.use("/startuprequest", startup_requestRoutes);
 application.use("/subscribe", subscribetRoutes);
 application.use("/plan", planRoutes);
+application.use("/Jobs", jobRoutes);
+application.use("/mail", mailRoutes);
 
 application.listen(3000, () => {
   console.log("server runnig");
