@@ -222,7 +222,7 @@ export default function Jobs(props) {
               size={30}
               onPress={() => props.navigation.openDrawer()}
             />
-            <Text style={{ color: COLORS.white, marginLeft: 10, fontSize: 23 }}>
+            <Text style={{ color: COLORS.white, marginLeft: 20, fontSize: 23 }}>
               Jobs
             </Text>
           </View>
