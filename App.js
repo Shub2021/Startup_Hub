@@ -20,19 +20,23 @@ import Profile from "./screens/Profile";
 import updateProfile from "./screens/UpdateProfile";
 import Jobs from "./screens/service/Jobs";
 import Orders from "./screens/products/Orders";
-<<<<<<< HEAD
 import Members from "./screens/Members";
 import Add_Members from "./screens/AddMember";
 import Partners from "./screens/products/Partners";
 import Business_Profile from "./screens/Business_Profile";
+import JobTask from "./screens/service/JobTask";
+import Forgot from "./screens/Forgot";
+import Recover from "./screens/Recover";
 import Investors from "./screens/Investors";
+import StripeApp from "./screens/StripeApp";
+import updatePackage from "./screens/service/updatePackage";
 import Business_Profile_Update from "./screens/Business_Profile_Update";
+import Map from "./screens/Map";
 import Partners_Products from "./screens/products/Partners_Products";
 import Plan from "./screens/Plan";
+import Complaints from "./screens/Complaints";
+import AdminComplaints from "./screens/AdminComplaints";
 import Partners_Business_Profile from "./screens/products/Partners_Business_Profile";
-=======
-import JobTask from "./screens/service/JobTask";
->>>>>>> main
 import {
   NavigationContainer,
   DefaultTheme,
@@ -48,7 +52,7 @@ import { COLORS } from "./constants";
 // import { Provider } from "react-redux";
 // import { reducer } from "./reducers/reducer";
 //import { useSelector, useDispatch } from "react-redux";
-
+import { StripeProvider } from "@stripe/stripe-react-native";
 //const store = createStore(reducer);
 
 const Stack = createStackNavigator();
@@ -206,6 +210,16 @@ function sHomeRoutes() {
         component={serviveHome}
         options={{ ...navoption, title: "ServiceHome", headerShown: false }}
       />
+      <shomeStack.Screen
+        name="Complaints"
+        component={Complaints}
+        options={{ ...navoption, title: "Complaints", headerShown: false }}
+      />
+      <shomeStack.Screen
+        name="AdminComplaints"
+        component={AdminComplaints}
+        options={{ ...navoption, title: "AdminComplaints", headerShown: false }}
+      />
     </shomeStack.Navigator>
   );
 }
@@ -216,6 +230,16 @@ function pHomeRoutes() {
         name="Home"
         component={Home}
         options={{ ...navoption, title: "Home", headerShown: false }}
+      />
+      <phomeStack.Screen
+        name="Complaints"
+        component={Complaints}
+        options={{ ...navoption, title: "Complaints", headerShown: false }}
+      />
+      <phomeStack.Screen
+        name="AdminComplaints"
+        component={AdminComplaints}
+        options={{ ...navoption, title: "AdminComplaints", headerShown: false }}
       />
     </phomeStack.Navigator>
   );
@@ -257,6 +281,24 @@ function Business_ProfileRoutes() {
           headerShown: false,
         }}
       />
+      <business_profileStack.Screen
+        name="StripeApp"
+        component={StripeApp}
+        options={{
+          ...navoption,
+          title: "StripeApp",
+          headerShown: false,
+        }}
+      />
+      <business_profileStack.Screen
+        name="Map"
+        component={Map}
+        options={{
+          ...navoption,
+          title: "Map",
+          headerShown: false,
+        }}
+      />
     </business_profileStack.Navigator>
   );
 }
@@ -293,6 +335,11 @@ function ServicetRoutes() {
         component={packageCard}
         options={{ ...navoption, title: "PackageCard", headerShown: false }}
       />
+      <serviceStack.Screen
+        name="updatePackage"
+        component={updatePackage}
+        options={{ ...navoption, title: "updatePackage", headerShown: false }}
+      />
     </serviceStack.Navigator>
   );
 }
@@ -321,6 +368,7 @@ function SDrawerRoutes() {
       <Drawer.Screen name="Services" component={ServicetRoutes} />
       <Drawer.Screen name="Jobs" component={JobRoutes} />
       <Drawer.Screen name="Members" component={MemberRoutes} />
+      <Drawer.Screen name="Investors" component={InvestorRoutes} />
       <Drawer.Screen
         name="Business_Profile"
         component={Business_ProfileRoutes}
@@ -374,159 +422,197 @@ export default function App() {
     getData();
   });
   return (
-    <NavigationContainer>
-      <View style={styles.container}>
-        {loading ? (
-          <ActivityIndicator size="large" color="#0000ff" />
-        ) : (
-          <Stack.Navigator>
-            {islogged ? (
-              <>
-                {type === "product" ? (
-                  <>
-                    <Stack.Screen
-                      name="PDrawer"
-                      component={PDrawerRoutes}
-                      options={{
-                        ...navoption,
-                        title: "Drawer",
-                        headerShown: false,
-                      }}
-                    />
-                    <Stack.Screen
-                      name="SDrawer"
-                      component={SDrawerRoutes}
-                      options={{
-                        ...navoption,
-                        title: "Drawer",
-                        headerShown: false,
-                      }}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <Stack.Screen
-                      name="SDrawer"
-                      component={SDrawerRoutes}
-                      options={{
-                        ...navoption,
-                        title: "Drawer",
-                        headerShown: false,
-                      }}
-                    />
-                    <Stack.Screen
-                      name="PDrawer"
-                      component={PDrawerRoutes}
-                      options={{
-                        ...navoption,
-                        title: "Drawer",
-                        headerShown: false,
-                      }}
-                    />
-                  </>
-                )}
+    <StripeProvider publishableKey="pk_test_51JU5UCKmGZodwyxaN1Q24PTRnjRGzL7ePprbwfx9Nf2yiSu5sPvBKhdoyjJjhCgNT6heMbpZiEKBxHW3t5A2FEIT00B6Dg98nj">
+      <NavigationContainer>
+        <View style={styles.container}>
+          {loading ? (
+            <ActivityIndicator size="large" color="#0000ff" />
+          ) : (
+            <Stack.Navigator>
+              {islogged ? (
+                <>
+                  {type === "product" ? (
+                    <>
+                      <Stack.Screen
+                        name="PDrawer"
+                        component={PDrawerRoutes}
+                        options={{
+                          ...navoption,
+                          title: "Drawer",
+                          headerShown: false,
+                        }}
+                      />
+                      <Stack.Screen
+                        name="SDrawer"
+                        component={SDrawerRoutes}
+                        options={{
+                          ...navoption,
+                          title: "Drawer",
+                          headerShown: false,
+                        }}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <Stack.Screen
+                        name="SDrawer"
+                        component={SDrawerRoutes}
+                        options={{
+                          ...navoption,
+                          title: "Drawer",
+                          headerShown: false,
+                        }}
+                      />
+                      <Stack.Screen
+                        name="PDrawer"
+                        component={PDrawerRoutes}
+                        options={{
+                          ...navoption,
+                          title: "Drawer",
+                          headerShown: false,
+                        }}
+                      />
+                    </>
+                  )}
 
-                <Stack.Screen
-                  name="Products"
-                  component={ProductRoutes}
-                  options={{
-                    ...navoption,
-                    title: "Products",
-                    headerShown: false,
-                  }}
-                />
-                <Stack.Screen
-                  name="Services"
-                  component={ServicetRoutes}
-                  options={{
-                    ...navoption,
-                    title: "Services",
-                    headerShown: false,
-                  }}
-                />
-                <Stack.Screen
-                  name="Login"
-                  component={Login}
-                  options={{
-                    ...navoption,
-                    title: "Login",
-                    headerShown: false,
-                  }}
-                />
-                <Stack.Screen
-                  name="Register"
-                  component={Register}
-                  options={{
-                    ...navoption,
-                    title: "Register",
-                    headerShown: false,
-                  }}
-                />
-              </>
-            ) : (
-              <>
-                <Stack.Screen
-                  name="Login"
-                  component={Login}
-                  options={{
-                    ...navoption,
-                    title: "Login",
-                    headerShown: false,
-                  }}
-                />
-                <Stack.Screen
-                  name="Register"
-                  component={Register}
-                  options={{
-                    ...navoption,
-                    title: "Register",
-                    headerShown: false,
-                  }}
-                />
-                <Stack.Screen
-                  name="PDrawer"
-                  component={PDrawerRoutes}
-                  options={{
-                    ...navoption,
-                    title: "Drawer",
-                    headerShown: false,
-                  }}
-                />
-                <Stack.Screen
-                  name="SDrawer"
-                  component={SDrawerRoutes}
-                  options={{
-                    ...navoption,
-                    title: "Drawer",
-                    headerShown: false,
-                  }}
-                />
-                <Stack.Screen
-                  name="Products"
-                  component={ProductRoutes}
-                  options={{
-                    ...navoption,
-                    title: "Products",
-                    headerShown: false,
-                  }}
-                />
-                <Stack.Screen
-                  name="Services"
-                  component={ServicetRoutes}
-                  options={{
-                    ...navoption,
-                    title: "Services",
-                    headerShown: false,
-                  }}
-                />
-              </>
-            )}
-          </Stack.Navigator>
-        )}
+                  <Stack.Screen
+                    name="Products"
+                    component={ProductRoutes}
+                    options={{
+                      ...navoption,
+                      title: "Products",
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Services"
+                    component={ServicetRoutes}
+                    options={{
+                      ...navoption,
+                      title: "Services",
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Login"
+                    component={Login}
+                    options={{
+                      ...navoption,
+                      title: "Login",
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Forgot"
+                    component={Forgot}
+                    options={{
+                      ...navoption,
+                      title: "Forgot",
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Recover"
+                    component={Recover}
+                    options={{
+                      ...navoption,
+                      title: "Recover",
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Register"
+                    component={Register}
+                    options={{
+                      ...navoption,
+                      title: "Register",
+                      headerShown: false,
+                    }}
+                  />
+                </>
+              ) : (
+                <>
+                  <Stack.Screen
+                    name="Login"
+                    component={Login}
+                    options={{
+                      ...navoption,
+                      title: "Login",
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Register"
+                    component={Register}
+                    options={{
+                      ...navoption,
+                      title: "Register",
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Forgot"
+                    component={Forgot}
+                    options={{
+                      ...navoption,
+                      title: "Forgot",
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Recover"
+                    component={Recover}
+                    options={{
+                      ...navoption,
+                      title: "Recover",
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="PDrawer"
+                    component={PDrawerRoutes}
+                    options={{
+                      ...navoption,
+                      title: "Drawer",
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="SDrawer"
+                    component={SDrawerRoutes}
+                    options={{
+                      ...navoption,
+                      title: "Drawer",
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Products"
+                    component={ProductRoutes}
+                    options={{
+                      ...navoption,
+                      title: "Products",
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Services"
+                    component={ServicetRoutes}
+                    options={{
+                      ...navoption,
+                      title: "Services",
+                      headerShown: false,
+                    }}
+                  />
+                </>
+              )}
+            </Stack.Navigator>
+          )}
 
-        <StatusBar style="auto" />
-      </View>
-    </NavigationContainer>
+          <StatusBar style="auto" />
+        </View>
+      </NavigationContainer>
+    </StripeProvider>
   );
 }
 
