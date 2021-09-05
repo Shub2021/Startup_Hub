@@ -36,6 +36,12 @@ export default function serviceCard(props) {
     const name = await AsyncStorage.getItem("name");
     const br_number = await AsyncStorage.getItem("br");
 
+    fetch(Urls.cn + "/service/br/"+br_number)
+      .then((res) => res.json())
+      .then((result) => {
+        //console.log(result);
+        setdata(result);
+      });
     setEmail(email);
     setBr(br_number);
 
@@ -43,17 +49,7 @@ export default function serviceCard(props) {
     setloading(false);
   };
 
-  const fetchData = () => {
-    fetch(Urls.cn + "/service/")
-      .then((res) => res.json())
-      .then((result) => {
-        //console.log(result);
-        setdata(result);
-      });
-  };
-
   useEffect(() => {
-    fetchData();
     getData();
     console.log(br);
   }, []);
@@ -62,13 +58,14 @@ export default function serviceCard(props) {
     return (
       <Card
         style={styles.card}
-        onPress={() => props.navigation.navigate("packageCard", { item })}
       >
+      <TouchableOpacity onPress={() => props.navigation.navigate("packageCard", { item })}>
         <Card.Cover style={styles.image} source={{ uri: item.picture }} />
+      </TouchableOpacity>
         <Card.Actions>
           <Card.Title
             titleStyle={{ color: COLORS.green }}
-            title={item.service_name}
+            title={item.service_name} 
           />
           <Button
             style={styles.editBtn}
@@ -147,7 +144,7 @@ export default function serviceCard(props) {
                 return renderList(item);
               }}
               keyExtractor={(item) => item._id.toString()}
-              onRefresh={() => fetchData()}
+              onRefresh={() => getData()}
               refreshing={loading}
             />
           </View>

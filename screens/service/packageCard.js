@@ -30,7 +30,7 @@ export default function packageCard(props) {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [br, setBr] = useState("");
-  const [data, setdata] = useState();
+  const [data, setdata] = useState([]);
   const [loading, setloading] = useState(true);
 
   const service_name = props.route.params.item.service_name;
@@ -41,7 +41,12 @@ export default function packageCard(props) {
     const email = await AsyncStorage.getItem("email");
     const name = await AsyncStorage.getItem("name");
     const br_number = await AsyncStorage.getItem("br");
-
+    fetch(Urls.cn + "/service/" + id)
+      .then((res) => res.json())
+      .then((result) => {
+        //console.log(result);
+        setdata(result[0].package);
+      });
     setEmail(email);
     setBr(br_number);
 
@@ -49,25 +54,77 @@ export default function packageCard(props) {
     setloading(false);
   };
 
-  const fetchData = () => {
-    fetch(Urls.cn + "/service/" + id)
-      .then((res) => res.json())
-      .then((result) => {
-        console.log(result);
-        setdata(result.package);
-      });
-  };
-
   useEffect(() => {
-    fetchData();
     getData();
     console.log(br);
   }, []);
 
+  const showAlert = (ID, pk) =>
+    Alert.alert(
+      "Warning",
+      "Are you sure to delete " + service_name + pk,
+      [
+        {
+          text: "Yes",
+          onPress: () => deletepackage(ID, pk),
+          style: "cancel",
+        },
+        {
+          text: "No",
+          style: "cancel",
+        },
+      ],
+      {
+        cancelable: true,
+      }
+    );
+  const desAlert = (des) =>
+    Alert.alert(
+      "Discription",
+      des,
+      [
+        {
+          text: "Ok",
+          style: "cancel",
+        },
+      ],
+      {
+        cancelable: true,
+      }
+    );
+
+  const deletepackage = (Id, pk) => {
+    console.log(id);
+    let arr = [];
+    for (let i = 0; i < data.length; i++) {
+      if (data[i]._id !== Id) {
+        arr = arr.concat(data[i]);
+      }
+    }
+    console.log(arr);
+
+    fetch(Urls.cn + "/service/package/" + id, {
+      method: "patch",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        package: arr,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        Alert.alert("deleted");
+        // props.navigation.navigate("packageCard");
+      });
+  };
+
   const renderList = (item) => {
+    const pkid = item._id;
     return (
-      <TouchableOpacity
+      <View
         style={{
+          justifyContent: "center",
+          alignItems: "center",
+          margin: 20,
           marginBottom: SIZES.radius,
           borderRadius: SIZES.radius * 2,
           paddingHorizontal: SIZES.padding,
@@ -78,31 +135,68 @@ export default function packageCard(props) {
         {/* <Text style={{ color: COLORS.lightYellow, fontSize: 24 }}>
           {service_name}
         </Text> */}
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginRight: 5,
-          }}
-        >
-          <Text style={{ color: COLORS.white, fontSize: 18 }}>
-            {service_name}
-          </Text>
-          <Text style={{ color: COLORS.white, fontSize: 18 }}>
-            {item.Package_type}
-          </Text>
+        <TouchableOpacity>
+          <Card
+            style={styles.card}
+            onPress={() => desAlert(item.pk_discription)}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginLeft: 15,
+                marginRight: 15,
+                marginTop: 15,
+              }}
+            >
+              <Text style={{ color: COLORS.black, fontSize: 18 }}>
+                {service_name}
+              </Text>
+              <Text style={{ color: COLORS.black, fontSize: 18 }}>
+                {item.Package_type}
+              </Text>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+
+                marginLeft: 15,
+                marginRight: 15,
+              }}
+            >
+              <Text style={{ color: COLORS.black, fontSize: 18 }}>Price</Text>
+              <Text style={{ color: COLORS.black, fontSize: 18 }}>
+                LKR{item.price}.00
+              </Text>
+            </View>
+          </Card>
+        </TouchableOpacity>
+
+        <View style={{ flexDirection: "row", marginRight: 240, width: 80 }}>
+          <TouchableOpacity style={styles.editBtn}>
+            <Icons
+              name="file-document-edit-outline"
+              style={{ color: COLORS.green }}
+              onPress={() =>
+                props.navigation.navigate("updatePackage", { item, data, id })
+              }
+              color="#ffffff"
+              size={23}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.editBtn}>
+            <Icons
+              name="delete"
+              style={{ color: COLORS.red }}
+              onPress={() => showAlert(item._id, item.Package_type)}
+              color="#ffffff"
+              size={23}
+            />
+          </TouchableOpacity>
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginRight: 5,
-          }}
-        >
-          <Text style={{ color: COLORS.white, fontSize: 18 }}>Total</Text>
-          <Text style={{ color: COLORS.white, fontSize: 18 }}>LKR .00</Text>
-        </View>
-      </TouchableOpacity>
+      </View>
     );
   };
 
@@ -173,25 +267,27 @@ export default function packageCard(props) {
             <View style={styles.imageView}>
               <Image style={styles.image} source={{ uri: picture }} />
             </View>
-            <View style={styles.scrollcontainer}>
-              <FlatList
-                style={{ marginTop: 10, marginBottom: 10 }}
-                data={data}
-                renderItem={({ item }) => {
-                  return renderList(item);
-                }}
-                keyExtractor={(item) => item._id.toString()}
-                onRefresh={() => fetchData()}
-                refreshing={loading}
-              />
-            </View>
+          </View>
+          <View style={styles.scrollcontainer}>
+            <FlatList
+              style={{ marginTop: 10, marginBottom: 10 }}
+              data={data}
+              renderItem={({ item }) => {
+                return renderList(item);
+              }}
+              keyExtractor={(item) => item._id.toString()}
+              onRefresh={() => getData()}
+              refreshing={loading}
+            />
+
+            {/* </View> */}
           </View>
           <FAB
             style={styles.fab}
             small={false}
             icon="plus"
             onPress={() =>
-              props.navigation.navigate("addPackage", { br, data })
+              props.navigation.navigate("addPackage", { br, data, id })
             }
           />
         </>
@@ -228,6 +324,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   background: {
+    height: 255,
     marginTop: -20,
     backgroundColor: COLORS.white,
     borderTopLeftRadius: SIZES.radius * 2,
@@ -235,15 +332,26 @@ const styles = StyleSheet.create({
   },
   card: {
     borderRadius: 23,
-    height: 200,
+    height: 70,
     width: 300,
     marginHorizontal: 30,
-    backgroundColor: COLORS.gray3,
+    backgroundColor: COLORS.white,
     marginBottom: 15,
+  },
+  editBtn: {
+    backgroundColor: "white",
+    borderRadius: 5,
+    color: COLORS.green,
+    marginLeft: 15,
+    marginTop: -5,
+    height: 30,
+    paddingTop: 2,
+    justifyContent: "center",
+    alignItems: "center",
   },
   image: {
     borderRadius: 23,
-    marginTop: 50,
+    marginTop: 35,
     marginBottom: 40,
     height: 200,
     width: 300,

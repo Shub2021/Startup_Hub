@@ -21,7 +21,7 @@ router.get("/", (req, res, next) => {
 
 router.get("/:service_id", (req, res, next) => {
   const id = req.params.service_id
-  Service.find({_id:id})
+  Service.findOne({_id:id})
     .exec()
     .then((docs) => {
       console.log(docs);
@@ -116,5 +116,22 @@ router.patch("/package/:serviceID", (req, res, next) => {
       res.status(500).json({ error: err });
     });
 });
+
+router.get("/br/:service_id", (req, res, next) => {
+  const id = req.params.service_id;
+  Service.find({ br_number: id })
+    .exec()
+    .then((docs) => {
+      console.log(docs);
+      res.status(200).json(docs);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        error: err,
+      });
+    });
+});
+
 
 module.exports = router;

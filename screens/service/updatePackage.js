@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import Constants from "expo-constants";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
-import { AntDesign,Feather,Ionicons } from '@expo/vector-icons'; 
+import { AntDesign, Feather, Ionicons } from "@expo/vector-icons";
 import { Appbar, Card } from "react-native-paper";
 import { Value } from "react-native-reanimated";
 import Urls from "../../constant";
@@ -23,85 +23,45 @@ import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import { SIZES, COLORS, icons } from "../../constants";
 
-
-
-export default function addPackege(props) {
-
+export default function updatePackage(props) {
   const service_id = props.route.params.id;
-  const [package_type, setStype] = useState();
-  const [price, setPrice] = useState();
-  const [pk_discription, setDescription] = useState();
+  const package_id = props.route.params.item._id;
+  const [data, setdata] = useState(props.route.params.data);
+  const [price, setPrice] = useState(props.route.params.item.price.toString());
+  const [pk_type, setType] = useState(props.route.params.item.Package_type);
+  const [Description, setDescription] = useState(props.route.params.item.pk_discription);
+  const package1 = [{_id:package_id,Package_type:pk_type,price:price,pk_discription:Description}];
   const br_number = props.route.params.br;
-  const package1 = [{Package_type:package_type,price:price,pk_discription:pk_discription}];
-  const array = props.route.params.data;
 
-  useEffect(() => {
-    (async () => {
-      if (Platform.OS !== "web") {
-        const { status } =
-          await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== "granted") {
-          alert("Sorry, we need camera roll permissions to make this work!");
+
+
+  const updateData = () => {
+    let arr=[];
+        for(let i=0;i<data.length;i++){ 
+            if(data[i]._id !== package_id){
+                arr=arr.concat(data[i]);
+            }
+            if(data[i]._id === package_id){
+                arr=arr.concat(package1);
+            }
+            
         }
-      }
-    })();
-  }, []);
-  // const pickImage = async () => {
-  //   let data = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //     quality: 1,
-  //   });
+        console.log(arr);
 
-  //   //console.log(data);
 
-  //   if (!data.cancelled) {
-  //     let newfile = {
-  //       uri: data.uri,
-  //       type: `test/${data.uri.split(".")[1]}`,
-  //       name: `test/${data.uri.split(".")[1]}`,
-  //     };
-  //     handleUpload(newfile);
-  //   }
-  // };
-  // const handleUpload = (image) => {
-  //   const data = new FormData();
-  //   data.append("file", image);
-  //   data.append("upload_preset", "StartupHub");
-  //   data.append("cloud_name", "hiruna");
-
-  //   fetch("https://api.cloudinary.com/v1_1/hiruna/image/upload", {
-  //     method: "post",
-  //     body: data,
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       //console.log(data);
-  //       setPicture(data.url);
-  //     });
-  // };
-
-  const submitData = () => {
-   // array.push({package_type,price,pk_discription});
-   console.log(array);
-   let newarray = package1.concat(array);
-   console.log(newarray);
-    fetch(Urls.cn + "/service/package/"+service_id, {
-      method: "patch",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        package:newarray,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        Alert.alert("is successfuly added");
-        props.navigation.navigate("packageCard");
-      });
-    console.log(br_number+"ggfffg");
+        fetch(Urls.cn + "/service/package/"+service_id, {
+          method: "patch",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            package:arr,
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            Alert.alert("updated");
+            props.navigation.navigate("packageCard");
+          });
   };
-  
 
   return (
     <KeyboardAvoidingView
@@ -144,7 +104,7 @@ export default function addPackege(props) {
               />
             </TouchableOpacity>
             <Text style={{ color: COLORS.white, marginLeft: 10, fontSize: 25 }}>
-              Add Packege
+              Update 
             </Text>
           </View>
           <View>
@@ -158,11 +118,6 @@ export default function addPackege(props) {
         </View>
       </SafeAreaView>
       <ScrollView style={styles.scrollcontainer}>
-        {/* <View style={styles.imageContainer}>
-          <Card style={styles.card} onPress={pickImage}>
-            <Card.Cover style={styles.image} source={{ uri: picture }} />
-          </Card>
-        </View> */}
         <View style={styles.inputContainer}>
           <TextInput
             style={{
@@ -170,30 +125,30 @@ export default function addPackege(props) {
               color: COLORS.green,
               fontSize: 20,
             }}
-            placeholder="type"
-            placeholderTextColor={COLORS.green}
-            value={package_type}
-            onChangeText={(text) => setStype(text)}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={{
-              paddingHorizontal: 10,
-              color: COLORS.green,
-              fontSize: 20,
-            }}
-            placeholder="price"
-            keyboardType="number-pad"
-            placeholderTextColor={COLORS.green}
+            placeholder="Service Name"
+            placeholderTextColor={COLORS.primary}
             value={price}
             onChangeText={(text) => setPrice(text)}
           />
         </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={{
+              paddingHorizontal: 10,
+              color: COLORS.green,
+              fontSize: 20,
+            }}
+            value={pk_type}
+            placeholder="Product Category"
+            placeholderTextColor={COLORS.primary}
+            
+            onChangeText={(text) => setType(text)}
+          />
+        </View>
+
         <View style={styles.inputContainer_des}>
           <TextInput
-            style={{ 
-              
+            style={{
               paddingHorizontal: 10,
               color: COLORS.green,
               fontSize: 20,
@@ -201,19 +156,24 @@ export default function addPackege(props) {
             multiline={true}
             numberOfLines={8}
             placeholder="Description"
-            placeholderTextColor={COLORS.green}
-            value={pk_discription}
+            placeholderTextColor={COLORS.primary}
+            value={Description}
             onChangeText={(text) => setDescription(text)}
           />
         </View>
 
-        <TouchableOpacity style={[styles.inputContainer, styles.btn]}
-        onPress={submitData}
-      >
-        <Text style={{ color: "white", fontSize: 20, fontWeight: "bold",textShadowOffset: {width: 1, height: 1},textShadowRadius: 1,textShadowColor: 'black',}}>
-         Add
-        </Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.inputContainer,
+            styles.btn,
+            { borderColor: COLORS.green },
+          ]}
+          onPress={updateData}
+        >
+          <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
+            Save
+          </Text>
+        </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -232,7 +192,7 @@ const styles = StyleSheet.create({
     left: 40,
     paddingHorizontal: 10,
     borderColor: COLORS.green,
-    borderRadius: 23,
+    borderRadius: 15,
     paddingVertical: 2,
     height: 45,
   },

@@ -20,6 +20,7 @@ import Profile from "./screens/Profile";
 import updateProfile from "./screens/UpdateProfile";
 import Jobs from "./screens/service/Jobs";
 import Orders from "./screens/products/Orders";
+<<<<<<< HEAD
 import Members from "./screens/Members";
 import Add_Members from "./screens/AddMember";
 import Partners from "./screens/products/Partners";
@@ -29,6 +30,9 @@ import Business_Profile_Update from "./screens/Business_Profile_Update";
 import Partners_Products from "./screens/products/Partners_Products";
 import Plan from "./screens/Plan";
 import Partners_Business_Profile from "./screens/products/Partners_Business_Profile";
+=======
+import JobTask from "./screens/service/JobTask";
+>>>>>>> main
 import {
   NavigationContainer,
   DefaultTheme,
@@ -113,6 +117,11 @@ function JobRoutes() {
         name="Jobs"
         component={Jobs}
         options={{ ...navoption, title: "Jobs", headerShown: false }}
+      />
+      <jobStack.Screen
+        name="JobTask"
+        component={JobTask}
+        options={{ ...navoption, title: "JobTask", headerShown: false }}
       />
     </jobStack.Navigator>
   );

@@ -11,7 +11,15 @@ const JobsSchema = new mongoose.Schema({
   date: String,
   description: String,
   serviceid: String,
+<<<<<<< HEAD
   clientid: String,
+=======
+  client_email: String,
+  service_name: String,
+  package_id: String,
+  price: Number,
+  package_name: String,
+>>>>>>> main
   br_number: String,
   job_status: String,
   taskarray: [ToDoSchema],
