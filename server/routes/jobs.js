@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 const Jobs = require("../models/Jobs");
 const constants = require("../../constant");
 
-
 router.get("/", (req, res, next) => {
   Jobs.find()
     .exec()
@@ -22,7 +21,7 @@ router.get("/", (req, res, next) => {
 
 router.get("/:brnumber", (req, res, next) => {
   const brnumber = req.params.brnumber;
-  Jobs.find({ br_number: brnumber } )
+  Jobs.find({ br_number: brnumber })
     .exec()
     .then((docs) => {
       console.log(docs);
@@ -40,12 +39,16 @@ router.post("/", (req, res, next) => {
   const arr = [];
   const jobs = new Jobs({
     _id: new mongoose.Types.ObjectId(),
-        date: req.body.date,
-    description:req.body.description,
+    date: req.body.date,
+    description: req.body.description,
     serviceid: req.body.serviceid,
-    clientid: req.body.clientid,
+    client_email: req.body.client_email,
     br_number: req.body.br_number,
     job_status: req.body.job_status,
+    service_name: req.body.service_name,
+    package_id: req.body.package_id,
+    price: req.body.price,
+    package_name: req.body.package_name,
     taskarray: arr,
   });
   jobs
@@ -68,7 +71,7 @@ router.patch("/:jobId", (req, res, next) => {
     { _id: id },
     {
       taskarray: req.body.taskarray,
-      job_status: req.body.job_status, 
+      job_status: req.body.job_status,
     }
   )
     .exec()
@@ -83,7 +86,7 @@ router.patch("/:jobId", (req, res, next) => {
 });
 router.get("/byID/:jobID", (req, res, next) => {
   const id = req.params.jobID;
-  Jobs.findById({ _id : id} )
+  Jobs.findById({ _id: id })
     .exec()
     .then((doc) => {
       console.log(doc);
