@@ -11,7 +11,7 @@ const JobsSchema = new mongoose.Schema({
   date: String,
   description: String,
   serviceid: String,
-  client_email: String,
+  clientid: String,
   service_name: String,
   package_id: String,
   price: Number,

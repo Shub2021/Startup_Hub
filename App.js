@@ -6,6 +6,7 @@ import Home from "./screens/products/Home";
 import Products from "./screens/products/Products";
 import AddProducts from "./screens/products/AddProduct";
 import ProductDetails from "./screens/products/ProductDetails";
+import UpdateProduct from "./screens/products/UpdateProduct";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
 import addService from "./screens/service/addService";
@@ -19,7 +20,19 @@ import Profile from "./screens/Profile";
 import updateProfile from "./screens/UpdateProfile";
 import Jobs from "./screens/service/Jobs";
 import Orders from "./screens/products/Orders";
+<<<<<<< HEAD
+import Members from "./screens/Members";
+import Add_Members from "./screens/AddMember";
+import Partners from "./screens/products/Partners";
+import Business_Profile from "./screens/Business_Profile";
+import Investors from "./screens/Investors";
+import Business_Profile_Update from "./screens/Business_Profile_Update";
+import Partners_Products from "./screens/products/Partners_Products";
+import Plan from "./screens/Plan";
+import Partners_Business_Profile from "./screens/products/Partners_Business_Profile";
+=======
 import JobTask from "./screens/service/JobTask";
+>>>>>>> main
 import {
   NavigationContainer,
   DefaultTheme,
@@ -44,9 +57,13 @@ const productStack = createStackNavigator();
 const serviceStack = createStackNavigator();
 const jobStack = createStackNavigator();
 const profileStack = createStackNavigator();
+const business_profileStack = createStackNavigator();
 const shomeStack = createStackNavigator();
 const phomeStack = createStackNavigator();
 const orderStack = createStackNavigator();
+const partnerStack = createStackNavigator();
+const memberStack = createStackNavigator();
+const investorStack = createStackNavigator();
 
 const customDarkTheme = {
   ...DarkTheme,
@@ -85,6 +102,11 @@ function ProductRoutes() {
         component={ProductDetails}
         options={{ ...navoption, title: "ProductDetails", headerShown: false }}
       />
+      <productStack.Screen
+        name="UpdateProduct"
+        component={UpdateProduct}
+        options={{ ...navoption, title: "UpdateProduct", headerShown: false }}
+      />
     </productStack.Navigator>
   );
 }
@@ -102,6 +124,67 @@ function JobRoutes() {
         options={{ ...navoption, title: "JobTask", headerShown: false }}
       />
     </jobStack.Navigator>
+  );
+}
+function InvestorRoutes() {
+  return (
+    <investorStack.Navigator>
+      <investorStack.Screen
+        name="Investors"
+        component={Investors}
+        options={{ ...navoption, title: "Investors", headerShown: false }}
+      />
+      <investorStack.Screen
+        name="Plan"
+        component={Plan}
+        options={{ ...navoption, title: "Plan", headerShown: false }}
+      />
+    </investorStack.Navigator>
+  );
+}
+function MemberRoutes() {
+  return (
+    <memberStack.Navigator>
+      <memberStack.Screen
+        name="Members"
+        component={Members}
+        options={{ ...navoption, title: "Members", headerShown: false }}
+      />
+      <memberStack.Screen
+        name="AddMembers"
+        component={Add_Members}
+        options={{ ...navoption, title: "AddMembers", headerShown: false }}
+      />
+    </memberStack.Navigator>
+  );
+}
+function PartnerRoutes() {
+  return (
+    <partnerStack.Navigator>
+      <partnerStack.Screen
+        name="Partners"
+        component={Partners}
+        options={{ ...navoption, title: "Partners", headerShown: false }}
+      />
+      <partnerStack.Screen
+        name="Partners_Products"
+        component={Partners_Products}
+        options={{
+          ...navoption,
+          title: "Partners_Products",
+          headerShown: false,
+        }}
+      />
+      <partnerStack.Screen
+        name="Partners_Business_Profile"
+        component={Partners_Business_Profile}
+        options={{
+          ...navoption,
+          title: "Partners_Business_Profile",
+          headerShown: false,
+        }}
+      />
+    </partnerStack.Navigator>
   );
 }
 function OrderRoutes() {
@@ -153,6 +236,30 @@ function ProfileRoutes() {
     </profileStack.Navigator>
   );
 }
+function Business_ProfileRoutes() {
+  return (
+    <business_profileStack.Navigator>
+      <business_profileStack.Screen
+        name="Business_Profile"
+        component={Business_Profile}
+        options={{
+          ...navoption,
+          title: "Business_Profile",
+          headerShown: false,
+        }}
+      />
+      <business_profileStack.Screen
+        name="Business_Profile_Update"
+        component={Business_Profile_Update}
+        options={{
+          ...navoption,
+          title: "Business_Profile_Update",
+          headerShown: false,
+        }}
+      />
+    </business_profileStack.Navigator>
+  );
+}
 function ServicetRoutes() {
   return (
     <serviceStack.Navigator>
@@ -196,6 +303,13 @@ function PDrawerRoutes() {
       <Drawer.Screen name="Home" component={pHomeRoutes} />
       <Drawer.Screen name="Products" component={ProductRoutes} />
       <Drawer.Screen name="Orders" component={OrderRoutes} />
+      <Drawer.Screen name="Partners" component={PartnerRoutes} />
+      <Drawer.Screen name="Investors" component={InvestorRoutes} />
+      <Drawer.Screen name="Members" component={MemberRoutes} />
+      <Drawer.Screen
+        name="Business_Profile"
+        component={Business_ProfileRoutes}
+      />
       <Drawer.Screen name="Profile" component={ProfileRoutes} />
     </Drawer.Navigator>
   );
@@ -206,6 +320,11 @@ function SDrawerRoutes() {
       <Drawer.Screen name="ServiceHome" component={sHomeRoutes} />
       <Drawer.Screen name="Services" component={ServicetRoutes} />
       <Drawer.Screen name="Jobs" component={JobRoutes} />
+      <Drawer.Screen name="Members" component={MemberRoutes} />
+      <Drawer.Screen
+        name="Business_Profile"
+        component={Business_ProfileRoutes}
+      />
       <Drawer.Screen name="Profile" component={ProfileRoutes} />
     </Drawer.Navigator>
   );
@@ -264,25 +383,47 @@ export default function App() {
             {islogged ? (
               <>
                 {type === "product" ? (
-                  <Stack.Screen
-                    name="PDrawer"
-                    component={PDrawerRoutes}
-                    options={{
-                      ...navoption,
-                      title: "Drawer",
-                      headerShown: false,
-                    }}
-                  />
+                  <>
+                    <Stack.Screen
+                      name="PDrawer"
+                      component={PDrawerRoutes}
+                      options={{
+                        ...navoption,
+                        title: "Drawer",
+                        headerShown: false,
+                      }}
+                    />
+                    <Stack.Screen
+                      name="SDrawer"
+                      component={SDrawerRoutes}
+                      options={{
+                        ...navoption,
+                        title: "Drawer",
+                        headerShown: false,
+                      }}
+                    />
+                  </>
                 ) : (
-                  <Stack.Screen
-                    name="SDrawer"
-                    component={SDrawerRoutes}
-                    options={{
-                      ...navoption,
-                      title: "Drawer",
-                      headerShown: false,
-                    }}
-                  />
+                  <>
+                    <Stack.Screen
+                      name="SDrawer"
+                      component={SDrawerRoutes}
+                      options={{
+                        ...navoption,
+                        title: "Drawer",
+                        headerShown: false,
+                      }}
+                    />
+                    <Stack.Screen
+                      name="PDrawer"
+                      component={PDrawerRoutes}
+                      options={{
+                        ...navoption,
+                        title: "Drawer",
+                        headerShown: false,
+                      }}
+                    />
+                  </>
                 )}
 
                 <Stack.Screen

@@ -11,7 +11,7 @@ const ProductSchema = new mongoose.Schema({
   product_category: String,
   company_category: String,
   picture: String,
-  order_category: String,
+  expence: Number,
   unitprice: Number,
   quantity: Number,
   description: String,

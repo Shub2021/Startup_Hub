@@ -8,6 +8,7 @@ const OrderSchema = new mongoose.Schema({
   order_status: String,
   req_date: String,
   unitprice: Number,
+  expence: Number,
   quantity: Number,
   total: Number,
   payment_status: String,

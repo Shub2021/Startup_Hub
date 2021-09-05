@@ -29,6 +29,7 @@ router.post("/", (req, res, next) => {
     order_status: req.body.order_status,
     req_date: req.body.req_date,
     unitprice: req.body.unitprice,
+    expence: req.body.expence,
     quantity: req.body.quantity,
     total: req.body.total,
     payment_status: req.body.payment_status,
@@ -94,27 +95,23 @@ router.get("/orderId/:orderId", (req, res, next) => {
       res.status(500).json({ error: err });
     });
 });
-// router.patch("/:productId", (req, res, next) => {
-//   const id = req.params.productId;
-//   Product.findByIdAndUpdate(
-//     { _id: id },
-//     {
-//       product_name: req.body.product_name,
-//       product_category: req.body.product_category,
-//       picture: req.body.picture,
-//       unitprice: req.body.unitprice,
-//       quantity: req.body.quantity,
-//       description: req.body.description,
-//     }
-//   )
-//     .exec()
-//     .then((result) => {
-//       console.log(result);
-//       res.status(200).json(result);
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//       res.status(500).json({ error: err });
-//     });
-// });
+router.patch("/:orderId", (req, res, next) => {
+  const id = req.params.orderId;
+  Order.findByIdAndUpdate(
+    { _id: id },
+    {
+      order_status: req.body.order_status,
+      payment_status: req.body.payment_status,
+    }
+  )
+    .exec()
+    .then((result) => {
+      console.log(result);
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
+});
 module.exports = router;

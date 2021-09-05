@@ -1,4 +1,3 @@
-
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
 import {
@@ -22,10 +21,11 @@ import {
 import { SIZES, COLORS, icons } from "../constants";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Input from "../components/Input";
 
 import Urls from "../constant";
 
-export default function Home(props) {
+export default function Profile(props) {
   //const data = props.route.params.data;
   const [notvisible1, setVisible1] = useState(true);
   const [notvisible2, setVisible2] = useState(true);
@@ -33,7 +33,9 @@ export default function Home(props) {
   const [email, setEmail] = useState("");
   const [curpass, setCpass] = useState("");
   const [newpass, setNpass] = useState("");
+  const [newpassvalid, setNpassvalid] = useState("");
   const [repass, setRpass] = useState("");
+  const [repassvalid, setRpassvalid] = useState("");
   const [name, setName] = useState("");
   const [br, setBr] = useState("");
   const [cmpcategory, setCategory] = useState("");
@@ -124,14 +126,6 @@ export default function Home(props) {
                 >
                   Profile
                 </Text>
-              </View>
-              <View>
-                <Icons
-                  name="bell-outline"
-                  style={{ padding: SIZES.padding }}
-                  color="#ffffff"
-                  size={30}
-                />
               </View>
             </View>
           </SafeAreaView>
@@ -296,7 +290,7 @@ export default function Home(props) {
                   { right: 0, marginHorizontal: 20, borderColor: COLORS.green },
                 ]}
               >
-                <TextInput
+                <Input
                   style={{
                     paddingHorizontal: 10,
                     color: COLORS.black,
@@ -305,9 +299,12 @@ export default function Home(props) {
                   placeholder="New Password"
                   placeholderTextColor={COLORS.primary}
                   value={newpass}
+                  pattern={"^[a-zA-Z0-9]{8,}$"}
+                  onValidation={(isValid) => setNpassvalid(isValid)}
                   secureTextEntry={notvisible2}
                   onChangeText={(text) => setNpass(text)}
                 />
+
                 <TouchableOpacity
                   style={{ marginLeft: 270, top: 6, position: "absolute" }}
                   onPress={() => setVisible2(!notvisible2)}
@@ -323,13 +320,24 @@ export default function Home(props) {
                   )}
                 </TouchableOpacity>
               </View>
+              <View style={{ marginHorizontal: 40, height: 10 }}>
+                {newpass === "" ? (
+                  <Text style={{ color: COLORS.red }}>Required</Text>
+                ) : !newpassvalid ? (
+                  <Text style={{ color: COLORS.red }}>
+                    Password must contain at least 8 characters
+                  </Text>
+                ) : (
+                  <Text style={{ color: COLORS.red }}></Text>
+                )}
+              </View>
               <View
                 style={[
                   styles.inputContainer,
                   { right: 0, marginHorizontal: 20, borderColor: COLORS.green },
                 ]}
               >
-                <TextInput
+                <Input
                   style={{
                     paddingHorizontal: 10,
                     color: COLORS.black,
@@ -338,6 +346,8 @@ export default function Home(props) {
                   placeholder="Re-Enter Password"
                   placeholderTextColor={COLORS.primary}
                   value={repass}
+                  pattern={"^[a-zA-Z0-9]{8,}$"}
+                  onValidation={(isValid) => setRpassvalid(isValid)}
                   secureTextEntry={notvisible3}
                   onChangeText={(text) => setRpass(text)}
                 />
@@ -355,6 +365,17 @@ export default function Home(props) {
                     />
                   )}
                 </TouchableOpacity>
+              </View>
+              <View style={{ marginHorizontal: 40, height: 10 }}>
+                {repass === "" ? (
+                  <Text style={{ color: COLORS.red }}>Required</Text>
+                ) : !repassvalid ? (
+                  <Text style={{ color: COLORS.red }}>
+                    Password must contain at least 8 characters
+                  </Text>
+                ) : (
+                  <Text style={{ color: COLORS.red }}></Text>
+                )}
               </View>
               <TouchableOpacity
                 style={[

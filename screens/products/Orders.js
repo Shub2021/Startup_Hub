@@ -39,20 +39,19 @@ export default function Home(props) {
     const name = await AsyncStorage.getItem("name");
     const br = await AsyncStorage.getItem("br");
     const cmp = await AsyncStorage.getItem("category");
-    setEmail(email);
-    setBr(br);
-    setCategory(cmp);
-    setName(name);
-    setloading(false);
-  };
-  const fetchData = () => {
     fetch(Urls.cn + "/order/" + br)
       .then((res) => res.json())
       .then((result) => {
         //console.log(result);
         setdata(result);
       });
+    setEmail(email);
+    setBr(br);
+    setCategory(cmp);
+    setName(name);
+    setloading(false);
   };
+
   const putData = () => {
     var plcd = data.map(function (val) {
       if (val.order_status == "placed") {
@@ -63,54 +62,287 @@ export default function Home(props) {
     setPlaced(plcd);
   };
   useEffect(() => {
-    fetchData();
     getData();
-    putData();
+    //putData();
   }, []);
+  const startProduction = (item) => {
+    fetch(Urls.cn + "/order/" + item._id, {
+      method: "patch",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        order_status: "processing",
+        payment_status: item.payment_status,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        //Alert.alert(product_name + " is successfuly added");
+        props.navigation.navigate("Orders");
+      });
+  };
+  const showAlert4 = (item) => {
+    let user = "";
+    console.log(item.client_id);
+    fetch(Urls.cn + "/client/" + item.client_id)
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
 
-  const renderList = (item) => {
-    const id = item._id.slice(18, 23);
-    return (
-      <TouchableOpacity
-        style={{
-          marginBottom: SIZES.radius,
-          borderRadius: SIZES.radius * 2,
-          paddingHorizontal: SIZES.padding,
-          paddingVertical: SIZES.radius,
-          backgroundColor: COLORS.gray3,
-        }}
-      >
-        <Text style={{ color: COLORS.lightYellow, fontSize: 24 }}>
-          Order #{id}
-        </Text>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginRight: 5,
-          }}
-        >
-          <Text style={{ color: COLORS.white, fontSize: 18 }}>
-            {item.product_name}
-          </Text>
-          <Text style={{ color: COLORS.white, fontSize: 18 }}>
-            {item.quantity}
-          </Text>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginRight: 5,
-          }}
-        >
-          <Text style={{ color: COLORS.white, fontSize: 18 }}>Total</Text>
-          <Text style={{ color: COLORS.white, fontSize: 18 }}>
-            LKR {item.total}.00
-          </Text>
-        </View>
-      </TouchableOpacity>
+        //console.log(user);
+        Alert.alert(
+          item.product_name,
+          "Quantity : " +
+            item.quantity +
+            "\nRequired Date : " +
+            item.req_date +
+            "\nClient Name : " +
+            result[0].name +
+            "\nEmail : " +
+            result[0].email,
+          [
+            {
+              text: "Ok",
+              style: "cancel",
+            },
+          ],
+          {
+            cancelable: true,
+          }
+        );
+      });
+  };
+
+  const showAlert1 = (item) =>
+    Alert.alert(
+      item.product_name,
+      "Required Date : " +
+        item.req_date +
+        "\nQuantity : " +
+        item.quantity +
+        "\n \nAre you sure to start production?",
+      [
+        {
+          text: "Yes",
+          onPress: () => startProduction(item),
+          style: "cancel",
+        },
+        {
+          text: "No",
+          style: "cancel",
+        },
+      ],
+      {
+        cancelable: true,
+      }
     );
+  const renderList1 = (item) => {
+    const id = item._id.slice(18, 23);
+    if (item.order_status === "placed") {
+      return (
+        <TouchableOpacity
+          style={{
+            marginBottom: SIZES.radius,
+            borderRadius: SIZES.radius * 2,
+            paddingHorizontal: SIZES.padding,
+            paddingVertical: SIZES.radius,
+            backgroundColor: COLORS.gray3,
+          }}
+          onPress={() => showAlert1(item)}
+        >
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <Text style={{ color: COLORS.lightYellow, fontSize: 24 }}>
+              Order #{id}
+            </Text>
+            <Icons
+              name="eye"
+              color={COLORS.lightYellow}
+              size={28}
+              onPress={() => showAlert4(item)}
+            />
+          </View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginRight: 5,
+            }}
+          >
+            <Text style={{ color: COLORS.white, fontSize: 18 }}>
+              {item.product_name}
+            </Text>
+            <Text style={{ color: COLORS.white, fontSize: 18 }}>
+              {item.quantity}
+            </Text>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginRight: 5,
+            }}
+          >
+            <Text style={{ color: COLORS.white, fontSize: 18 }}>Total</Text>
+            <Text style={{ color: COLORS.white, fontSize: 18 }}>
+              LKR {item.total}.00
+            </Text>
+          </View>
+        </TouchableOpacity>
+      );
+    }
+  };
+  const completedProduction = (item) => {
+    fetch(Urls.cn + "/order/" + item._id, {
+      method: "patch",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        order_status: "completed",
+        payment_status: "done",
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        //Alert.alert(product_name + " is successfuly added");
+        props.navigation.navigate("Orders");
+      });
+  };
+  const showAlert2 = (item) =>
+    Alert.alert(
+      item.product_name,
+      "Required Date : " +
+        item.req_date +
+        "\nQuantity : " +
+        item.quantity +
+        "\n \nAre you sure to mark as completed?",
+      [
+        {
+          text: "Yes",
+          onPress: () => completedProduction(item),
+          style: "cancel",
+        },
+        {
+          text: "No",
+          style: "cancel",
+        },
+      ],
+      {
+        cancelable: true,
+      }
+    );
+  const renderList2 = (item) => {
+    const id = item._id.slice(18, 23);
+    if (item.order_status === "processing") {
+      return (
+        <TouchableOpacity
+          style={{
+            marginBottom: SIZES.radius,
+            borderRadius: SIZES.radius * 2,
+            paddingHorizontal: SIZES.padding,
+            paddingVertical: SIZES.radius,
+            backgroundColor: COLORS.gray3,
+          }}
+          onPress={() => showAlert2(item)}
+        >
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <Text style={{ color: COLORS.lightYellow, fontSize: 24 }}>
+              Order #{id}
+            </Text>
+            <Icons
+              name="eye"
+              color={COLORS.lightYellow}
+              size={28}
+              onPress={() => showAlert4(item)}
+            />
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginRight: 5,
+            }}
+          >
+            <Text style={{ color: COLORS.white, fontSize: 18 }}>
+              {item.product_name}
+            </Text>
+            <Text style={{ color: COLORS.white, fontSize: 18 }}>
+              {item.quantity}
+            </Text>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginRight: 5,
+            }}
+          >
+            <Text style={{ color: COLORS.white, fontSize: 18 }}>Total</Text>
+            <Text style={{ color: COLORS.white, fontSize: 18 }}>
+              LKR {item.total}.00
+            </Text>
+          </View>
+        </TouchableOpacity>
+      );
+    }
+  };
+  const renderList3 = (item) => {
+    const id = item._id.slice(18, 23);
+    if (item.order_status === "completed") {
+      return (
+        <TouchableOpacity
+          style={{
+            marginBottom: SIZES.radius,
+            borderRadius: SIZES.radius * 2,
+            paddingHorizontal: SIZES.padding,
+            paddingVertical: SIZES.radius,
+            backgroundColor: COLORS.gray3,
+          }}
+        >
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <Text style={{ color: COLORS.lightYellow, fontSize: 24 }}>
+              Order #{id}
+            </Text>
+            <Icons
+              name="eye"
+              color={COLORS.lightYellow}
+              size={28}
+              onPress={() => showAlert4(item)}
+            />
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginRight: 5,
+            }}
+          >
+            <Text style={{ color: COLORS.white, fontSize: 18 }}>
+              {item.product_name}
+            </Text>
+            <Text style={{ color: COLORS.white, fontSize: 18 }}>
+              {item.quantity}
+            </Text>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginRight: 5,
+            }}
+          >
+            <Text style={{ color: COLORS.white, fontSize: 18 }}>Total</Text>
+            <Text style={{ color: COLORS.white, fontSize: 18 }}>
+              LKR {item.total}.00
+            </Text>
+          </View>
+        </TouchableOpacity>
+      );
+    }
   };
   return (
     <View
@@ -123,7 +355,7 @@ export default function Home(props) {
             style={{
               height: 100,
               width: "100%",
-              backgroundColor: COLORS.darkGreen,
+              backgroundColor: COLORS.green,
               flexDirection: "row",
             }}
           >
@@ -146,14 +378,6 @@ export default function Home(props) {
                 >
                   Orders
                 </Text>
-              </View>
-              <View>
-                <Icons
-                  name="bell-outline"
-                  style={{ padding: SIZES.padding }}
-                  color="#ffffff"
-                  size={30}
-                />
               </View>
             </View>
           </SafeAreaView>
@@ -244,14 +468,15 @@ export default function Home(props) {
                 <FlatList
                   style={{
                     marginTop: SIZES.radius,
+                    marginBottom: SIZES.radius * 5,
                     paddingHorizontal: SIZES.radius,
                   }}
                   data={data}
                   renderItem={({ item }) => {
-                    return renderList(item);
+                    return renderList1(item);
                   }}
                   keyExtractor={(item) => item._id.toString()}
-                  onRefresh={() => fetchData()}
+                  onRefresh={() => getData()}
                   refreshing={loading}
                 />
               </View>
@@ -262,13 +487,14 @@ export default function Home(props) {
                   style={{
                     marginTop: SIZES.radius,
                     paddingHorizontal: SIZES.radius,
+                    marginBottom: SIZES.radius * 5,
                   }}
                   data={data}
                   renderItem={({ item }) => {
-                    return renderList(item);
+                    return renderList2(item);
                   }}
                   keyExtractor={(item) => item._id.toString()}
-                  onRefresh={() => fetchData()}
+                  onRefresh={() => getData()}
                   refreshing={loading}
                 />
               </View>
@@ -278,14 +504,15 @@ export default function Home(props) {
                 <FlatList
                   style={{
                     marginTop: SIZES.radius,
+                    marginBottom: SIZES.radius * 5,
                     paddingHorizontal: SIZES.radius,
                   }}
                   data={data}
                   renderItem={({ item }) => {
-                    return renderList(item);
+                    return renderList3(item);
                   }}
                   keyExtractor={(item) => item._id.toString()}
-                  onRefresh={() => fetchData()}
+                  onRefresh={() => getData()}
                   refreshing={loading}
                 />
               </View>
@@ -309,6 +536,6 @@ const styles = StyleSheet.create({
     marginTop: -22,
     borderTopLeftRadius: SIZES.radius * 2,
     borderTopRightRadius: SIZES.radius * 2,
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.white,
   },
 });

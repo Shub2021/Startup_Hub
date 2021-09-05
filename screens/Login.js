@@ -18,6 +18,7 @@ import Icons from "@expo/vector-icons/AntDesign";
 import Iconics from "react-native-vector-icons/MaterialCommunityIcons";
 import Urls from "../constant";
 import { SIZES, COLORS, icons } from "../constants";
+import Input from "../components/Input";
 //import { useSelector, useDispatch } from "react-redux";
 
 export default function Login(props) {
@@ -25,6 +26,7 @@ export default function Login(props) {
   const [password, setPassword] = useState("");
   const [notvisible, setVisible] = useState(true);
   const [email, setEmail] = useState("");
+  const [emailvalid, setEmailvalid] = useState(true);
   const signin = async () => {
     //console.log(email);
     fetch(Urls.cn + "/users/login", {
@@ -45,6 +47,7 @@ export default function Login(props) {
             await AsyncStorage.setItem("br", result.br_number);
             await AsyncStorage.setItem("email", email);
             await AsyncStorage.setItem("name", result.name);
+            await AsyncStorage.setItem("acctype", result.usertype);
             fetch(Urls.cn + "/company/" + result.br_number)
               .then((res) => res.json())
               .then(async (cmp) => {
@@ -87,12 +90,21 @@ export default function Login(props) {
       <Text style={styles.logintxt}>Login</Text>
       <View style={styles.inputContainer}>
         <Icons name="mail" color={COLORS.green} size={30} />
-        <TextInput
+        <Input
           style={{ paddingHorizontal: 10, color: COLORS.green, fontSize: 20 }}
           placeholder="Email"
           value={email}
+          pattern={"^[^@]+@[^@]+.[^@]+$"}
           onChangeText={(text) => setEmail(text)}
+          onValidation={(isValid) => setEmailvalid(isValid)}
         />
+      </View>
+      <View style={{ marginHorizontal: 40, height: 10 }}>
+        {!emailvalid ? (
+          <Text style={{ color: COLORS.red }}>Enter a valid email</Text>
+        ) : (
+          <Text></Text>
+        )}
       </View>
       <View style={styles.inputContainer}>
         <Icons name="lock" color={COLORS.green} size={30} />
@@ -140,7 +152,7 @@ export default function Login(props) {
           marginTop: 10,
           alignItems: "center",
         }}
-        onPress={() => props.navigation.navigate("Register")}
+        onPress={() => props.navigation.navigate("Forgot")}
       >
         <Text style={{ color: COLORS.green, fontSize: 15 }}>
           Forgot Password

@@ -20,23 +20,30 @@ import { Card } from "react-native-paper";
 import Urls from "../../constant";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
+import Input from "../../components/Input";
 
 export default function UpdateProduct(props) {
   const product_id = props.route.params._id;
+  const [product_namevalid, setPnamevalid] = useState(true);
   const [product_name, setPname] = useState(props.route.params.product_name);
   const [picture, setPicture] = useState(props.route.params.picture);
   const [unitprice, setUprice] = useState(
     props.route.params.unitprice.toString()
   );
+  const [unitpricevalid, setUpricevalid] = useState(true);
   const [quantity, setQuantity] = useState(
     props.route.params.quantity.toString()
   );
+  const [quantityvalid, setQuantityvalid] = useState(true);
   const [description, setDescription] = useState(
     props.route.params.description
   );
+  const [expence, setExpence] = useState(props.route.params.expence.toString());
+  const [expencevalid, setExpencevalid] = useState(true);
   const [product_category, setPCategory] = useState(
     props.route.params.product_category
   );
+  const [product_categoryvalid, setPCategoryvalid] = useState(true);
 
   //   const name = props.route.params.name;
   //   const email = props.route.params.email;
@@ -90,23 +97,34 @@ export default function UpdateProduct(props) {
       });
   };
   const updateData = () => {
-    fetch(Urls.cn + "/product/" + product_id, {
-      method: "patch",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        product_name,
-        product_category,
-        picture,
-        unitprice,
-        quantity,
-        description,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        Alert.alert(product_name + " is successfuly added");
-        props.navigation.navigate("Products");
-      });
+    if (
+      product_namevalid &&
+      product_categoryvalid &&
+      unitpricevalid &&
+      expencevalid &&
+      quantityvalid
+    ) {
+      fetch(Urls.cn + "/product/" + product_id, {
+        method: "patch",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          product_name,
+          product_category,
+          picture,
+          unitprice,
+          quantity,
+          description,
+          expence,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          Alert.alert(product_name + " is successfuly added");
+          props.navigation.navigate("Products");
+        });
+    } else {
+      Alert.alert("Please fill the required feilds");
+    }
   };
 
   return (
@@ -153,14 +171,6 @@ export default function UpdateProduct(props) {
               Add Product
             </Text>
           </View>
-          <View>
-            <Icons
-              name="bell-outline"
-              style={{ padding: SIZES.padding }}
-              color="#ffffff"
-              size={30}
-            />
-          </View>
         </View>
       </SafeAreaView>
       <ScrollView style={styles.scrollcontainer}>
@@ -170,7 +180,7 @@ export default function UpdateProduct(props) {
           </Card>
         </View>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
@@ -178,12 +188,21 @@ export default function UpdateProduct(props) {
             }}
             placeholder="Product Name"
             placeholderTextColor={COLORS.green}
+            pattern={"[^s]"}
+            onValidation={(isValid) => setPnamevalid(isValid)}
             value={product_name}
             onChangeText={(text) => setPname(text)}
           />
         </View>
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {!product_namevalid ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : (
+            <Text></Text>
+          )}
+        </View>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
@@ -192,11 +211,20 @@ export default function UpdateProduct(props) {
             placeholder="Product Category"
             placeholderTextColor={COLORS.green}
             value={product_category}
+            pattern={"[^s]"}
+            onValidation={(isValid) => setPCategoryvalid(isValid)}
             onChangeText={(text) => setPCategory(text)}
           />
         </View>
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {!product_categoryvalid ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : (
+            <Text></Text>
+          )}
+        </View>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
@@ -204,10 +232,46 @@ export default function UpdateProduct(props) {
             }}
             placeholder="Unit Price"
             placeholderTextColor={COLORS.green}
+            pattern={"^([1-9]{1,}[0-9]{0,})$"}
+            onValidation={(isValid) => setUpricevalid(isValid)}
             keyboardType="number-pad"
             value={unitprice}
             onChangeText={(text) => setUprice(text)}
           />
+        </View>
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {unitprice === "" ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : !unitpricevalid ? (
+            <Text style={{ color: COLORS.red }}>Invalid Unit Price</Text>
+          ) : (
+            <Text style={{ color: COLORS.red }}></Text>
+          )}
+        </View>
+        <View style={styles.inputContainer}>
+          <Input
+            style={{
+              paddingHorizontal: 10,
+              color: COLORS.green,
+              fontSize: 20,
+            }}
+            placeholder="Unit Cost"
+            placeholderTextColor={COLORS.green}
+            pattern={"^([1-9]{1,}[0-9]{0,})$"}
+            onValidation={(isValid) => setExpencevalid(isValid)}
+            keyboardType="number-pad"
+            value={expence}
+            onChangeText={(text) => setExpence(text)}
+          />
+        </View>
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {expence === "" ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : !expencevalid || expence >= unitprice ? (
+            <Text style={{ color: COLORS.red }}>Invalid Unit Cost</Text>
+          ) : (
+            <Text style={{ color: COLORS.red }}></Text>
+          )}
         </View>
         <View style={styles.inputContainer}>
           <TextInput
@@ -218,10 +282,21 @@ export default function UpdateProduct(props) {
             }}
             placeholder="Quantity"
             placeholderTextColor={COLORS.green}
+            pattern={"^([1-9]{1,}[0-9]{0,})$"}
+            onValidation={(isValid) => setQuantityvalid(isValid)}
             keyboardType="number-pad"
             value={quantity}
             onChangeText={(text) => setQuantity(text)}
           />
+        </View>
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {quantity === "" ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : !quantityvalid ? (
+            <Text style={{ color: COLORS.red }}>Invalid Unit Cost</Text>
+          ) : (
+            <Text style={{ color: COLORS.red }}></Text>
+          )}
         </View>
         <View style={styles.inputContainer}>
           <TextInput

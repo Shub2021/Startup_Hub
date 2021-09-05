@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { NavigationActions } from "react-navigation";
 import {
   View,
   StyleSheet,
@@ -18,6 +19,7 @@ export function DrawerContent(props) {
   const [name, setName] = useState("");
   const [br, setBr] = useState("");
   const [type, setType] = useState("");
+  const [actype, setacType] = useState("");
   const [loading, setloading] = useState(true);
   const getData = async () => {
     // const { br, name, email, loading } = useSelector((state) => {
@@ -27,6 +29,8 @@ export function DrawerContent(props) {
     const name = await AsyncStorage.getItem("name");
     const br = await AsyncStorage.getItem("br");
     const type = await AsyncStorage.getItem("type");
+    const acctype = await AsyncStorage.getItem("acctype");
+    setacType(acctype);
     setEmail(email);
     setBr(br);
     setName(name);
@@ -44,6 +48,8 @@ export function DrawerContent(props) {
       await AsyncStorage.removeItem("email");
       await AsyncStorage.removeItem("type");
       await AsyncStorage.removeItem("category");
+      await AsyncStorage.removeItem("acctype");
+
       props.navigation.navigate("Login");
     } catch (e) {
       console.log(e);
@@ -138,6 +144,40 @@ export function DrawerContent(props) {
                   />
                   <DrawerItem
                     icon={() => (
+                      <Icon
+                        name="account-group-outline"
+                        color={COLORS.green}
+                        size={28}
+                      />
+                    )}
+                    pressColor={COLORS.lightGreen3}
+                    label="Partners"
+                    labelStyle={{ color: COLORS.green, fontSize: SIZES.h3 }}
+                    onPress={() => {
+                      props.navigation.navigate("Partners");
+                    }}
+                  />
+                  {actype === "admin" ? (
+                    <DrawerItem
+                      icon={() => (
+                        <Icon
+                          name="account-plus-outline"
+                          color={COLORS.green}
+                          size={28}
+                        />
+                      )}
+                      label="Members"
+                      pressColor={COLORS.lightGreen3}
+                      labelStyle={{ color: COLORS.green, fontSize: SIZES.h3 }}
+                      onPress={() => {
+                        props.navigation.navigate("Members");
+                      }}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                  <DrawerItem
+                    icon={() => (
                       <Icon name="cog-outline" color={COLORS.green} size={28} />
                     )}
                     label="Profile"
@@ -145,6 +185,36 @@ export function DrawerContent(props) {
                     labelStyle={{ color: COLORS.green, fontSize: SIZES.h3 }}
                     onPress={() => {
                       props.navigation.navigate("Profile");
+                    }}
+                  />
+                  <DrawerItem
+                    icon={() => (
+                      <Icon
+                        name="currency-usd"
+                        color={COLORS.green}
+                        size={28}
+                      />
+                    )}
+                    label="Investors"
+                    pressColor={COLORS.lightGreen3}
+                    labelStyle={{ color: COLORS.green, fontSize: SIZES.h3 }}
+                    onPress={() => {
+                      props.navigation.navigate("Investors");
+                    }}
+                  />
+                  <DrawerItem
+                    icon={() => (
+                      <Icon
+                        name="office-building"
+                        color={COLORS.green}
+                        size={28}
+                      />
+                    )}
+                    label="Business Profile"
+                    pressColor={COLORS.lightGreen3}
+                    labelStyle={{ color: COLORS.green, fontSize: SIZES.h3 }}
+                    onPress={() => {
+                      props.navigation.navigate("Business_Profile");
                     }}
                   />
                 </>
@@ -195,6 +265,25 @@ export function DrawerContent(props) {
                       props.navigation.navigate("Jobs");
                     }}
                   />
+                  {actype === "admin" ? (
+                    <DrawerItem
+                      icon={() => (
+                        <Icon
+                          name="account-plus-outline"
+                          color={COLORS.green}
+                          size={28}
+                        />
+                      )}
+                      label="Members"
+                      pressColor={COLORS.lightGreen3}
+                      labelStyle={{ color: COLORS.green, fontSize: SIZES.h3 }}
+                      onPress={() => {
+                        props.navigation.navigate("Members");
+                      }}
+                    />
+                  ) : (
+                    <></>
+                  )}
                   <DrawerItem
                     icon={() => (
                       <Icon name="cog-outline" color={COLORS.green} size={28} />
@@ -204,6 +293,36 @@ export function DrawerContent(props) {
                     labelStyle={{ color: COLORS.green, fontSize: SIZES.h3 }}
                     onPress={() => {
                       props.navigation.navigate("Profile");
+                    }}
+                  />
+                  <DrawerItem
+                    icon={() => (
+                      <Icon
+                        name="currency-usd"
+                        color={COLORS.green}
+                        size={28}
+                      />
+                    )}
+                    label="Investors"
+                    pressColor={COLORS.lightGreen3}
+                    labelStyle={{ color: COLORS.green, fontSize: SIZES.h3 }}
+                    onPress={() => {
+                      props.navigation.navigate("Investors");
+                    }}
+                  />
+                  <DrawerItem
+                    icon={() => (
+                      <Icon
+                        name="office-building"
+                        color={COLORS.green}
+                        size={28}
+                      />
+                    )}
+                    label="Business Profile"
+                    pressColor={COLORS.lightGreen3}
+                    labelStyle={{ color: COLORS.green, fontSize: SIZES.h3 }}
+                    onPress={() => {
+                      props.navigation.navigate("Business_Profile");
                     }}
                   />
                 </>
