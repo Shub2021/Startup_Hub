@@ -22,18 +22,23 @@ import Urls from "../../constant";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
+import Input from "../../components/Input";
 
 export default function AddProduct(props) {
   const [product_name, setPname] = useState("");
+  const [product_namevalid, setPnamevalid] = useState(false);
   const [picture, setPicture] = useState(
     "https://res.cloudinary.com/hiruna/image/upload/c_fit,w_700/v1624803256/90343213-aquamarine-blue-rounded-arrow-up-in-light-blue-circle-icon-flat-upload-sign-isolated-on-white-point-_tzzhnf.jpg"
   );
   const [unitprice, setUprice] = useState("");
+  const [unitpricevalid, setUpricevalid] = useState(false);
   const [quantity, setQuantity] = useState("");
+  const [quantityvalid, setQuantityvalid] = useState(false);
   const [expence, setExpence] = useState("");
+  const [expencevalid, setExpencevalid] = useState(false);
   const [description, setDescription] = useState("");
   const [product_category, setPCategory] = useState("");
-  const [ordercategory, setOCategory] = useState("");
+  const [product_categoryvalid, setPCategoryvalid] = useState(false);
   const br_number = props.route.params.br;
   const company_category = props.route.params.cmpcategory;
   const email = props.route.params.email;
@@ -85,27 +90,39 @@ export default function AddProduct(props) {
       });
   };
   const submitData = () => {
-    fetch(Urls.cn + "/product/", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        product_name,
-        product_category,
-        company_category,
-        ordercategory,
-        picture,
-        unitprice,
-        expence,
-        quantity,
-        description,
-        br_number,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        Alert.alert(`${data.createProduct.product_name} is successfuly added`);
-        props.navigation.navigate("Products");
-      });
+    if (
+      product_namevalid &&
+      product_categoryvalid &&
+      unitpricevalid &&
+      expencevalid &&
+      quantityvalid
+    ) {
+      fetch(Urls.cn + "/product/", {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          product_name,
+          product_category,
+          company_category,
+
+          picture,
+          unitprice,
+          expence,
+          quantity,
+          description,
+          br_number,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          Alert.alert(
+            `${data.createProduct.product_name} is successfuly added`
+          );
+          props.navigation.navigate("Products");
+        });
+    } else {
+      Alert.alert("Please fill the required feilds");
+    }
   };
 
   return (
@@ -152,14 +169,6 @@ export default function AddProduct(props) {
               Add Product
             </Text>
           </View>
-          <View>
-            <Icons
-              name="bell-outline"
-              style={{ padding: SIZES.padding }}
-              color="#ffffff"
-              size={30}
-            />
-          </View>
         </View>
       </SafeAreaView>
       <ScrollView style={styles.scrollcontainer}>
@@ -169,7 +178,7 @@ export default function AddProduct(props) {
           </Card>
         </View>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
@@ -178,11 +187,20 @@ export default function AddProduct(props) {
             placeholder="Product Name"
             placeholderTextColor={COLORS.primary}
             value={product_name}
+            pattern={"[^s]"}
+            onValidation={(isValid) => setPnamevalid(isValid)}
             onChangeText={(text) => setPname(text)}
           />
         </View>
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {!product_namevalid ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : (
+            <Text></Text>
+          )}
+        </View>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
@@ -190,12 +208,21 @@ export default function AddProduct(props) {
             }}
             placeholder="Product Category"
             placeholderTextColor={COLORS.primary}
+            pattern={"[^s]"}
+            onValidation={(isValid) => setPCategoryvalid(isValid)}
             value={product_category}
             onChangeText={(text) => setPCategory(text)}
           />
         </View>
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {!product_categoryvalid ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : (
+            <Text></Text>
+          )}
+        </View>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
@@ -204,12 +231,23 @@ export default function AddProduct(props) {
             placeholder="Unit Price"
             placeholderTextColor={COLORS.primary}
             value={unitprice}
+            pattern={"^([1-9]{1,}[0-9]{0,})$"}
+            onValidation={(isValid) => setUpricevalid(isValid)}
             keyboardType="number-pad"
             onChangeText={(text) => setUprice(text)}
           />
         </View>
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {unitprice === "" ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : !unitpricevalid ? (
+            <Text style={{ color: COLORS.red }}>Invalid Unit Price</Text>
+          ) : (
+            <Text style={{ color: COLORS.red }}></Text>
+          )}
+        </View>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
@@ -217,14 +255,24 @@ export default function AddProduct(props) {
             }}
             placeholder="Unit Cost"
             placeholderTextColor={COLORS.primary}
+            pattern={"^([1-9]{1,}[0-9]{0,})$"}
+            onValidation={(isValid) => setExpencevalid(isValid)}
             keyboardType="number-pad"
             value={expence}
             onChangeText={(text) => setExpence(text)}
           />
         </View>
-
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {expence === "" ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : !expencevalid || expence >= unitprice ? (
+            <Text style={{ color: COLORS.red }}>Invalid Unit Cost</Text>
+          ) : (
+            <Text style={{ color: COLORS.red }}></Text>
+          )}
+        </View>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
@@ -232,12 +280,22 @@ export default function AddProduct(props) {
             }}
             placeholder="Quantity"
             placeholderTextColor={COLORS.primary}
+            pattern={"^([1-9]{1,}[0-9]{0,})$"}
+            onValidation={(isValid) => setQuantityvalid(isValid)}
             keyboardType="number-pad"
             value={quantity}
             onChangeText={(text) => setQuantity(text)}
           />
         </View>
-
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {quantity === "" ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : !quantityvalid ? (
+            <Text style={{ color: COLORS.red }}>Invalid Unit Cost</Text>
+          ) : (
+            <Text style={{ color: COLORS.red }}></Text>
+          )}
+        </View>
         <View style={styles.inputContainer}>
           <TextInput
             style={{

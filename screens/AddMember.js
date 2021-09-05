@@ -22,14 +22,17 @@ import Urls from "../constant";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
+import Input from "../components/Input";
 
 export default function AddMember(props) {
   const [member_name, setMname] = useState("");
+  const [member_namevalid, setMnamevalid] = useState(false);
   const [nic, setNIC] = useState("");
   const [picture, setPicture] = useState(
     "https://res.cloudinary.com/hiruna/image/upload/v1625729331/startupHub/PngItem_4212266_rd09ab.png"
   );
   const [memail, setMemail] = useState("");
+  const [memailvalid, setMemailvalid] = useState(false);
   const br_number = props.route.params.br;
   const company_category = props.route.params.cmpcategory;
   const email = props.route.params.email;
@@ -64,9 +67,9 @@ export default function AddMember(props) {
       handleUpload(newfile);
     }
   };
-  function randnum () {
-      const max = 99999;
-      const min = 10000;
+  function randnum() {
+    const max = 99999;
+    const min = 10000;
     return Math.floor(Math.random() * (max - min)) + min;
   }
   const handleUpload = (image) => {
@@ -89,7 +92,8 @@ export default function AddMember(props) {
     var password = randnum().toString();
     var acctype = "member";
     console.log(password);
-    fetch(Urls.cn + "/users/signup", {
+    if (member_namevalid && memailvalid) {
+      fetch(Urls.cn + "/users/signup", {
         method: "post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -97,14 +101,17 @@ export default function AddMember(props) {
           email: memail,
           name: member_name,
           password,
-          accountType : acctype,
-
+          accountType: acctype,
         }),
-      }).then((res) => res.json())
-      .then((data) => {
-        Alert.alert("Created Successfully");
-        props.navigation.navigate("Members");
-      });
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          Alert.alert("Created Successfully");
+          props.navigation.navigate("Members");
+        });
+    } else {
+      Alert.alert("Please fill the required feilds");
+    }
   };
 
   return (
@@ -148,36 +155,36 @@ export default function AddMember(props) {
               />
             </TouchableOpacity>
             <Text style={{ color: COLORS.white, marginLeft: 10, fontSize: 25 }}>
-              Add Product
+              Add Member
             </Text>
-          </View>
-          <View>
-            <Icons
-              name="bell-outline"
-              style={{ padding: SIZES.padding }}
-              color="#ffffff"
-              size={30}
-            />
           </View>
         </View>
       </SafeAreaView>
       <ScrollView style={styles.scrollcontainer}>
-        
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="Member Name"
+            pattern={"[^s]"}
+            onValidation={(isValid) => setMnamevalid(isValid)}
             placeholderTextColor={COLORS.primary}
             value={member_name}
             onChangeText={(text) => setMname(text)}
           />
         </View>
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {!member_namevalid ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : (
+            <Text></Text>
+          )}
+        </View>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
@@ -186,10 +193,20 @@ export default function AddMember(props) {
             placeholder="Email"
             placeholderTextColor={COLORS.primary}
             value={memail}
+            pattern={"^[^@]+@[^@]+.[^@]+$"}
+            onValidation={(isValid) => setMemailvalid(isValid)}
             onChangeText={(text) => setMemail(text)}
           />
         </View>
-       
+        <View style={{ marginHorizontal: 40, height: 10 }}>
+          {memail === "" ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : !memailvalid ? (
+            <Text style={{ color: COLORS.red }}>Enter a valid email</Text>
+          ) : (
+            <Text style={{ color: COLORS.red }}></Text>
+          )}
+        </View>
         <TouchableOpacity
           style={[
             styles.inputContainer,

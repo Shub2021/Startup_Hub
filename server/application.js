@@ -1,6 +1,7 @@
 const bodyParser = require("body-parser");
 const express = require("express");
 const mongoose = require("mongoose");
+var cors = require("cors");
 const application = express();
 require("./models/Startup_Company");
 require("./models/Startup_User");
@@ -17,8 +18,13 @@ const subscribetRoutes = require("./routes/subscribe");
 const planRoutes = require("./routes/plan");
 const mailRoutes = require("./routes/mailer");
 const jobRoutes = require("./routes/jobs");
+const clientRoutes = require("./routes/client");
+const paymentRoutes = require("./routes/payment");
+const annfeeRoutes = require("./routes/annualfee");
+const complaintRoutes = require("./routes/complaints");
 
 application.use(bodyParser.json());
+application.use(cors());
 
 const Startup_Company = mongoose.model("Startup_Company");
 const Startup_User = mongoose.model("Startup_User");
@@ -55,6 +61,10 @@ application.use("/subscribe", subscribetRoutes);
 application.use("/plan", planRoutes);
 application.use("/Jobs", jobRoutes);
 application.use("/mail", mailRoutes);
+application.use("/client", clientRoutes);
+application.use("/payment", paymentRoutes);
+application.use("/annualfee", annfeeRoutes);
+application.use("/complaint", complaintRoutes);
 
 application.listen(3000, () => {
   console.log("server runnig");

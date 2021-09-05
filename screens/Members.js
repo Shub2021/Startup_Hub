@@ -157,14 +157,6 @@ export default function Members(props) {
                     Members
                   </Text>
                 </View>
-                <View>
-                  <Icons
-                    name="bell-outline"
-                    style={{ padding: SIZES.padding }}
-                    color="#ffffff"
-                    size={30}
-                  />
-                </View>
               </View>
             </SafeAreaView>
           </KeyboardAvoidingView>

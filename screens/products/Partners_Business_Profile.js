@@ -249,14 +249,6 @@ export default function Business_Profile(props) {
                   Business Profile
                 </Text>
               </View>
-              <View>
-                <Icons
-                  name="bell-outline"
-                  style={{ padding: SIZES.padding }}
-                  color="#ffffff"
-                  size={30}
-                />
-              </View>
             </View>
           </SafeAreaView>
           {pflag ? (

@@ -31,16 +31,29 @@ export default function Register(props) {
   const [email, setEmail] = useState("");
   const [emailvalid, setEmailvalid] = useState(true);
   const [address, setAddress] = useState("");
+  const [addressvalid, setAddressvalid] = useState(false);
   const [br_number, setBr] = useState("");
+  const [br_numbervalid, setBrvalid] = useState(false);
   const [type, setType] = useState("");
   const [category, setCategory] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordvalid, setPasswordvalid] = useState(false);
   const [repassword, setRePassword] = useState("");
+  const [repasswordvalid, setRePasswordvalid] = useState(false);
 
   const abortController = new AbortController();
 
   const submitData = () => {
-    if (adminvalid && company_namevalid) {
+    if (
+      adminvalid &&
+      company_namevalid &&
+      contactvalid &&
+      emailvalid &&
+      addressvalid &&
+      br_numbervalid &&
+      passwordvalid &&
+      repasswordvalid
+    ) {
       if (password == repassword) {
         fetch(Urls.cn + "/company", {
           method: "post",
@@ -162,35 +175,58 @@ export default function Register(props) {
             placeholder="Contact Number"
             keyboardType="number-pad"
             value={contact}
-            pattern={"0[0-9]{9}"}
+            pattern={"^0[0-9]{9}$"}
             onValidation={(isValid) => setPhonevalid(isValid)}
             onChangeText={(text) => setPhone(text)}
           />
         </View>
         <View style={{ marginHorizontal: 40, height: 10 }}>
-          {contactvalid ? (
-            <Text style={{ color: COLORS.red }}>Enter a valid email</Text>
-          ) : contact === "" ? (
+          {contact === "" ? (
             <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : !contactvalid ? (
+            <Text style={{ color: COLORS.red }}>
+              Enter a valid Contact Number
+            </Text>
           ) : (
             <Text style={{ color: COLORS.red }}></Text>
           )}
         </View>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{ paddingHorizontal: 10, color: "#008c8c", fontSize: 20 }}
             placeholder="Address"
             value={address}
+            pattern={"[^s]"}
+            onValidation={(isValid) => setAddressvalid(isValid)}
             onChangeText={(text) => setAddress(text)}
           />
         </View>
+        <View style={{ marginHorizontal: 40, height: 10 }}>
+          {!addressvalid ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : (
+            <Text></Text>
+          )}
+        </View>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{ paddingHorizontal: 10, color: "#008c8c", fontSize: 20 }}
             placeholder="Business Registration Number"
             value={br_number}
+            keyboardType="number-pad"
+            pattern={"^[0-9]{5}$"}
+            onValidation={(isValid) => setBrvalid(isValid)}
             onChangeText={(text) => setBr(text)}
           />
+        </View>
+        <View style={{ marginHorizontal: 40, height: 10 }}>
+          {br_number === "" ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : !br_numbervalid ? (
+            <Text style={{ color: COLORS.red }}>Enter a valid Br Number</Text>
+          ) : (
+            <Text style={{ color: COLORS.red }}></Text>
+          )}
         </View>
         <View style={styles.inputContainer}>
           <Picker
@@ -232,20 +268,44 @@ export default function Register(props) {
         </View>
 
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{ paddingHorizontal: 10, color: "#008c8c", fontSize: 20 }}
             placeholder="Password"
             value={password}
+            pattern={"^[a-zA-Z0-9]{8,}$"}
+            onValidation={(isValid) => setPasswordvalid(isValid)}
             onChangeText={(text) => setPassword(text)}
           />
         </View>
+        <View style={{ marginHorizontal: 40, height: 10 }}>
+          {password === "" ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : !passwordvalid ? (
+            <Text style={{ color: COLORS.red }}>
+              Password must contain at least 8 characters
+            </Text>
+          ) : (
+            <Text style={{ color: COLORS.red }}></Text>
+          )}
+        </View>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{ paddingHorizontal: 10, color: "#008c8c", fontSize: 20 }}
             placeholder="Re Enter Password"
             value={repassword}
+            pattern={password}
+            onValidation={(isValid) => setRePasswordvalid(isValid)}
             onChangeText={(text) => setRePassword(text)}
           />
+        </View>
+        <View style={{ marginHorizontal: 40, height: 10 }}>
+          {repassword === "" ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : !repasswordvalid ? (
+            <Text style={{ color: COLORS.red }}>Not matching</Text>
+          ) : (
+            <Text style={{ color: COLORS.red }}></Text>
+          )}
         </View>
         <TouchableOpacity
           style={[styles.inputContainer, styles.btn]}

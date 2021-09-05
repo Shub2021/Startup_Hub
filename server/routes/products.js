@@ -120,6 +120,7 @@ router.patch("/:productId", (req, res, next) => {
       unitprice: req.body.unitprice,
       quantity: req.body.quantity,
       description: req.body.description,
+      expence: req.body.expence,
     }
   )
     .exec()

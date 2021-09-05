@@ -31,6 +31,7 @@ export default function ProductDetails(props) {
   const unitprice = props.route.params.item.unitprice;
   const quantity = props.route.params.item.quantity;
   const description = props.route.params.item.description;
+  const expence = props.route.params.item.expence;
   const ratingarr = props.route.params.item.rating;
   const loading = false;
   var trating = 0;
@@ -233,6 +234,7 @@ export default function ProductDetails(props) {
                   unitprice,
                   quantity,
                   description,
+                  expence,
                 })
               }
             >

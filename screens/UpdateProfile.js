@@ -20,15 +20,21 @@ import { Card } from "react-native-paper";
 import Urls from "../constant";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
+import Input from "../components/Input";
 
-export default function UpdateProduct(props) {
+export default function UpdateProfile(props) {
   const user_id = props.route.params.data._id;
   const [user_name, setSname] = useState(props.route.params.data.name);
+  const [user_namevalid, setSnamevalid] = useState(true);
   const [picture, setPicture] = useState(props.route.params.data.img);
   const [email, setEmail] = useState(props.route.params.data.email);
+  const [emailvalid, setEmailvalid] = useState(true);
   const [address, setAddress] = useState(props.route.params.data.Address);
+  const [addressvalid, setAddressvalid] = useState(true);
   const [NIC, setNIC] = useState(props.route.params.data.NIC);
+  const [NICvalid, setNICvalid] = useState(true);
   const [mobile, setMobile] = useState(props.route.params.data.mobile);
+  const [mobilevalid, setMobilevalid] = useState(true);
 
   //   const name = props.route.params.name;
   //   const email = props.route.params.email;
@@ -82,23 +88,27 @@ export default function UpdateProduct(props) {
       });
   };
   const updateData = () => {
-    fetch(Urls.cn + "/users/" + user_id, {
-      method: "patch",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        user_name,
-        email,
-        picture,
-        address,
-        NIC,
-        mobile,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        Alert.alert("Updated Successfully");
-        props.navigation.navigate("Profile");
-      });
+    if (user_namevalid && emailvalid && NICvalid && mobilevalid) {
+      fetch(Urls.cn + "/users/" + user_id, {
+        method: "patch",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_name,
+          email,
+          picture,
+          address,
+          NIC,
+          mobile,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          Alert.alert("Updated Successfully");
+          props.navigation.navigate("Profile");
+        });
+    } else {
+      Alert.alert("Please fill the required feilds");
+    }
   };
 
   return (
@@ -145,14 +155,6 @@ export default function UpdateProduct(props) {
               Edit Profile
             </Text>
           </View>
-          <View>
-            <Icons
-              name="bell-outline"
-              style={{ padding: SIZES.padding }}
-              color="#ffffff"
-              size={30}
-            />
-          </View>
         </View>
       </SafeAreaView>
       <ScrollView style={styles.scrollcontainer}>
@@ -162,7 +164,7 @@ export default function UpdateProduct(props) {
           </TouchableOpacity>
         </View>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
@@ -170,12 +172,21 @@ export default function UpdateProduct(props) {
             }}
             placeholder="Name"
             placeholderTextColor={COLORS.green}
+            pattern={"[^s]"}
+            onValidation={(isValid) => setSnamevalid(isValid)}
             value={user_name}
             onChangeText={(text) => setSname(text)}
           />
         </View>
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {!user_namevalid ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : (
+            <Text></Text>
+          )}
+        </View>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
@@ -183,25 +194,45 @@ export default function UpdateProduct(props) {
             }}
             placeholder="Email"
             placeholderTextColor={COLORS.green}
+            pattern={"^[^@]+@[^@]+.[^@]+$"}
+            onValidation={(isValid) => setEmailvalid(isValid)}
             value={email}
             onChangeText={(text) => setEmail(text)}
           />
         </View>
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {email === "" ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : !emailvalid ? (
+            <Text style={{ color: COLORS.red }}>Enter a valid email</Text>
+          ) : (
+            <Text style={{ color: COLORS.red }}></Text>
+          )}
+        </View>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="NIC"
+            pattern={"^[0-9]{9}[x|X|v|V]$"}
+            onValidation={(isValid) => setNICvalid(isValid)}
             placeholderTextColor={COLORS.green}
             value={NIC}
             onChangeText={(text) => setNIC(text)}
           />
         </View>
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {!NICvalid ? (
+            <Text style={{ color: COLORS.red }}>Enter a valid NIC</Text>
+          ) : (
+            <Text></Text>
+          )}
+        </View>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
@@ -210,12 +241,25 @@ export default function UpdateProduct(props) {
             placeholder="Phone Number"
             placeholderTextColor={COLORS.green}
             keyboardType="number-pad"
+            pattern={"^0[0-9]{9}$"}
+            onValidation={(isValid) => setMobilevalid(isValid)}
             value={mobile}
             onChangeText={(text) => setMobile(text)}
           />
         </View>
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {mobile === "" ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : !mobilevalid ? (
+            <Text style={{ color: COLORS.red }}>
+              Enter a valid Contact Number
+            </Text>
+          ) : (
+            <Text style={{ color: COLORS.red }}></Text>
+          )}
+        </View>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,

@@ -276,7 +276,11 @@ export default function Home(props) {
             flexDirection: "row",
           }}
           onPress={() =>
-            props.navigation.navigate("Partners_Products", { item, flag , pflag})
+            props.navigation.navigate("Partners_Products", {
+              item,
+              flag,
+              pflag,
+            })
           }
         >
           <Image style={styles.image} source={{ uri: item.image }} />
@@ -356,14 +360,6 @@ export default function Home(props) {
                 >
                   Partners
                 </Text>
-              </View>
-              <View>
-                <Icons
-                  name="bell-outline"
-                  style={{ padding: SIZES.padding }}
-                  color="#ffffff"
-                  size={30}
-                />
               </View>
             </View>
           </SafeAreaView>

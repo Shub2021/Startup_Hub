@@ -127,14 +127,6 @@ export default function Partners_Products(props) {
                     Products
                   </Text>
                 </View>
-                <View>
-                  <Icons
-                    name="bell-outline"
-                    style={{ padding: SIZES.padding }}
-                    color="#ffffff"
-                    size={30}
-                  />
-                </View>
               </View>
             </SafeAreaView>
           </KeyboardAvoidingView>

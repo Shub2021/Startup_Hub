@@ -150,18 +150,20 @@ export default function Investors(props) {
         Alert.alert("Member is successfuly deleted");
       });
   };
-  const showAlert = (id) =>
+  const showAlert = (item) =>
     Alert.alert(
-      "Warning",
-      "Are you sure to delete Member",
+      item.cName,
+      "Invest Area : " +
+        item.investArea +
+        "\nCompany Address : " +
+        item.cAddress +
+        "\nContact : " +
+        item.cTel +
+        "\nEmail : " +
+        item.email,
       [
         {
-          text: "Yes",
-          onPress: () => deleteMember(id),
-          style: "cancel",
-        },
-        {
-          text: "No",
+          text: "Ok",
           style: "cancel",
         },
       ],
@@ -212,9 +214,20 @@ export default function Investors(props) {
           //   }
         >
           <View style={{ flexDirection: "column", marginLeft: 0, padding: 2 }}>
-            <Text style={{ color: COLORS.white, fontSize: 23 }}>
-              {item.cName}
-            </Text>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <Text style={{ color: COLORS.white, fontSize: 23 }}>
+                {item.cName}
+              </Text>
+              <Icons
+                name="eye"
+                color="#ffffff"
+                size={30}
+                onPress={() => showAlert(item)}
+              />
+            </View>
+
             <Text style={{ color: COLORS.white, fontSize: 23 }}>
               {item.investArea}
             </Text>
@@ -463,6 +476,13 @@ export default function Investors(props) {
               <Text style={{ color: COLORS.white, fontSize: 23 }}>
                 {item.cName}
               </Text>
+              <Icons
+                name="eye"
+                color="#ffffff"
+                size={30}
+                style={{ marginLeft: 80 }}
+                onPress={() => showAlert(item)}
+              />
             </View>
             <Text style={{ color: COLORS.white, fontSize: 23 }}>
               {item.investArea}
@@ -534,14 +554,6 @@ export default function Investors(props) {
                   >
                     Investors
                   </Text>
-                </View>
-                <View>
-                  <Icons
-                    name="bell-outline"
-                    style={{ padding: SIZES.padding }}
-                    color="#ffffff"
-                    size={30}
-                  />
                 </View>
               </View>
             </SafeAreaView>

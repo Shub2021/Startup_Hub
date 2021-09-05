@@ -93,14 +93,6 @@ export default function Business_Profile(props) {
                   Business Profile
                 </Text>
               </View>
-              <View>
-                <Icons
-                  name="bell-outline"
-                  style={{ padding: SIZES.padding }}
-                  color="#ffffff"
-                  size={30}
-                />
-              </View>
             </View>
           </SafeAreaView>
           <ScrollView
@@ -221,16 +213,41 @@ export default function Business_Profile(props) {
                   styles.inputContainer,
                   styles.btn,
                   {
-                    backgroundColor: COLORS.red,
-                    borderColor: COLORS.red,
+                    backgroundColor: COLORS.primary,
+                    borderColor: COLORS.primary,
                   },
                 ]}
-                onPress={() => setmodal(true)}
+                onPress={() =>
+                  props.navigation.navigate("Map", {
+                    data,
+                  })
+                }
               >
                 <Text
                   style={{ color: "white", fontSize: 20, fontWeight: "bold" }}
                 >
-                  Pay Here
+                  Set Location
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.inputContainer,
+                  styles.btn,
+                  {
+                    backgroundColor: COLORS.red,
+                    borderColor: COLORS.red,
+                  },
+                ]}
+                onPress={() =>
+                  props.navigation.navigate("StripeApp", {
+                    data,
+                  })
+                }
+              >
+                <Text
+                  style={{ color: "white", fontSize: 20, fontWeight: "bold" }}
+                >
+                  Pay Annual Fee
                 </Text>
               </TouchableOpacity>
             </View>
@@ -260,13 +277,13 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     justifyContent: "center",
     borderRadius: 23,
-    height: 250,
+    height: 200,
     width: "100%",
   },
   image: {
     marginHorizontal: 0,
-    height: 200,
-    width: "100%",
+    height: 160,
+    width: "80%",
     borderBottomLeftRadius: 23,
     borderBottomRightRadius: 23,
   },

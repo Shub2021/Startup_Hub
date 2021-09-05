@@ -21,60 +21,40 @@ import { SIZES, COLORS, icons } from "../constants";
 import Input from "../components/Input";
 //import { useSelector, useDispatch } from "react-redux";
 
-export default function Login(props) {
+export default function Forgot(props) {
   //const dispatch = useDispatch();
   const [password, setPassword] = useState("");
   const [notvisible, setVisible] = useState(true);
+  const [recode, setRecode] = useState("");
+  const [code, setcode] = useState("");
   const [email, setEmail] = useState("");
   const [emailvalid, setEmailvalid] = useState(true);
-  const signin = async () => {
-    //console.log(email);
-    fetch(Urls.cn + "/users/login", {
+  function randnum() {
+    const max = 99999;
+    const min = 10000;
+    return Math.floor(Math.random() * (max - min)) + min;
+  }
+  const sendCode = async () => {
+    var cd = randnum().toString();
+    setcode(cd);
+    await AsyncStorage.setItem("email", email);
+    fetch(Urls.cn + "/mail", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        email,
-        password,
+        code: cd,
       }),
     })
       .then((res) => res.json())
-      .then(async (result) => {
-        console.log(result);
-        if (result.message === "Auth successful") {
-          Alert.alert("login successfull");
-          try {
-            await AsyncStorage.setItem("token", result.token);
-            await AsyncStorage.setItem("br", result.br_number);
-            await AsyncStorage.setItem("email", email);
-            await AsyncStorage.setItem("name", result.name);
-            await AsyncStorage.setItem("acctype", result.usertype);
-            fetch(Urls.cn + "/company/" + result.br_number)
-              .then((res) => res.json())
-              .then(async (cmp) => {
-                console.log(cmp);
-                await AsyncStorage.setItem("type", cmp.type);
-                await AsyncStorage.setItem("category", cmp.category);
-                if (cmp.type === "product") {
-                  props.navigation.navigate("PDrawer");
-                  setEmail("");
-                  setPassword("");
-                } else if (cmp.type === "service") {
-                  props.navigation.navigate("SDrawer");
-                  setEmail("");
-                  setPassword("");
-                }
-              });
-            // dispatch({ type: "br", payload: result.br_number });
-            // dispatch({ type: "email", payload: email });
-            // dispatch({ type: "name", payload: result.name });
-            // dispatch({ type: "set_loading", payload: false });
-          } catch (e) {
-            console.log(e);
-          }
-        } else {
-          Alert.alert("login unsuccessfull");
-        }
-      });
+      .then((result) => {});
+    console.log(cd);
+  };
+
+  const verifyCode = () => {
+    console.log(code);
+    if (code === recode) {
+      props.navigation.navigate("Recover");
+    }
   };
   return (
     <KeyboardAvoidingView
@@ -87,9 +67,8 @@ export default function Login(props) {
       >
         <View style={styles.welcomeContainer}></View>
       </ImageBackground>
-      <Text style={styles.logintxt}>Login</Text>
+      <Text style={styles.logintxt}>Forgot Password</Text>
       <View style={styles.inputContainer}>
-        <Icons name="mail" color={COLORS.green} size={30} />
         <Input
           style={{ paddingHorizontal: 10, color: COLORS.green, fontSize: 20 }}
           placeholder="Email"
@@ -106,56 +85,33 @@ export default function Login(props) {
           <Text></Text>
         )}
       </View>
+      <TouchableOpacity
+        style={[styles.inputContainer2, styles.btn]}
+        onPress={sendCode}
+      >
+        <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
+          Send Code
+        </Text>
+      </TouchableOpacity>
       <View style={styles.inputContainer}>
-        <Icons name="lock" color={COLORS.green} size={30} />
         <TextInput
           style={{
             paddingHorizontal: 10,
             color: COLORS.green,
             fontSize: 20,
           }}
-          placeholder="Password"
-          value={password}
-          secureTextEntry={notvisible}
-          onChangeText={(text) => setPassword(text)}
+          placeholder="Code"
+          value={recode}
+          onChangeText={(text) => setRecode(text)}
         />
-        <TouchableOpacity
-          style={{ marginLeft: 250, top: 6, position: "absolute" }}
-          onPress={() => setVisible(!notvisible)}
-        >
-          {notvisible ? (
-            <Iconics name="eye-outline" color={COLORS.green} size={30} />
-          ) : (
-            <Iconics name="eye-off-outline" color={COLORS.green} size={30} />
-          )}
-        </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        style={[styles.inputContainer2, styles.btn]}
-        onPress={signin}
-      >
-        <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
-          Login
-        </Text>
-      </TouchableOpacity>
+
       <TouchableOpacity
         style={[styles.registerbtn, styles.inputContainer2]}
-        onPress={() => props.navigation.navigate("Register")}
+        onPress={verifyCode}
       >
         <Text style={{ color: COLORS.green, fontSize: 20, fontWeight: "bold" }}>
-          Register
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={{
-          justifyContent: "center",
-          marginTop: 10,
-          alignItems: "center",
-        }}
-        onPress={() => props.navigation.navigate("Forgot")}
-      >
-        <Text style={{ color: COLORS.green, fontSize: 15 }}>
-          Forgot Password
+          Verify
         </Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
@@ -225,7 +181,8 @@ const styles = StyleSheet.create({
   btn: {
     backgroundColor: COLORS.green,
     justifyContent: "center",
-    marginTop: 40,
+    marginTop: 10,
+    marginBottom: 20,
   },
   registerbtn: {
     backgroundColor: "#fff",

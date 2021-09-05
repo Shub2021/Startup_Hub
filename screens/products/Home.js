@@ -54,6 +54,10 @@ export default function Home(props) {
   const [profit, setProfit] = useState("0");
   const [br, setBr] = useState("");
   const [cmpcategory, setCategory] = useState("");
+  const [complaints, setComplaints] = useState("");
+  const [partners, setPartners] = useState("");
+  const [admincomplaints, setadmincomplaints] = useState("");
+  const [investor, setinvestor] = useState("");
   const [orderdata, setorderdata] = useState([]);
   const [productdata, setproductdata] = useState([]);
   const [loading, setloading] = useState(true);
@@ -119,15 +123,15 @@ export default function Home(props) {
                 let d = result[i].req_date;
                 totalinc = totalinc + result[i].total;
                 totalexp = totalexp + result[i].expence * result[i].quantity;
-                let m = d.slice(5, 7);
-                console.log(m);
-                if (m === "06") {
+                let m = d.slice(5, 6);
+                //console.log(m);
+                if (m === "6") {
                   incm[0] = incm[0] + result[i].total;
-                } else if (m === "07") {
+                } else if (m === "7") {
                   incm[1] = incm[1] + result[i].total;
-                } else if (m === "08") {
+                } else if (m === "8") {
                   incm[2] = incm[2] + result[i].total;
-                } else if (m === "09") {
+                } else if (m === "9") {
                   incm[3] = incm[3] + result[i].total;
                 }
               }
@@ -139,6 +143,24 @@ export default function Home(props) {
             setincome(incm);
             setOcount(c);
             setbardata(dat);
+          });
+        fetch(Urls.cn + "/prequest/recieved/" + brr)
+          .then((res) => res.json())
+          .then((result) => {
+            setPartners(result.length);
+            //console.log(result.length);
+          });
+        fetch(Urls.cn + "/investorrequest/recieved/" + brr)
+          .then((res) => res.json())
+          .then((result) => {
+            setinvestor(result.length);
+            //console.log(result.length);
+          });
+        fetch(Urls.cn + "/complaint/br/" + brr)
+          .then((res) => res.json())
+          .then((result) => {
+            setComplaints(result.length);
+            //console.log(result.length);
             setloading(false);
           });
       });
@@ -227,7 +249,7 @@ export default function Home(props) {
                   }}
                 >
                   <Text style={{ fontSize: 20 }}>Partners</Text>
-                  <Text style={{ fontSize: 20 }}>3</Text>
+                  <Text style={{ fontSize: 20 }}>{partners}</Text>
                 </View>
               </Card>
             </View>
@@ -236,7 +258,7 @@ export default function Home(props) {
             >
               <Card
                 style={[styles.card, { backgroundColor: COLORS.lightPurple }]}
-                onPress={() => props.navigation.navigate("Orders")}
+                onPress={() => props.navigation.navigate("Investors")}
               >
                 <View
                   style={{
@@ -250,13 +272,37 @@ export default function Home(props) {
                     Investor
                   </Text>
                   <Text style={{ fontSize: 20, color: COLORS.white }}>
-                    {ordercount}
+                    {investor}
                   </Text>
                 </View>
               </Card>
               <Card
+                style={[styles.card, { backgroundColor: COLORS.lightGreen3 }]}
+                onPress={() => props.navigation.navigate("Complaints", br)}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    paddingHorizontal: 15,
+                    paddingVertical: 20,
+                  }}
+                >
+                  <Text style={{ fontSize: 20 }}>Client</Text>
+                  <Text style={{ fontSize: 20 }}>{complaints}</Text>
+                </View>
+              </Card>
+            </View>
+            <View
+              style={{
+                width: "100%",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Card
                 style={styles.card}
-                onPress={() => props.navigation.navigate("Partners")}
+                onPress={() => props.navigation.navigate("AdminComplaints")}
               >
                 <View
                   style={{
@@ -267,11 +313,16 @@ export default function Home(props) {
                   }}
                 >
                   <Text style={{ fontSize: 20 }}>Admin</Text>
-                  <Text style={{ fontSize: 20 }}>3</Text>
+                  <Text style={{ fontSize: 20 }}>0</Text>
                 </View>
               </Card>
             </View>
-            <View style={{ marginBottom: 10 }}>
+            <View style={{ marginBottom: 10, marginTop: 10 }}>
+              <Text
+                style={{ fontSize: 20, marginBottom: 5, alignSelf: "center" }}
+              >
+                Most Selling Products
+              </Text>
               <BarChart
                 style={styles.card2}
                 data={data}
@@ -285,10 +336,7 @@ export default function Home(props) {
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
-              <Card
-                style={styles.card3}
-                onPress={() => props.navigation.navigate("Orders")}
-              >
+              <Card style={[styles.card3, { backgroundColor: COLORS.orange }]}>
                 <View
                   style={{
                     justifyContent: "space-between",
@@ -300,10 +348,7 @@ export default function Home(props) {
                   <Text style={{ fontSize: 15 }}>LKR {total}.00</Text>
                 </View>
               </Card>
-              <Card
-                style={styles.card3}
-                onPress={() => props.navigation.navigate("Partners")}
-              >
+              <Card style={[styles.card3, { backgroundColor: COLORS.purple }]}>
                 <View
                   style={{
                     justifyContent: "space-between",
@@ -311,13 +356,16 @@ export default function Home(props) {
                     paddingVertical: 15,
                   }}
                 >
-                  <Text style={{ fontSize: 20 }}>Expence</Text>
-                  <Text style={{ fontSize: 15 }}>LKR {expence}.00</Text>
+                  <Text style={{ fontSize: 20, color: COLORS.white }}>
+                    Expence
+                  </Text>
+                  <Text style={{ fontSize: 15, color: COLORS.white }}>
+                    LKR {expence}.00
+                  </Text>
                 </View>
               </Card>
               <Card
-                style={styles.card3}
-                onPress={() => props.navigation.navigate("Partners")}
+                style={[styles.card3, { backgroundColor: COLORS.lightGreen2 }]}
               >
                 <View
                   style={{
@@ -331,7 +379,11 @@ export default function Home(props) {
                 </View>
               </Card>
             </View>
-
+            <Text
+              style={{ fontSize: 20, marginBottom: 5, alignSelf: "center" }}
+            >
+              Monthly Income Destribution
+            </Text>
             <View style={{ marginBottom: 10 }}>
               <LineChart
                 style={styles.card2}

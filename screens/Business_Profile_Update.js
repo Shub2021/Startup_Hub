@@ -20,15 +20,22 @@ import { Card } from "react-native-paper";
 import Urls from "../constant";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
+import Input from "../components/Input";
 
-export default function UpdateProduct(props) {
+export default function UpdateBprofile(props) {
   const company_id = props.route.params.data._id;
-  const [company_name, setCname] = useState(props.route.params.data.company_name);
+  const [company_name, setCname] = useState(
+    props.route.params.data.company_name
+  );
+  const [company_namevalid, setCnamevalid] = useState(true);
   const [image, setPicture] = useState(props.route.params.data.image);
   const [email, setEmail] = useState(props.route.params.data.email);
+  const [emailvalid, setEmailvalid] = useState(true);
   const [address, setAddress] = useState(props.route.params.data.address);
+  const [addressvalid, setAddressvalid] = useState(true);
   const [location, setLocation] = useState(props.route.params.data.location);
   const [contact, setMobile] = useState(props.route.params.data.contact);
+  const [contactvalid, setMobilevalid] = useState(true);
 
   //   const name = props.route.params.name;
   //   const email = props.route.params.email;
@@ -82,23 +89,27 @@ export default function UpdateProduct(props) {
       });
   };
   const updateData = () => {
-    fetch(Urls.cn + "/company/" + company_id, {
-      method: "patch",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        company_name,
-        contact,
-        address,
-        image,
-        location,
-        email,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        Alert.alert("Updated Successfully");
-        props.navigation.navigate("Business_Profile");
-      });
+    if (company_namevalid && contactvalid && addressvalid && emailvalid) {
+      fetch(Urls.cn + "/company/" + company_id, {
+        method: "patch",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          company_name,
+          contact,
+          address,
+          image,
+          location,
+          email,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          Alert.alert("Updated Successfully");
+          props.navigation.navigate("Business_Profile");
+        });
+    } else {
+      Alert.alert("Please fill the required feilds");
+    }
   };
 
   return (
@@ -145,14 +156,6 @@ export default function UpdateProduct(props) {
               Edit Business Profile
             </Text>
           </View>
-          <View>
-            <Icons
-              name="bell-outline"
-              style={{ padding: SIZES.padding }}
-              color="#ffffff"
-              size={30}
-            />
-          </View>
         </View>
       </SafeAreaView>
       <ScrollView style={styles.scrollcontainer}>
@@ -162,20 +165,29 @@ export default function UpdateProduct(props) {
           </TouchableOpacity>
         </View>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="Company Name"
+            pattern={"[^s]"}
+            onValidation={(isValid) => setCnamevalid(isValid)}
             placeholderTextColor={COLORS.green}
             value={company_name}
             onChangeText={(text) => setCname(text)}
           />
         </View>
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {!company_namevalid ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : (
+            <Text></Text>
+          )}
+        </View>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
@@ -183,12 +195,23 @@ export default function UpdateProduct(props) {
             }}
             placeholder="Email"
             placeholderTextColor={COLORS.green}
+            pattern={"^[^@]+@[^@]+.[^@]+$"}
+            onValidation={(isValid) => setEmailvalid(isValid)}
             value={email}
             onChangeText={(text) => setEmail(text)}
           />
         </View>
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {email === "" ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : !emailvalid ? (
+            <Text style={{ color: COLORS.red }}>Enter a valid email</Text>
+          ) : (
+            <Text style={{ color: COLORS.red }}></Text>
+          )}
+        </View>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
@@ -198,8 +221,21 @@ export default function UpdateProduct(props) {
             keyboardType="number-pad"
             placeholderTextColor={COLORS.green}
             value={contact}
+            pattern={"^0[0-9]{9}$"}
+            onValidation={(isValid) => setMobilevalid(isValid)}
             onChangeText={(text) => setMobile(text)}
           />
+        </View>
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {contact === "" ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : !contactvalid ? (
+            <Text style={{ color: COLORS.red }}>
+              Enter a valid Contact Number
+            </Text>
+          ) : (
+            <Text style={{ color: COLORS.red }}></Text>
+          )}
         </View>
         {/* <View style={styles.inputContainer}>
           <TextInput
@@ -216,17 +252,26 @@ export default function UpdateProduct(props) {
           />
         </View> */}
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="Address"
+            pattern={"[^s]"}
+            onValidation={(isValid) => setAddressvalid(isValid)}
             placeholderTextColor={COLORS.green}
             value={address}
             onChangeText={(text) => setAddress(text)}
           />
+        </View>
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {!addressvalid ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : (
+            <Text></Text>
+          )}
         </View>
 
         <TouchableOpacity
