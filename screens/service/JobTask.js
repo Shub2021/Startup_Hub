@@ -187,12 +187,12 @@ export default function JobTask(props) {
         >
           <View style={{ flexDirection: "row", padding: SIZES.padding }}>
             <Icons
-              name="menu"
+              name="arrow-left"
               color="#ffffff"
               size={30}
-              onPress={() => props.navigation.openDrawer()}
+              onPress={() => props.navigation.navigate("Jobs")}
             />
-            <Text style={{ color: COLORS.white, marginLeft: 10, fontSize: 25 }}>
+            <Text style={{ color: COLORS.white, marginLeft: 20, fontSize: 23 }}>
               JobTask
             </Text>
           </View>
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     flexDirection: "row",
     elevation: 4,
-    borderRadius: 10,
+    borderRadius: 12,
     width: 300,
     marginVertical: 6,
   },
