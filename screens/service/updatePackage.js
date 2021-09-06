@@ -22,20 +22,29 @@ import Urls from "../../constant";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import { SIZES, COLORS, icons } from "../../constants";
+import Input from "../../components/Input";
 
 export default function updatePackage(props) {
   const service_id = props.route.params.id;
   const package_id = props.route.params.item._id;
   const [data, setdata] = useState(props.route.params.data);
   const [price, setPrice] = useState(props.route.params.item.price.toString());
+  const [priceValid, setPriceValid] = useState(true);
   const [pk_type, setType] = useState(props.route.params.item.Package_type);
+  const [pk_typeValid, setTypeValid] = useState(true);
   const [Description, setDescription] = useState(props.route.params.item.pk_discription);
+  const [DescriptionValid, setDescriptionValid] = useState(true);
   const package1 = [{_id:package_id,Package_type:pk_type,price:price,pk_discription:Description}];
   const br_number = props.route.params.br;
 
 
 
   const updateData = () => {
+    if(
+      priceValid &&
+      pk_typeValid &&
+      DescriptionValid 
+    ){
     let arr=[];
         for(let i=0;i<data.length;i++){ 
             if(data[i]._id !== package_id){
@@ -61,6 +70,9 @@ export default function updatePackage(props) {
             Alert.alert("updated");
             props.navigation.navigate("packageCard");
           });
+    }else{
+      Alert.alert("Please fill the required feilds");
+    }    
   };
 
   return (
@@ -119,35 +131,56 @@ export default function updatePackage(props) {
       </SafeAreaView>
       <ScrollView style={styles.scrollcontainer}>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
               fontSize: 20,
             }}
-            placeholder="Service Name"
+            placeholder="Price"
             placeholderTextColor={COLORS.primary}
             value={price}
+            pattern={"^([1-9]{1,}[0-9]{0,})$"}
+            onValidation={(isValid) => setPriceValid(isValid)}
             onChangeText={(text) => setPrice(text)}
           />
         </View>
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {price === "" ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : !priceValid ? (
+            <Text style={{ color: COLORS.red }}>Invalid Unit Price</Text>
+          ) : (
+            <Text style={{ color: COLORS.red }}></Text>
+          )}
+        </View>
+
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
               fontSize: 20,
             }}
             value={pk_type}
-            placeholder="Product Category"
+            pattern={"[^s]"}
+            onValidation={(isValid) => setTypeValid(isValid)}
+            placeholder="Package Type"
             placeholderTextColor={COLORS.primary}
             
             onChangeText={(text) => setType(text)}
           />
         </View>
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {!pk_typeValid ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : (
+            <Text></Text>
+          )}
+        </View>
 
         <View style={styles.inputContainer_des}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
@@ -158,8 +191,17 @@ export default function updatePackage(props) {
             placeholder="Description"
             placeholderTextColor={COLORS.primary}
             value={Description}
+            pattern={"[^s]"}
+            onValidation={(isValid) => setDescriptionValid(isValid)}
             onChangeText={(text) => setDescription(text)}
           />
+        </View>
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {!DescriptionValid ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : (
+            <Text></Text>
+          )}
         </View>
 
         <TouchableOpacity

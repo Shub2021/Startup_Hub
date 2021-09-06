@@ -22,16 +22,22 @@ import Urls from "../../constant";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import { SIZES, COLORS, icons } from "../../constants";
+import Input from "../../components/Input";
 
 export default function updateService(props) {
   const service_id = props.route.params._id;
   const [Service_type, setStype] = useState(props.route.params.service_type);
+  const [Service_typeValid, setStypeValid] = useState(true);
   const [picture, setPicture] = useState(props.route.params.picture);
+  const [Service_nameValid, setDNamevalid] = useState(true);
   const [Service_name, setSname] = useState(props.route.params.service_name);
+  
+  setDNamevalid
   // const [quantity, setQuantity] = useState("");
-  const [Description, setDescription] = useState(
-    props.route.params.Description
-  );
+  const [Description, setDescription] = useState(props.route.params.Description);
+  const [DescriptionValid, setDescriptionvalid] = useState(true);
+
+  
   // const [product_category, setPCategory] = useState("");
   const br_number = props.route.params.br;
   // const name = props.route.params.name;
@@ -84,6 +90,12 @@ export default function updateService(props) {
   };
 
   const updateData = () => {
+    if(
+      Service_nameValid &&
+      Service_typeValid &&
+      DescriptionValid
+    ){
+
     fetch(Urls.cn + "/service/" + service_id, {
       method: "patch",
       headers: { "Content-Type": "application/json" },
@@ -102,7 +114,10 @@ export default function updateService(props) {
         Alert.alert(Service_name + "is successfuly added");
         props.navigation.navigate("ServiceCard");
       });
-    console.log(br_number + "ggfffg");
+    }else{
+      Alert.alert("Please fill the required feilds");
+    }
+   
   };
 
   return (
@@ -166,31 +181,54 @@ export default function updateService(props) {
           </Card>
         </View>
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="Service Name"
+            pattern={"[^s]"}
+            onValidation={(isValid) => setDNamevalid(isValid)}
             placeholderTextColor={COLORS.primary}
             value={Service_name}
             onChangeText={(text) => setSname(text)}
           />
         </View>
+        
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {!Service_nameValid ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : (
+            <Text></Text>
+          )}
+        </View>
+
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
               fontSize: 20,
             }}
-            placeholder="Product Category"
+            placeholder="Service Category"
             placeholderTextColor={COLORS.primary}
+            pattern={"[^s]"}
+            onValidation={(isValid) => setStypeValid(isValid)}
+            
             value={Service_type}
             onChangeText={(text) => setStype(text)}
           />
         </View>
+
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {!Service_typeValid ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : (
+            <Text></Text>
+          )}
+        </View>
+
         {/* <View style={styles.inputContainer}>
           <TextInput
             style={{
@@ -220,17 +258,27 @@ export default function updateService(props) {
           />
         </View> */}
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="Description"
+            pattern={"[^s]"}
+            onValidation={(isValid) => setDescriptionvalid(isValid)}
             placeholderTextColor={COLORS.primary}
             value={Description}
             onChangeText={(text) => setDescription(text)}
           />
+        </View>
+
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {!DescriptionValid ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : (
+            <Text></Text>
+          )}
         </View>
 
         <TouchableOpacity

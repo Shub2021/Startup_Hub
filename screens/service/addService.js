@@ -24,17 +24,22 @@ import Urls from "../../constant";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import Note from "./Note";
+import Input from "../../components/Input";
 
 export default function addService(props) {
   const [Service_type, setStype] = useState("");
+  const[Service_typeValid, setTypevalid] = useState(false);
   const [picture, setPicture] = useState(
     "https://res.cloudinary.com/hiruna/image/upload/c_fit,w_700/v1624803256/90343213-aquamarine-blue-rounded-arrow-up-in-light-blue-circle-icon-flat-upload-sign-isolated-on-white-point-_tzzhnf.jpg"
   );
   const [Service_name, setSname] = useState("");
+  const [Service_nameValid, setNamevalid] = useState(false);
   // const [quantity, setQuantity] = useState("");
   const [Description, setDescription] = useState("");
+  const [DescriptionValid, setDescriptionvalid] = useState(false);
   // const [product_category, setPCategory] = useState("");
   const br_number = props.route.params.br;
+  const company_category = props.route.params.type;
   // const name = props.route.params.name;
   // const email = props.route.params.email;
   useEffect(() => {
@@ -85,6 +90,12 @@ export default function addService(props) {
   };
 
   const submitData = () => {
+    if(
+      Service_typeValid &&
+      Service_nameValid  &&
+      DescriptionValid
+    ){
+
     fetch(Urls.cn + "/service/", {
       method: "post",
       headers: { "Content-Type": "application/json" },
@@ -96,15 +107,19 @@ export default function addService(props) {
         // quantity,
         Description,
         br_number,
+        company_category,
       }),
     })
       .then((res) => res.json())
       .then((item) => {
         Alert.alert(Service_name + "is successfuly added");
         //props.navigation.navigate("packageCard",{item});
-        props.navigation.navigate("serviceCard");
+        props.navigation.navigate("ServiceCard");
       });
-    console.log(br_number + "ggfffg");
+    }else{
+      Alert.alert("Please fill the required feilds");
+    }
+   
   };
 
   return (
@@ -169,43 +184,75 @@ export default function addService(props) {
         </View>
 
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="Service Type"
+            pattern={"[^s]"}
+            onValidation={(isValid) => setTypevalid(isValid)}
             placeholderTextColor={COLORS.primary}
             value={Service_type}
             onChangeText={(text) => setStype(text)}
           />
         </View>
+
+        <View style={{ marginHorizontal: 40, height: 10 }}>
+          {!Service_typeValid ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : (
+            <Text></Text>
+          )}
+        </View>
+
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="Service Name"
+            pattern={"[^s]"}
+            onValidation={(isValid) => setNamevalid(isValid)}
             placeholderTextColor={COLORS.primary}
             value={Service_name}
             onChangeText={(text) => setSname(text)}
           />
         </View>
+
+        <View style={{ marginHorizontal: 40, height: 10 }}>
+          {!Service_nameValid ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : (
+            <Text></Text>
+          )}
+        </View>
+
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="Description"
+            pattern={"[^s]"}
+            onValidation={(isValid) => setDescriptionvalid(isValid)}
             placeholderTextColor={COLORS.primary}
             value={Description}
             onChangeText={(text) => setDescription(text)}
           />
+        </View>
+
+        <View style={{ marginHorizontal: 40, height: 10 }}>
+          {!DescriptionValid ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : (
+            <Text></Text>
+          )}
         </View>
 
         {/* <View style={styles.inputContainer}>

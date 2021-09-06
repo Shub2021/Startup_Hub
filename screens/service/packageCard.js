@@ -45,7 +45,7 @@ export default function packageCard(props) {
       .then((res) => res.json())
       .then((result) => {
         //console.log(result);
-        setdata(result[0].package);
+        setdata(result.package);
       });
     setEmail(email);
     setBr(br_number);
