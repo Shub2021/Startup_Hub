@@ -22,6 +22,7 @@ import Urls from "../../constant";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import { SIZES, COLORS, icons } from "../../constants";
+import Input from "../../components/Input";
 
 
 
@@ -29,8 +30,11 @@ export default function addPackege(props) {
 
   const service_id = props.route.params.id;
   const [package_type, setStype] = useState();
-  const [price, setPrice] = useState();
+  const [package_typeValid, setStypeValid] = useState(false);
+  const [price, setPrice] = useState("");
+  const [priceValid, setPriceValid] = useState(false);
   const [pk_discription, setDescription] = useState();
+  const [pk_discriptionValid, setDescriptionValid] = useState();
   const br_number = props.route.params.br;
   const package1 = [{Package_type:package_type,price:price,pk_discription:pk_discription}];
   const array = props.route.params.data;
@@ -83,6 +87,11 @@ export default function addPackege(props) {
   // };
 
   const submitData = () => {
+    if(
+      package_typeValid &&
+      priceValid &&
+      pk_discriptionValid
+    ){
    // array.push({package_type,price,pk_discription});
    console.log(array);
    let newarray = package1.concat(array);
@@ -99,7 +108,9 @@ export default function addPackege(props) {
         Alert.alert("is successfuly added");
         props.navigation.navigate("packageCard");
       });
-    console.log(br_number+"ggfffg");
+    }else{
+      Alert.alert("Please fill the required feilds");
+    }
   };
   
 
@@ -164,34 +175,58 @@ export default function addPackege(props) {
           </Card>
         </View> */}
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="type"
+            pattern={"[^s]"}
+            onValidation={(isValid) => setStypeValid(isValid)}
             placeholderTextColor={COLORS.green}
             value={package_type}
             onChangeText={(text) => setStype(text)}
           />
         </View>
+
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {!package_typeValid ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : (
+            <Text></Text>
+          )}
+        </View>
+
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input
             style={{
               paddingHorizontal: 10,
               color: COLORS.green,
               fontSize: 20,
             }}
             placeholder="price"
+            value={price}
+            pattern={"^([1-9]{1,}[0-9]{0,})$"}
+            onValidation={(isValid) => setPriceValid(isValid)}
             keyboardType="number-pad"
             placeholderTextColor={COLORS.green}
-            value={price}
+            
             onChangeText={(text) => setPrice(text)}
           />
         </View>
+
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {price === "" ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : !priceValid ? (
+            <Text style={{ color: COLORS.red }}>Invalid Unit Price</Text>
+          ) : (
+            <Text></Text>
+          )}
+        </View>
         <View style={styles.inputContainer_des}>
-          <TextInput
+          <Input
             style={{ 
               
               paddingHorizontal: 10,
@@ -201,11 +236,20 @@ export default function addPackege(props) {
             multiline={true}
             numberOfLines={8}
             placeholder="Description"
+            pattern={"[^s]"}
+            onValidation={(isValid) => setDescriptionValid(isValid)}
             placeholderTextColor={COLORS.green}
             value={pk_discription}
             onChangeText={(text) => setDescription(text)}
           />
         </View>
+        <View style={{ marginHorizontal: 50, height: 10 }}>
+          {!pk_discriptionValid ? (
+            <Text style={{ color: COLORS.red }}>Required</Text>
+          ) : (
+            <Text></Text>
+          )}
+        </View> 
 
         <TouchableOpacity style={[styles.inputContainer, styles.btn]}
         onPress={submitData}

@@ -28,6 +28,7 @@ export default function serviceCard(props) {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [br, setBr] = useState("");
+  const [type, setType] = useState("");
   const [data, setdata] = useState([]);
   const [loading, setloading] = useState(true);
 
@@ -35,6 +36,7 @@ export default function serviceCard(props) {
     const email = await AsyncStorage.getItem("email");
     const name = await AsyncStorage.getItem("name");
     const br_number = await AsyncStorage.getItem("br");
+    const category = await AsyncStorage.getItem("category");
 
     fetch(Urls.cn + "/service/br/"+br_number)
       .then((res) => res.json())
@@ -44,7 +46,7 @@ export default function serviceCard(props) {
       });
     setEmail(email);
     setBr(br_number);
-
+    setType(category);
     setName(name);
     setloading(false);
   };
@@ -164,7 +166,7 @@ export default function serviceCard(props) {
             style={styles.fab}
             small={false}
             icon="plus"
-            onPress={() => props.navigation.navigate("addService", { br })}
+            onPress={() => props.navigation.navigate("addService", { br,type})}
           />
           {/* <TouchableOpacity style={styles.addButton1}
         onPress={() => props.navigation.navigate("addPackage",{br})}
