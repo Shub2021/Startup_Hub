@@ -18,8 +18,26 @@ router.post("/", (req, res, next) => {
   let mailOptions = {
     from: "StartupHub21@gmail.com",
     to: "hirujayasuriya98@gmail.com",
-    subject: "test 123",
-    text: "yaaaaaaaaaaaaa" + req.body.code,
+    subject: "Password Recovery",
+    text: "Verification Code : " + req.body.code,
+  };
+  transporter.sendMail(mailOptions, function (err, data) {
+    if (err) {
+      console.log("Error" + err);
+    } else {
+      console.log("Email Sent");
+    }
+  });
+});
+router.post("/addmember/", (req, res, next) => {
+  let mailOptions = {
+    from: "StartupHub21@gmail.com",
+    to: "hirujayasuriya98@gmail.com",
+    subject: "Accout Activation",
+    text:
+      "Please use your email and the following verification code as the password for login on Startup Hub. /n /nVerification Code :" +
+      req.body.code +
+      "/n /nOnce you logged in for the first time we highly recomend you to change your password.",
   };
   transporter.sendMail(mailOptions, function (err, data) {
     if (err) {

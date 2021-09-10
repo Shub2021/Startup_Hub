@@ -130,6 +130,9 @@ router.post("/", (req, res, next) => {
               admin: req.body.admin,
               br_number: req.body.br_number,
               email: req.body.email,
+              last_payment: "",
+              payment_month: req.body.payment_month,
+              account_status: "active",
               image:
                 "https://res.cloudinary.com/hiruna/image/upload/v1627280049/startupHub/clipart1093235_wgyezv.png",
               location: location,
@@ -164,6 +167,24 @@ router.patch("/:companyID", (req, res, next) => {
       email: req.body.email,
       image: req.body.image,
       location: req.body.location,
+    }
+  )
+    .exec()
+    .then((result) => {
+      console.log(result);
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
+});
+router.patch("/payment/:br", (req, res, next) => {
+  const companyID = req.params.br;
+  Company.findByIdAndUpdate(
+    { br_number: companyID },
+    {
+      last_payment: req.body.last_payment,
     }
   )
     .exec()
