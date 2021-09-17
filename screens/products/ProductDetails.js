@@ -74,7 +74,7 @@ export default function ProductDetails(props) {
     <View style={styles.container}>
       {!loading ? (
         <>
-        <KeyboardAvoidingView
+          <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "position"}
           >
             <SafeAreaView
@@ -92,31 +92,30 @@ export default function ProductDetails(props) {
                   justifyContent: "space-between",
                 }}
               >
-              <View style={{ flexDirection: "row", padding: SIZES.padding }}>
-              <TouchableOpacity
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                position: "relative",
-                top: -5,
-                left: 0,
-                padding: 10,
-                borderRadius: SIZES.radius,
-                backgroundColor: COLORS.green,
-              }}
-              onPress={() => props.navigation.navigate("Products")}
-            >
-              <Image
-                source={icons.leftArrow}
-                resizeMode="contain"
-                style={{ width: 23, height: 23, tintColor: COLORS.white }}
-              />
-            </TouchableOpacity>
+                <View style={{ flexDirection: "row", padding: SIZES.padding }}>
+                  <TouchableOpacity
+                    style={{
+                      alignItems: "center",
+                      justifyContent: "center",
+                      position: "relative",
+                      top: -5,
+                      left: 0,
+                      padding: 10,
+                      borderRadius: SIZES.radius,
+                      backgroundColor: COLORS.green,
+                    }}
+                    onPress={() => props.navigation.navigate("Products")}
+                  >
+                    <Image
+                      source={icons.leftArrow}
+                      resizeMode="contain"
+                      style={{ width: 23, height: 23, tintColor: COLORS.white }}
+                    />
+                  </TouchableOpacity>
                   <Text
                     style={{
                       color: COLORS.white,
-                      marginTop: -2,
-                      marginLeft: 15,
+                      marginLeft: 10,
                       fontSize: 23,
                     }}
                   >
@@ -155,18 +154,17 @@ export default function ProductDetails(props) {
                   bottom: 0,
                   right: 0,
                   left: 0,
-                  borderTopLeftRadius: 23,
-                  borderTopRightRadius: 23,
+                  borderRadius: 23,
+                  zIndex: 0,
                 }}
               />
               {/* back Button */}
-              
             </View>
             <View
               style={{
                 flex: 1,
                 paddingHorizontal: 15,
-                marginTop: SIZES.padding,
+                marginTop: SIZES.padding / 2,
                 justifyContent: "space-between",
               }}
             >
@@ -230,76 +228,62 @@ export default function ProductDetails(props) {
                   {quantity}
                 </Text>
               </View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Text style={{ color: COLORS.black, fontSize: 20 }}>
-                  Rating
-                </Text>
-                <Text style={{ color: COLORS.green, fontSize: 20 }}>
-                  {trating}
-                </Text>
-              </View>
             </View>
             <View
               style={{
                 flex: 1,
-                marginTop: SIZES.padding * 2,
+                marginTop: SIZES.padding,
                 justifyContent: "space-between",
               }}
             ></View>
             <View style={{ marginBottom: 10 }}>
-            <TouchableOpacity
-              style={[
-                styles.inputContainer,
-                styles.btn,
-                {
-                  backgroundColor: COLORS.green,
-                  borderColor: COLORS.green,
-                },
-              ]}
-              onPress={() =>
-                props.navigation.navigate("UpdateProduct", {
-                  product_name,
-                  _id,
-                  product_category,
-                  picture,
-                  unitprice,
-                  quantity,
-                  description,
-                  expence,
-                })
-              }
-            >
-              <Text
-                style={{ color: "white", fontSize: 20, fontWeight: "bold" }}
+              <TouchableOpacity
+                style={[
+                  styles.inputContainer,
+                  styles.btn,
+                  {
+                    backgroundColor: COLORS.green,
+                    borderColor: COLORS.green,
+                  },
+                ]}
+                onPress={() =>
+                  props.navigation.navigate("UpdateProduct", {
+                    product_name,
+                    _id,
+                    product_category,
+                    picture,
+                    unitprice,
+                    quantity,
+                    description,
+                    expence,
+                  })
+                }
               >
-                Edit
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.inputContainer,
-                styles.btn,
-                {
-                  backgroundColor: COLORS.red,
-                  borderColor: COLORS.red,
-                },
-              ]}
-              onPress={showAlert}
-            >
-              <Text
-                style={{ color: "white", fontSize: 20, fontWeight: "bold" }}
+                <Text
+                  style={{ color: "white", fontSize: 20, fontWeight: "bold" }}
+                >
+                  Edit
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.inputContainer,
+                  styles.btn,
+                  {
+                    backgroundColor: COLORS.red,
+                    borderColor: COLORS.red,
+                  },
+                ]}
+                onPress={showAlert}
               >
-                Delete
-              </Text>
-            </TouchableOpacity>
-          </View>
+                <Text
+                  style={{ color: "white", fontSize: 20, fontWeight: "bold" }}
+                >
+                  Delete
+                </Text>
+              </TouchableOpacity>
+            </View>
           </ScrollView>
-          
         </>
       ) : (
         <ActivityIndicator size="large" color={COLORS.primary} />
@@ -311,7 +295,7 @@ export default function ProductDetails(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: "#fff",
   },
 
   btn: {
