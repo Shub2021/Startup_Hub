@@ -127,7 +127,7 @@ export default function serviceDetails(props) {
             <View
               style={{
                 width: "100%",
-                height: 280,
+                height: 250,
                 alignItems: "center",
                 justifyContent: "center",
               }}
@@ -204,20 +204,7 @@ export default function serviceDetails(props) {
                   {service_type}
                 </Text>
               </View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Text style={{ color: COLORS.black, fontSize: 23 }}>
-                  Rating
-                </Text>
-                <Text style={{ color: COLORS.green, fontSize: 23 }}>
-                  {/* {trating} */}
-                  STARS 5
-                </Text>
-              </View>
+              
             </View>
             <View
               style={{
@@ -227,7 +214,7 @@ export default function serviceDetails(props) {
               }}
             ></View>
           
-          <View style={{ marginBottom: 10 }}>
+          <View style={{ marginTop: -50 }}>
             <TouchableOpacity
               style={[
                 styles.inputContainer,
