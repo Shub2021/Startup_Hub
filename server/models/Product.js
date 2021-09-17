@@ -15,6 +15,8 @@ const ProductSchema = new mongoose.Schema({
   unitprice: Number,
   quantity: Number,
   description: String,
+  avg_rate: Number,
+  company_status: String,
   br_number: String,
   rating: [RatingSchema],
 });

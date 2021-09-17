@@ -181,10 +181,28 @@ router.patch("/:companyID", (req, res, next) => {
 });
 router.patch("/payment/:br", (req, res, next) => {
   const companyID = req.params.br;
-  Company.findByIdAndUpdate(
+  Company.findOneAndUpdate(
     { br_number: companyID },
     {
       last_payment: req.body.last_payment,
+    }
+  )
+    .exec()
+    .then((result) => {
+      console.log(result);
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
+});
+router.patch("/ban/:br", (req, res, next) => {
+  const companyID = req.params.br;
+  Company.findOneAndUpdate(
+    { br_number: companyID },
+    {
+      account_status: "banned",
     }
   )
     .exec()

@@ -13,7 +13,7 @@ const Startup_CompanySchema = new mongoose.Schema({
   password: String,
   image: String,
   last_payment: String,
-  payment_month: String,
+  payment_month: Number,
   account_status: String,
   location: { lat: String, long: String },
   partners: [],

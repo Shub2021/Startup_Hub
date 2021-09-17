@@ -5,7 +5,7 @@ const Product = require("../models/Product");
 const constants = require("../../constant");
 
 router.get("/", (req, res, next) => {
-  Product.find()
+  Product.find({ company_status: "active" })
     .exec()
     .then((docs) => {
       console.log(docs);
@@ -20,7 +20,7 @@ router.get("/", (req, res, next) => {
 });
 router.get("/br/:br", (req, res, next) => {
   const br = req.params.br;
-  Product.find({ br_number: br })
+  Product.find({ br_number: br, company_status: "active" })
     .exec()
     .then((docs) => {
       console.log(docs);
@@ -46,6 +46,8 @@ router.post("/", (req, res, next) => {
     quantity: req.body.quantity,
     description: req.body.description,
     br_number: req.body.br_number,
+    avg_rate: 0,
+    company_status: "active",
     rating: arr,
   });
   product
@@ -121,6 +123,24 @@ router.patch("/:productId", (req, res, next) => {
       quantity: req.body.quantity,
       description: req.body.description,
       expence: req.body.expence,
+    }
+  )
+    .exec()
+    .then((result) => {
+      console.log(result);
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
+});
+router.patch("/ban/:br_number", (req, res, next) => {
+  const id = req.params.br_number;
+  Product.findByIdAndUpdate(
+    { br_number: id },
+    {
+      company_status: req.body.company_status,
     }
   )
     .exec()

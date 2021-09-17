@@ -5,7 +5,7 @@ const Service = require("../models/Service");
 const constants = require("../../constant");
 
 router.get("/", (req, res, next) => {
-  Service.find()
+  Service.find({ company_status: "active" })
     .exec()
     .then((docs) => {
       console.log(docs);
@@ -20,8 +20,8 @@ router.get("/", (req, res, next) => {
 });
 
 router.get("/:service_id", (req, res, next) => {
-  const id = req.params.service_id
-  Service.findOne({_id:id})
+  const id = req.params.service_id;
+  Service.findOne({ _id: id })
     .exec()
     .then((docs) => {
       console.log(docs);
@@ -44,7 +44,8 @@ router.post("/", (req, res, next) => {
     service_type: req.body.Service_type,
     Description: req.body.Description,
     br_number: req.body.br_number,
-    package:arr,
+    company_status: "active",
+    package: arr,
   });
   service
     .save()
@@ -80,11 +81,11 @@ router.patch("/:serviceID", (req, res, next) => {
   Service.findByIdAndUpdate(
     { _id: id },
     {
-    service_name: req.body.Service_name,
-    picture: req.body.picture,
-    service_type: req.body.Service_type,
-    Description: req.body.Description,
-    package: req.body.package_type,
+      service_name: req.body.Service_name,
+      picture: req.body.picture,
+      service_type: req.body.Service_type,
+      Description: req.body.Description,
+      package: req.body.package_type,
     }
   )
     .exec()
@@ -103,7 +104,25 @@ router.patch("/package/:serviceID", (req, res, next) => {
   Service.findByIdAndUpdate(
     { _id: id },
     {
-    package: req.body.package,
+      package: req.body.package,
+    }
+  )
+    .exec()
+    .then((result) => {
+      console.log(result);
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
+});
+router.patch("/ban/:br_number", (req, res, next) => {
+  const id = req.params.br_number;
+  Service.findByIdAndUpdate(
+    { br_number: id },
+    {
+      company_status: req.body.company_status,
     }
   )
     .exec()
@@ -132,6 +151,5 @@ router.get("/br/:service_id", (req, res, next) => {
       });
     });
 });
-
 
 module.exports = router;

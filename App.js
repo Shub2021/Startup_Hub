@@ -29,12 +29,14 @@ import Forgot from "./screens/Forgot";
 import Recover from "./screens/Recover";
 import Investors from "./screens/Investors";
 import StripeApp from "./screens/StripeApp";
+import FirstPayment from "./screens/FirstPayment";
 import updatePackage from "./screens/service/updatePackage";
 import Business_Profile_Update from "./screens/Business_Profile_Update";
 import Map from "./screens/Map";
 import Partners_Products from "./screens/products/Partners_Products";
 import Plan from "./screens/Plan";
 import Complaints from "./screens/Complaints";
+import Agrement from "./screens/Agrement";
 import AdminComplaints from "./screens/AdminComplaints";
 import Partners_Business_Profile from "./screens/products/Partners_Business_Profile";
 import {
@@ -142,6 +144,11 @@ function InvestorRoutes() {
         name="Plan"
         component={Plan}
         options={{ ...navoption, title: "Plan", headerShown: false }}
+      />
+      <investorStack.Screen
+        name="Agrement"
+        component={Agrement}
+        options={{ ...navoption, title: "Agrement", headerShown: false }}
       />
     </investorStack.Navigator>
   );
@@ -503,6 +510,15 @@ export default function App() {
                     }}
                   />
                   <Stack.Screen
+                    name="FirstPayment"
+                    component={FirstPayment}
+                    options={{
+                      ...navoption,
+                      title: "FirstPayment",
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
                     name="Forgot"
                     component={Forgot}
                     options={{
@@ -547,6 +563,15 @@ export default function App() {
                     options={{
                       ...navoption,
                       title: "Register",
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="FirstPayment"
+                    component={FirstPayment}
+                    options={{
+                      ...navoption,
+                      title: "StripeApp",
                       headerShown: false,
                     }}
                   />

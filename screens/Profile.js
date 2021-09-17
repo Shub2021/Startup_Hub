@@ -270,7 +270,7 @@ export default function Profile(props) {
                   onChangeText={(text) => setCpass(text)}
                 />
                 <TouchableOpacity
-                  style={{ marginLeft: 300, top: 6, position: "absolute" }}
+                  style={{ marginLeft: 275, top: 6, position: "absolute" }}
                   onPress={() => setVisible1(!notvisible1)}
                 >
                   {notvisible1 ? (
@@ -306,7 +306,7 @@ export default function Profile(props) {
                 />
 
                 <TouchableOpacity
-                  style={{ marginLeft: 300, top: 6, position: "absolute" }}
+                  style={{ marginLeft: 275, top: 6, position: "absolute" }}
                   onPress={() => setVisible2(!notvisible2)}
                 >
                   {notvisible2 ? (
@@ -352,7 +352,7 @@ export default function Profile(props) {
                   onChangeText={(text) => setRpass(text)}
                 />
                 <TouchableOpacity
-                  style={{ marginLeft: 300, top: 6, position: "absolute" }}
+                  style={{ marginLeft: 275, top: 6, position: "absolute" }}
                   onPress={() => setVisible3(!notvisible3)}
                 >
                   {notvisible3 ? (
@@ -446,7 +446,6 @@ const styles = StyleSheet.create({
     borderRadius: 90,
     height: 180,
     width: 180,
-
   },
   btn: {
     marginTop: 20,
@@ -477,7 +476,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     paddingTop: 10,
     width: "100%",
-    height: "48%",
+    height: "55%",
     borderWidth: 1,
     borderColor: COLORS.green,
     backgroundColor: COLORS.lightGreen3,

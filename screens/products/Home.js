@@ -30,7 +30,8 @@ export default function Home(props) {
     backgroundGradientToOpacity: 0.7,
     color: (opacity = 0.5) => `rgba(255, 255, 255, ${opacity})`,
     strokeWidth: 1, // optional, default 3
-    barPercentage: 0.8,
+    barPercentage: 1,
+    decimalPlaces: 0,
     useShadowColorFromDataset: false, // optional
   };
   const chartConfig2 = {
@@ -55,8 +56,8 @@ export default function Home(props) {
   const [br, setBr] = useState("");
   const [cmpcategory, setCategory] = useState("");
   const [complaints, setComplaints] = useState("");
+  const [admincomplaints, setadminComplaints] = useState("");
   const [partners, setPartners] = useState("");
-  const [admincomplaints, setadmincomplaints] = useState("");
   const [investor, setinvestor] = useState("");
   const [orderdata, setorderdata] = useState([]);
   const [productdata, setproductdata] = useState([]);
@@ -110,6 +111,7 @@ export default function Home(props) {
             let totalinc = 0;
             let totalexp = 0;
             let incm = [0, 0, 0, 0];
+
             for (let i = 0; i < ll; i++) {
               dat[i] = 0;
             }
@@ -160,6 +162,12 @@ export default function Home(props) {
           .then((res) => res.json())
           .then((result) => {
             setComplaints(result.length);
+            //console.log(result.length);
+          });
+        fetch(Urls.cn + "/admincomplaint/br/" + brr)
+          .then((res) => res.json())
+          .then((result) => {
+            setadminComplaints(result.length);
             //console.log(result.length);
             setloading(false);
           });
@@ -248,7 +256,9 @@ export default function Home(props) {
                     paddingVertical: 20,
                   }}
                 >
-                  <Text style={{ fontSize: 20 }}>Partners</Text>
+                  <Text style={{ fontSize: 16, bottom: 6 }}>
+                    {"Partner \nNotifications"}
+                  </Text>
                   <Text style={{ fontSize: 20 }}>{partners}</Text>
                 </View>
               </Card>
@@ -268,8 +278,10 @@ export default function Home(props) {
                     paddingVertical: 20,
                   }}
                 >
-                  <Text style={{ fontSize: 20, color: COLORS.white }}>
-                    Investor
+                  <Text
+                    style={{ fontSize: 16, bottom: 6, color: COLORS.white }}
+                  >
+                    {"Investor\nNotifications"}
                   </Text>
                   <Text style={{ fontSize: 20, color: COLORS.white }}>
                     {investor}
@@ -288,7 +300,9 @@ export default function Home(props) {
                     paddingVertical: 20,
                   }}
                 >
-                  <Text style={{ fontSize: 20 }}>Client</Text>
+                  <Text style={{ fontSize: 16, bottom: 6 }}>
+                    {"Client\nNotifications"}
+                  </Text>
                   <Text style={{ fontSize: 20 }}>{complaints}</Text>
                 </View>
               </Card>
@@ -312,8 +326,10 @@ export default function Home(props) {
                     paddingVertical: 20,
                   }}
                 >
-                  <Text style={{ fontSize: 20 }}>Admin</Text>
-                  <Text style={{ fontSize: 20 }}>0</Text>
+                  <Text style={{ fontSize: 16, bottom: 6 }}>
+                    {"Admin\nNotifications"}
+                  </Text>
+                  <Text style={{ fontSize: 20 }}>{admincomplaints}</Text>
                 </View>
               </Card>
             </View>
@@ -324,9 +340,11 @@ export default function Home(props) {
                 Most Selling Products
               </Text>
               <BarChart
-                style={styles.card2}
+                style={styles.card4}
                 data={data}
                 width={330}
+                withInnerLines={true}
+                segments={3}
                 height={350}
                 yAxisLabel=""
                 chartConfig={chartConfig}
@@ -441,5 +459,15 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     marginVertical: 0,
     paddingHorizontal: 0,
+  },
+  card4: {
+    borderRadius: 23,
+    height: 350,
+    width: 330,
+    marginHorizontal: 15,
+    backgroundColor: COLORS.white,
+    marginVertical: 0,
+    paddingHorizontal: 0,
+    paddingRight: 30,
   },
 });

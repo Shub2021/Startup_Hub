@@ -35,9 +35,9 @@ router.post("/addmember/", (req, res, next) => {
     to: "hirujayasuriya98@gmail.com",
     subject: "Accout Activation",
     text:
-      "Please use your email and the following verification code as the password for login on Startup Hub. /n /nVerification Code :" +
+      "Please use your email and the following verification code as the password for login on Startup Hub. \nVerification Code :" +
       req.body.code +
-      "/n /nOnce you logged in for the first time we highly recomend you to change your password.",
+      "\nOnce you logged in for the first time we highly recomend you to change your password.",
   };
   transporter.sendMail(mailOptions, function (err, data) {
     if (err) {
@@ -45,6 +45,9 @@ router.post("/addmember/", (req, res, next) => {
     } else {
       console.log("Email Sent");
     }
+  });
+  res.status(201).json({
+    message: "Email Sent",
   });
 });
 

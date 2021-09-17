@@ -22,6 +22,9 @@ const clientRoutes = require("./routes/client");
 const paymentRoutes = require("./routes/payment");
 const annfeeRoutes = require("./routes/annualfee");
 const complaintRoutes = require("./routes/complaints");
+const admincomplaintRoutes = require("./routes/admin_complain");
+const postplanRoutes = require("./routes/postplan");
+const adminRoutes = require("./routes/admin");
 
 application.use(bodyParser.json());
 application.use(cors());
@@ -65,6 +68,9 @@ application.use("/client", clientRoutes);
 application.use("/payment", paymentRoutes);
 application.use("/annualfee", annfeeRoutes);
 application.use("/complaint", complaintRoutes);
+application.use("/admincomplaint", admincomplaintRoutes);
+application.use("/postplan", postplanRoutes);
+application.use("/admin", adminRoutes);
 
 application.listen(3000, () => {
   console.log("server runnig");

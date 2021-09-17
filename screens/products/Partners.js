@@ -159,7 +159,12 @@ export default function Home(props) {
               >
                 <Icons name="account-outline" color="#ffffff" size={25} />
                 <Text
-                  style={{ color: COLORS.white, fontSize: 18, padding: 3 , marginLeft:5}}
+                  style={{
+                    color: COLORS.white,
+                    fontSize: 18,
+                    padding: 3,
+                    marginLeft: 5,
+                  }}
                 >
                   Profile
                 </Text>
@@ -224,7 +229,7 @@ export default function Home(props) {
                 style={{
                   width: 120,
                   borderRadius: 23,
-                  paddingLeft: 5,
+                  paddingLeft: 10,
                   marginTop: 5,
                   backgroundColor: COLORS.green,
                   flexDirection: "row",
@@ -240,7 +245,12 @@ export default function Home(props) {
               >
                 <Icons name="account-outline" color="#ffffff" size={25} />
                 <Text
-                  style={{ color: COLORS.white, fontSize: 18, padding: 3, marginLeft:5 }}
+                  style={{
+                    color: COLORS.white,
+                    fontSize: 18,
+                    padding: 3,
+                    marginLeft: 5,
+                  }}
                 >
                   Profile
                 </Text>
@@ -305,7 +315,7 @@ export default function Home(props) {
                 style={{
                   width: 120,
                   borderRadius: 23,
-                  padding: 5,
+                  paddingLeft: 10,
                   marginTop: 5,
                   backgroundColor: COLORS.green,
                   flexDirection: "row",
@@ -321,7 +331,12 @@ export default function Home(props) {
               >
                 <Icons name="account-outline" color="#ffffff" size={25} />
                 <Text
-                  style={{ color: COLORS.white, fontSize: 18, paddingTop: 3, marginLeft: 5 }}
+                  style={{
+                    color: COLORS.white,
+                    fontSize: 18,
+                    padding: 3,
+                    marginLeft: 5,
+                  }}
                 >
                   Profile
                 </Text>

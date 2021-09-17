@@ -18,6 +18,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Card, FAB } from "react-native-paper";
+import filter from "lodash.filter";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
 import Urls from "../constant";
@@ -30,9 +31,12 @@ export default function Investors(props) {
   const [br, setBr] = useState("");
   const [cmpcategory, setCategory] = useState("");
   const [data, setdata] = useState([]);
+  const [fulldata, setfulldata] = useState([]);
+  const [query, setQuery] = useState("");
   const [sentdata, setsentdata] = useState([]);
   const [recieveddata, setrecieveddata] = useState([]);
   const [subscribedata, setsubscribedata] = useState([]);
+  const [agrement, setagrement] = useState(false);
   const [loading, setloading] = useState(true);
   const getData = async () => {
     const email = await AsyncStorage.getItem("email");
@@ -48,6 +52,7 @@ export default function Investors(props) {
       .then((result) => {
         //console.log(result);
         setdata(result);
+        setfulldata(result);
       });
     fetch(Urls.cn + "/startuprequest/sent/" + br)
       .then((res) => res.json())
@@ -74,6 +79,49 @@ export default function Investors(props) {
     getData();
     //fetchData();
   }, []);
+  const handleSearch = (text) => {
+    const formattedQuery = text;
+    const filteredData = filter(fulldata, (user) => {
+      return contains(user, formattedQuery);
+    });
+    setdata(filteredData);
+    setQuery(text);
+  };
+
+  const contains = (name, query) => {
+    if (name.cName.includes(query) || name.investArea.includes(query)) {
+      return true;
+    }
+
+    return false;
+  };
+  const showpostplan = (item) => {
+    //console.log(item.email);
+    fetch(Urls.cn + "/postplan/br/" + br + "/" + item.email)
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
+        if (result.length > 0) {
+          props.navigation.navigate("Agrement", { item, br });
+        } else {
+          Alert.alert("No agreement found");
+        }
+      });
+  };
+  function renderHeader() {
+    return (
+      <View style={[styles.inputContainer, { marginBottom: 15, bottom: 5 }]}>
+        <TextInput
+          autoCorrect={false}
+          clearButtonMode="always"
+          value={query}
+          onChangeText={(queryText) => handleSearch(queryText)}
+          placeholder="Search"
+          style={{ backgroundColor: "#fff", paddingHorizontal: 20 }}
+        />
+      </View>
+    );
+  }
   function acceptInvestment(item) {
     fetch(Urls.cn + "/investorrequest/" + br + "/" + item.email, {
       method: "delete",
@@ -252,7 +300,12 @@ export default function Investors(props) {
               >
                 <Icons name="file-document" color="#ffffff" size={20} />
                 <Text
-                  style={{ color: COLORS.white, fontSize: 18, padding: 3 , marginLeft: 5}}
+                  style={{
+                    color: COLORS.white,
+                    fontSize: 18,
+                    padding: 3,
+                    marginLeft: 5,
+                  }}
                 >
                   View Plan
                 </Text>
@@ -260,11 +313,11 @@ export default function Investors(props) {
               {sflag ? (
                 <TouchableOpacity
                   style={{
-                    width: 155,
+                    width: 150,
                     borderRadius: 23,
                     paddingLeft: 5,
                     marginTop: 5,
-                    marginLeft: 20,
+                    marginLeft: 10,
                     borderColor: COLORS.red,
                     borderWidth: 2,
                     flexDirection: "row",
@@ -275,7 +328,7 @@ export default function Investors(props) {
                     style={{
                       color: COLORS.red,
                       fontSize: 18,
-                      paddingTop: 3,
+                      paddingTop: 0,
                       marginLeft: 5,
                     }}
                   >
@@ -285,7 +338,7 @@ export default function Investors(props) {
               ) : (
                 <TouchableOpacity
                   style={{
-                    width: 160,
+                    width: 150,
                     borderRadius: 23,
                     alignItems: "center",
                     paddingLeft: 5,
@@ -299,7 +352,12 @@ export default function Investors(props) {
                 >
                   <Icons name="send" color="#0E357A" size={15} />
                   <Text
-                    style={{ color: COLORS.green, fontSize: 18, padding: 3, marginLeft: 5 }}
+                    style={{
+                      color: COLORS.green,
+                      fontSize: 18,
+                      padding: 0,
+                      marginLeft: 5,
+                    }}
                   >
                     Send Request
                   </Text>
@@ -392,7 +450,12 @@ export default function Investors(props) {
               >
                 <Icons name="file-document" color="#ffffff" size={20} />
                 <Text
-                  style={{ color: COLORS.white, fontSize: 18, paddingTop: 3 , marginLeft: 8}}
+                  style={{
+                    color: COLORS.white,
+                    fontSize: 18,
+                    paddingTop: 3,
+                    marginLeft: 8,
+                  }}
                 >
                   View Plan
                 </Text>
@@ -438,9 +501,7 @@ export default function Investors(props) {
                   onPress={() => acceptInvestment(item)}
                 >
                   {/* <Icons name="account-outline" color="#ffffff" size={30} /> */}
-                  <Text
-                    style={{ color: COLORS.green, fontSize: 18 }}
-                  >
+                  <Text style={{ color: COLORS.green, fontSize: 18 }}>
                     Accept
                   </Text>
                 </TouchableOpacity>
@@ -472,6 +533,7 @@ export default function Investors(props) {
             borderWidth: SIZES.borderWidth,
             borderColor: COLORS.green,
             elevation: SIZES.elevation,
+            marginTop: 20,
             flexDirection: "row",
           }}
           //   onPress={() =>
@@ -497,7 +559,9 @@ export default function Investors(props) {
                 onPress={() => showAlert(item)}
               />
             </View>
-            <Text style={{ color: COLORS.gray3, fontSize: 18, marginBottom: 10 }}>
+            <Text
+              style={{ color: COLORS.gray3, fontSize: 18, marginBottom: 10 }}
+            >
               {item.investArea}
             </Text>
 
@@ -513,7 +577,8 @@ export default function Investors(props) {
                   marginTop: 5,
                   alignItems: "center",
                   paddingRight: 10,
-                  paddingLeft:10,
+                  paddingLeft: 10,
+                  right: 8,
                   backgroundColor: COLORS.green,
                   borderColor: COLORS.green,
                   borderWidth: 2,
@@ -521,11 +586,41 @@ export default function Investors(props) {
                 }}
                 onPress={() => props.navigation.navigate("Plan", { item })}
               >
-                <Icons name="file-document" color="#ffffff" size={20}  />
+                <Icons name="file-document" color="#ffffff" size={20} />
                 <Text
-                  style={{ color: COLORS.white, fontSize: 18, padding: 3, paddingLeft: 10 }}
+                  style={{
+                    color: COLORS.white,
+                    fontSize: 18,
+                    padding: 3,
+                    paddingLeft: 10,
+                  }}
                 >
                   View Plan
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  width: 150,
+                  borderRadius: 15,
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  left: 8,
+                  marginTop: 5,
+                  alignItems: "center",
+                  paddingRight: 10,
+                  paddingLeft: 10,
+                  backgroundColor: COLORS.green,
+                  borderColor: COLORS.green,
+                  borderWidth: 2,
+                  flexDirection: "row",
+                }}
+                onPress={() => showpostplan(item)}
+              >
+                <Icons name="account-outline" color="#ffffff" size={30} />
+                <Text
+                  style={{ color: COLORS.white, fontSize: 18, paddingTop: 3 }}
+                >
+                  Agreement
                 </Text>
               </TouchableOpacity>
             </View>
@@ -661,6 +756,7 @@ export default function Investors(props) {
               <View>
                 {/* All */}
                 <FlatList
+                  ListHeaderComponent={renderHeader}
                   style={{
                     marginTop: SIZES.radius,
                     marginBottom: SIZES.radius * 5,
@@ -679,6 +775,7 @@ export default function Investors(props) {
               <View>
                 {/* Requested */}
                 <FlatList
+                  ListHeaderComponent={renderHeader}
                   style={{
                     marginTop: SIZES.radius,
                     paddingHorizontal: SIZES.radius / 3,
@@ -697,6 +794,7 @@ export default function Investors(props) {
               <View>
                 {/* Partners */}
                 <FlatList
+                  ListHeaderComponent={renderHeader}
                   style={{
                     marginTop: SIZES.radius,
                     paddingHorizontal: SIZES.radius / 3,
@@ -785,5 +883,18 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: SIZES.radius * 2,
     borderTopRightRadius: SIZES.radius * 2,
     backgroundColor: COLORS.white,
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginHorizontal: 25,
+    borderWidth: 1,
+    marginTop: 5,
+    paddingHorizontal: 10,
+    borderColor: COLORS.green,
+    justifyContent: "space-between",
+    borderRadius: 15,
+    paddingVertical: 2,
+    height: 45,
   },
 });

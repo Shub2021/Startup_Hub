@@ -108,7 +108,7 @@ export default function Members(props) {
               <Icons
                 name="delete"
                 color={COLORS.green}
-                style={{ marginTop: 10 },{ left: 20 }}
+                style={({ marginTop: 20 }, { left: 10 })}
                 size={28}
                 onPress={() => showAlert(item._id)}
               />
