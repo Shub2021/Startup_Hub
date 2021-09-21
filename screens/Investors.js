@@ -488,7 +488,7 @@ export default function Investors(props) {
               ) : (
                 <TouchableOpacity
                   style={{
-                    width: 155,
+                    width: 130,
                     borderRadius: 23,
                     alignItems: "center",
                     justifyContent: "center",
