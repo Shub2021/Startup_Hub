@@ -46,7 +46,9 @@ export default function Forgot(props) {
       }),
     })
       .then((res) => res.json())
-      .then((result) => {});
+      .then((result) => {
+        Alert.alert("Email Sent");
+      });
     console.log(cd);
   };
 

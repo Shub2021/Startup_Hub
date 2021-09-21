@@ -93,6 +93,13 @@ export default function AddMember(props) {
     var acctype = "member";
     console.log(password);
     if (member_namevalid && memailvalid) {
+      fetch(Urls.cn + "/mail/addmember/", {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          code: password,
+        }),
+      });
       fetch(Urls.cn + "/users/signup", {
         method: "post",
         headers: { "Content-Type": "application/json" },

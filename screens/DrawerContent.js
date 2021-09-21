@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-//import { NavigationActions } from "react-navigation";
+import { StackActions } from "react-navigation";
 import {
   View,
   StyleSheet,
@@ -51,6 +51,7 @@ export function DrawerContent(props) {
       await AsyncStorage.removeItem("acctype");
 
       props.navigation.navigate("Login");
+      props.navigation.dispatch(StackActions.REPLACE("Login"));
     } catch (e) {
       console.log(e);
     }
