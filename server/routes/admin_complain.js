@@ -22,9 +22,9 @@ router.get("/", (req, res, next) => {
 router.post("/", (req, res, next) => {
   const complaint = new Complaint({
     _id: new mongoose.Types.ObjectId(),
-   
+
     br_number: req.body.br_number,
-    type:req.body.type,
+    type: req.body.type,
     complian_Category: req.body.complian_Category,
     description: req.body.description,
     status: "placed",

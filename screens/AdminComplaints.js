@@ -37,10 +37,12 @@ export default function AdminComplaints(props) {
   const getData = async () => {
     const brr = await AsyncStorage.getItem("br");
     const cmp = await AsyncStorage.getItem("type");
-    fetch(Urls.cn + "/complaint/br/" + brr)
+    console.log(brr);
+    fetch(Urls.cn + "/admincomplaint/br/" + brr)
       .then((res) => res.json())
       .then((result) => {
         setData(result);
+        console.log(result);
       });
     setCategory(cmp);
     setBr(brr);
@@ -50,7 +52,7 @@ export default function AdminComplaints(props) {
     getData();
   }, []);
   const markAsRead = (item) => {
-    fetch(Urls.cn + "/complaint/viewed/" + item._id, {
+    fetch(Urls.cn + "/admincomplaint/viewed/" + item._id, {
       method: "patch",
       headers: { "Content-Type": "application/json" },
     });
@@ -103,11 +105,9 @@ export default function AdminComplaints(props) {
               marginRight: 5,
             }}
           >
+            <Text style={{ color: COLORS.white, fontSize: 18 }}>Type</Text>
             <Text style={{ color: COLORS.white, fontSize: 18 }}>
-              Client Email
-            </Text>
-            <Text style={{ color: COLORS.white, fontSize: 18 }}>
-              {item.client_email}
+              {item.type}
             </Text>
           </View>
           <View
@@ -134,18 +134,6 @@ export default function AdminComplaints(props) {
             <Text style={{ color: COLORS.white, fontSize: 18 }}>Date</Text>
             <Text style={{ color: COLORS.white, fontSize: 18 }}>
               {item.placed_date}
-            </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginRight: 5,
-            }}
-          >
-            <Text style={{ color: COLORS.white, fontSize: 18 }}>Order ID</Text>
-            <Text style={{ color: COLORS.white, fontSize: 18 }}>
-              #{item.item_id.slice(18, 23)}
             </Text>
           </View>
         </TouchableOpacity>
@@ -181,11 +169,9 @@ export default function AdminComplaints(props) {
               marginRight: 5,
             }}
           >
+            <Text style={{ color: COLORS.white, fontSize: 18 }}>Type</Text>
             <Text style={{ color: COLORS.white, fontSize: 18 }}>
-              Client Email
-            </Text>
-            <Text style={{ color: COLORS.white, fontSize: 18 }}>
-              {item.client_email}
+              {item.type}
             </Text>
           </View>
           <View
@@ -212,18 +198,6 @@ export default function AdminComplaints(props) {
             <Text style={{ color: COLORS.white, fontSize: 18 }}>Date</Text>
             <Text style={{ color: COLORS.white, fontSize: 18 }}>
               {item.placed_date}
-            </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginRight: 5,
-            }}
-          >
-            <Text style={{ color: COLORS.white, fontSize: 18 }}>Order ID</Text>
-            <Text style={{ color: COLORS.white, fontSize: 18 }}>
-              #{item.item_id.slice(18, 23)}
             </Text>
           </View>
         </TouchableOpacity>
