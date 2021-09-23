@@ -33,11 +33,15 @@ export default function Business_Profile(props) {
   const [location, setLocation] = useState("");
   const [data, setData] = useState("");
   const [loading, setloading] = useState(true);
+  const [annualPaid, setannualPaid] = useState(false);
+
   const getData = async () => {
     const email = await AsyncStorage.getItem("email");
     const name = await AsyncStorage.getItem("name");
     const br = await AsyncStorage.getItem("br");
     const cmp = await AsyncStorage.getItem("category");
+    const d = new Date();
+    const yr = d.getFullYear();
     console.log(email);
     setEmail(email);
     setBr(br);
@@ -49,6 +53,13 @@ export default function Business_Profile(props) {
         console.log(result.location);
         setData(result);
         setLocation(result.location);
+      });
+    fetch(Urls.cn + "/annualfee/yearbr/" + yr + "/" + br)
+      .then((res) => res.json())
+      .then((result) => {
+        if (result.length > 0) {
+          setannualPaid(true);
+        }
       });
   };
 
@@ -238,11 +249,13 @@ export default function Business_Profile(props) {
                     borderColor: COLORS.red,
                   },
                 ]}
-                onPress={() =>
-                  props.navigation.navigate("StripeApp", {
-                    data,
-                  })
-                }
+                onPress={() => {
+                  annualPaid
+                    ? Alert.alert("Already Paid")
+                    : props.navigation.navigate("StripeApp", {
+                        data,
+                      });
+                }}
               >
                 <Text
                   style={{ color: "white", fontSize: 20, fontWeight: "bold" }}

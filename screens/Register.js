@@ -17,6 +17,7 @@ import {
   Picker,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import Icons from "react-native-vector-icons/MaterialCommunityIcons";
 import Urls from "../constant";
 import { SIZES, COLORS, icons } from "../constants";
 import Input from "../components/Input";
@@ -40,6 +41,8 @@ export default function Register(props) {
   const [passwordvalid, setPasswordvalid] = useState(false);
   const [repassword, setRePassword] = useState("");
   const [repasswordvalid, setRePasswordvalid] = useState(false);
+  const [notvisible1, setVisible1] = useState(true);
+  const [notvisible2, setVisible2] = useState(true);
 
   const abortController = new AbortController();
 
@@ -114,9 +117,8 @@ export default function Register(props) {
           </TouchableOpacity>
           <Text style={styles.title}>Register Your startups</Text>
         </View>
-        
       </ImageBackground>
-      
+
       <ScrollView>
         <View style={styles.inputContainer}>
           <Input
@@ -274,10 +276,21 @@ export default function Register(props) {
             style={{ paddingHorizontal: 10, color: "#0E357A", fontSize: 20 }}
             placeholder="Password"
             value={password}
+            secureTextEntry={notvisible1}
             pattern={"^[a-zA-Z0-9]{8,}$"}
             onValidation={(isValid) => setPasswordvalid(isValid)}
             onChangeText={(text) => setPassword(text)}
           />
+          <TouchableOpacity
+            style={{ marginLeft: 250, top: 6, position: "absolute" }}
+            onPress={() => setVisible1(!notvisible1)}
+          >
+            {notvisible1 ? (
+              <Icons name="eye-outline" color={COLORS.green} size={30} />
+            ) : (
+              <Icons name="eye-off-outline" color={COLORS.green} size={30} />
+            )}
+          </TouchableOpacity>
         </View>
         <View style={{ marginHorizontal: 40, height: 10 }}>
           {password === "" ? (
@@ -296,9 +309,20 @@ export default function Register(props) {
             placeholder="Re Enter Password"
             value={repassword}
             pattern={password}
+            secureTextEntry={notvisible2}
             onValidation={(isValid) => setRePasswordvalid(isValid)}
             onChangeText={(text) => setRePassword(text)}
           />
+          <TouchableOpacity
+            style={{ marginLeft: 250, top: 6, position: "absolute" }}
+            onPress={() => setVisible2(!notvisible2)}
+          >
+            {notvisible2 ? (
+              <Icons name="eye-outline" color={COLORS.green} size={30} />
+            ) : (
+              <Icons name="eye-off-outline" color={COLORS.green} size={30} />
+            )}
+          </TouchableOpacity>
         </View>
         <View style={{ marginHorizontal: 40, height: 10 }}>
           {repassword === "" ? (

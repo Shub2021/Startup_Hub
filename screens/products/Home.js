@@ -31,6 +31,7 @@ export default function Home(props) {
     color: (opacity = 0.5) => `rgba(255, 255, 255, ${opacity})`,
     strokeWidth: 1, // optional, default 3
     barPercentage: 1,
+    decimalPlaces : 0,
     useShadowColorFromDataset: false, // optional
   };
   const chartConfig2 = {

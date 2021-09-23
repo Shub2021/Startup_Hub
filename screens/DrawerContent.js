@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StackActions } from "react-navigation";
+import { CommonActions } from "@react-navigation/native";
 import {
   View,
   StyleSheet,
@@ -50,8 +50,13 @@ export function DrawerContent(props) {
       await AsyncStorage.removeItem("category");
       await AsyncStorage.removeItem("acctype");
 
+      props.navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [{ name: "Login" }],
+        })
+      );
       props.navigation.navigate("Login");
-      props.navigation.dispatch(StackActions.REPLACE("Login"));
     } catch (e) {
       console.log(e);
     }
